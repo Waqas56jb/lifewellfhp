@@ -17,7 +17,8 @@
     "check:responsive": "node scripts/check-responsive.mjs",
     "check:forms": "node scripts/check-forms.mjs",
     "check:coverage": "node scripts/check-content-coverage.cjs",
-    "check:hero": "node scripts/shot-hero.mjs"
+    "check:hero": "node scripts/shot-hero.mjs",
+    "check:deeplinks": "node scripts/check-deeplinks.mjs"
   },
   "dependencies": {
     "next": "15.5.23",

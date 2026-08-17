@@ -1,0 +1,19 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+
+  "//": [
+    "Optional: deploy the API as a second Vercel project with Root Directory",
+    "set to `server`. Everything is routed to the single Express function in",
+    "api/index.ts, so /health, /api/contact and /api/newsletter keep the same",
+    "paths they have locally.",
+    "",
+    "Required environment variables: CORS_ORIGINS (the deployed frontend",
+    "origin), CONTACT_EMAIL, MAIL_FROM, and the SMTP_* set. Without SMTP the",
+    "server refuses to accept a submission in production rather than silently",
+    "dropping it.",
+    "",
+    "See api/index.ts for the serverless caveats around rate limiting."
+  ],
+
+  "rewrites": [{ "source": "/(.*)", "destination": "/api" }]
+}

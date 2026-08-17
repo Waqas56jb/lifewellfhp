@@ -276,14 +276,80 @@ Recorded here because each one is a judgement call the client should confirm.
 
 ---
 
-## Deployment
+## Deployment (Vercel)
 
-**Frontend.** Every route is statically prerendered, so any static host or Vercel works. Set
-`NEXT_PUBLIC_SITE_URL` and `NEXT_PUBLIC_API_URL` at build time — they are baked into the output.
+### Frontend
 
-**API.** `npm run build && npm start`. Set `CORS_ORIGINS` to the production frontend origin and
-`NODE_ENV=production`. The server sets `trust proxy` in production for correct client IPs behind a
-load balancer, which the rate limiter depends on.
+1. Import the repo, then set **Root Directory → `client`**. Everything else is detected.
+2. Add the environment variables below.
+3. Deploy.
 
-Note: `next/font` fetches Lora and Source Sans Pro at build time, so the build host needs network
-access on a cold cache.
+`client/vercel.json` sets long-lived caching for `/video` and `/images`, and short shared caching
+for the sitemap and robots file. Build and install commands are left to Vercel's Next.js preset —
+overriding them only creates ways for the deploy to fail.
+
+| Variable | Required | Notes |
+| --- | --- | --- |
+| `NEXT_PUBLIC_API_URL` | **Yes** | The deployed API origin. Left at localhost, the forms fail (gracefully — they show the phone number — but nothing is delivered). |
+| `NEXT_PUBLIC_SITE_URL` | Recommended | Drives canonicals, sitemap and JSON-LD. Falls back to `https://lifewellfhp.com`; set it per environment so previews don't claim production URLs. |
+| `NEXT_PUBLIC_GA4_ID` | Optional | `G-31C1GHVRGF` carried over from WordPress. Blank disables analytics. |
+
+These are read at **build** time and baked in, so changing one needs a redeploy.
+
+### Refresh behaviour
+
+Refreshing on a deep link cannot 404 here. That failure belongs to single-page apps on static
+hosts, where every path has to be rewritten to `index.html`; Next.js App Router prerenders each
+route to its own document, so `/services/psychiatric-evaluations` is a real file. A catch-all
+rewrite is deliberately **absent** from `vercel.json` — adding one would shadow the real routes and
+break the 404 page.
+
+`npm run check:deeplinks` proves it by loading all 41 routes cold, exactly as a browser refresh
+does, and asserting each returns prerendered HTML, that unknown paths 404, and that the legacy
+WordPress URLs still redirect.
+
+### API
+
+Two options.
+
+**A separate host (recommended).** Render, Railway or Fly. `npm run build && npm start`. A
+long-lived process keeps rate limiting global and lets SMTP connections pool.
+
+**Vercel, as a second project.** Set Root Directory → `server`. `server/vercel.json` and
+`server/api/index.ts` route everything to the same Express app, so the paths are unchanged. Note
+that rate limiting becomes per-instance under serverless — see the caveats in `api/index.ts`.
+
+Either way set `CORS_ORIGINS` to the deployed frontend origin, `NODE_ENV=production`, and the
+`SMTP_*` set. In production the server refuses to accept a submission without SMTP rather than
+silently dropping it. `trust proxy` is enabled in production so the rate limiter sees real client
+IPs behind the platform's load balancer.
+
+### Notes
+
+- `next/font` fetches Lora and Source Sans Pro at build time, so the build host needs network
+  access on a cold cache.
+- Dependencies are pinned exactly and `npm ci` reproduces the audited tree.
+
+## Security
+
+`next@15.5.4` — the version this was first built against — carries
+[CVE-2025-66478](https://nextjs.org/blog/CVE-2025-66478), a **CVSS 10.0 remote code execution** flaw
+in the React Server Components protocol that was being actively exploited. Vercel's build log
+flagged it as deprecated.
+
+Patched here:
+
+| Package | Was | Now | Why |
+| --- | --- | --- | --- |
+| `next` | 15.5.4 | **15.5.23** | CVE-2025-66478 (RCE, CVSS 10.0); fixed from 15.5.7 |
+| `react` / `react-dom` | 19.1.1 | **19.2.8** | Upstream CVE-2025-55182 |
+| `sharp` | 0.34.5 | **0.35.3** | libvips CVEs; pulled in by Next, resolved via `overrides` |
+| `postcss` | ≤8.5.22 | **8.5.26** | Source-map path traversal and stringify XSS; via `overrides` |
+| `express` | 4.21.2 | **4.22.2** | `body-parser`, `qs`, `path-to-regexp` advisories |
+| `nodemailer` | 6.10.1 | **9.0.5** | SMTP command injection and CRLF header injection — directly relevant, since user-supplied name/subject reach the mail transport |
+
+`npm audit` reports **0 vulnerabilities** in both packages. `sharp` and `postcss` use `overrides`
+rather than a major-version jump, because `npm audit fix --force` wanted to move to Next 16.
+
+If the site was deployed and publicly reachable on the vulnerable version, rotate any secrets it
+held, per Vercel's advisory.
