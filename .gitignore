@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Builds
+client/.next/
+client/out/
+server/dist/
+
+# Environment — never commit real secrets
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+yarn-error.log*
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Test artefacts
+client/test-results/
+client/playwright-report/
+client/hero-shots/
+
+# Next.js
+client/.vercel
+client/next-env.d.ts
+*.tsbuildinfo

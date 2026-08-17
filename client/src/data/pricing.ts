@@ -1,0 +1,118 @@
+import type { PricingTier, PricingPackage } from '@/types/content';
+
+/**
+ * Fees exactly as published on the source /fees-insurance/ page.
+ * Commercially sensitive — do not alter without client confirmation.
+ */
+
+export const feesIntro = {
+  heading: 'Transparent Mental Health Fees and Insurance Plans',
+  body: 'Explore our clear and structured mental health fees and insurance options designed to support individuals, couples, families, and teens. We provide transparent pricing and accepted insurance details to help you plan your care with confidence — all while receiving professional support from the comfort of your own home.',
+  image: {
+    src: '/images/sections/Mental-Health-Fees-and-Insurance.avif',
+    width: 633,
+    height: 633,
+    alt: 'Reviewing telehealth mental health fees and insurance options',
+  },
+};
+
+export const selfPay = {
+  heading: 'Cash-Pay / Self-Pay Options',
+  body: [
+    'We offer self-pay options for individuals who do not have insurance coverage or who prefer not to use their insurance benefits. Self-pay allows you to receive confidential, personalized care without insurance requirements or limitations.',
+    'Payment is due at the time services are provided. Fees vary depending on the type and duration of the appointment.',
+  ],
+};
+
+export const pricingTiers: PricingTier[] = [
+  {
+    name: 'Mental Health',
+    initialFee: 250,
+    initialDuration: '60 minutes',
+    followUpFee: 150,
+    followUpDuration: '30 minutes',
+    includes: [
+      'Psychiatric Evaluations',
+      'Medication Management',
+      'Anxiety Treatment',
+      'Depression Treatment',
+      'Sleep Health',
+    ],
+    freeConsult: true,
+  },
+  {
+    name: 'Primary Care',
+    initialFee: 125,
+    initialDuration: '60 minutes',
+    followUpFee: 75,
+    followUpDuration: '30 minutes',
+    includes: [
+      'New Patient Visits',
+      'Chronic Disease Management',
+      'Acute Care Visits',
+      'Medication Refills',
+      'Lab Review',
+    ],
+    freeConsult: true,
+  },
+  {
+    name: 'Weight Management',
+    initialFee: 100,
+    initialDuration: '60 minutes',
+    followUpFee: 75,
+    followUpDuration: '30 minutes',
+    includes: [
+      'Medical Weight Loss',
+      'GLP-1 Medication Management',
+      'Metabolic Health',
+      'Nutrition Support',
+      'Weight Loss Follow-Ups',
+    ],
+    freeConsult: true,
+  },
+];
+
+export const packagesSection = {
+  heading: 'Weight Management Program Packages',
+  body: [
+    'We offer structured weight management programs designed to provide ongoing medical supervision, personalized treatment planning, and consistent support to help you achieve safe and sustainable weight loss.',
+    'These programs include medical evaluation, progress monitoring, and individualized care tailored to your health needs and goals.',
+  ],
+};
+
+export const pricingPackages: PricingPackage[] = [
+  {
+    name: '3-Month Weight Management Program',
+    priceRange: '$450 – $900',
+    description:
+      'This program provides focused, short-term support to help you begin your weight loss journey with medical guidance and structured follow-up.',
+    includes: [
+      'Initial comprehensive weight management consultation',
+      '2–4 follow-up visits for monitoring and adjustments',
+      'Personalized weight management and metabolic plan',
+      'Messaging support (if available) for ongoing guidance',
+    ],
+  },
+  {
+    name: '6-Month Weight Management Program',
+    priceRange: '$800 – $1,500',
+    description:
+      'This extended program provides long-term medical supervision, accountability, and ongoing treatment adjustments to support sustainable weight loss and metabolic health.',
+    includes: [
+      'Initial comprehensive consultation',
+      'Regular follow-up visits and progress monitoring',
+      'Personalized treatment and lifestyle plan',
+      'Medication management when appropriate',
+      'Ongoing support and treatment adjustments',
+    ],
+  },
+];
+
+export const additionalInfo = {
+  heading: 'Additional Information',
+  body: 'We are committed to providing transparent pricing and high-quality care. If you have questions about services or fees, you are welcome to contact me before scheduling your appointment.',
+  notes: [
+    'We can provide a detailed receipt (superbill) upon request for patients who wish to seek possible out-of-network reimbursement from their insurance provider. Reimbursement eligibility depends on your individual insurance plan.',
+    'Accepted payment methods include major credit and debit cards, as well as secure online payment options for your convenience and privacy.',
+  ],
+};

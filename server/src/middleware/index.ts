@@ -1,0 +1,126 @@
+import type { ErrorRequestHandler, NextFunction, Request, RequestHandler, Response } from 'express';
+import rateLimit from 'express-rate-limit';
+import { randomUUID } from 'node:crypto';
+import { AppError } from '../utils/errors.js';
+import { logger } from '../utils/logger.js';
+import { env, isProduction, corsOrigins } from '../config/env.js';
+
+/** Attaches a request id used to correlate logs with client-facing references. */
+export const requestId: RequestHandler = (req, _res, next) => {
+  (req as Request & { id: string }).id = randomUUID();
+  next();
+};
+
+/** Logs method, path and outcome — never the body. */
+export const requestLogger: RequestHandler = (req, res, next) => {
+  const started = Date.now();
+  res.on('finish', () => {
+    logger.info('request', {
+      method: req.method,
+      path: req.path,
+      status: res.statusCode,
+      ms: Date.now() - started,
+    });
+  });
+  next();
+};
+
+const limiter = (max: number, message: string) =>
+  rateLimit({
+    windowMs: 60 * 60 * 1000,
+    max,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { success: false, message },
+    // Failed validation still counts, so a scripted probe cannot loop freely.
+    skipFailedRequests: false,
+  });
+
+export const contactLimiter = limiter(
+  env.RATE_LIMIT_CONTACT,
+  'Too many messages sent from this connection. Please try again later, or call us directly.'
+);
+
+export const newsletterLimiter = limiter(
+  env.RATE_LIMIT_NEWSLETTER,
+  'Too many signup attempts. Please try again later.'
+);
+
+/** Wraps async handlers so rejections reach the error middleware. */
+export const asyncHandler =
+  (fn: (req: Request, res: Response, next: NextFunction) => Promise<unknown>): RequestHandler =>
+  (req, res, next) => {
+    void fn(req, res, next).catch(next);
+  };
+
+/**
+ * Blocks cross-origin requests from origins outside the allowlist.
+ *
+ * The CORS layer withholds its headers for unknown origins, which stops the
+ * browser but still lets a direct (non-browser) caller reach the handler. This
+ * closes that gap with an explicit 403.
+ */
+export const disallowedOrigin: RequestHandler = (req, res, next) => {
+  const origin = req.headers.origin;
+  if (!origin || corsOrigins.includes(origin)) {
+    next();
+    return;
+  }
+  logger.warn('Blocked request from disallowed origin', { origin });
+  res.status(403).json({ success: false, message: 'Origin not permitted' });
+};
+
+/**
+ * Converts body-parser failures (malformed JSON, payload too large) into
+ * client errors. Without this Express reports them as 500s.
+ */
+export const jsonErrorHandler: ErrorRequestHandler = (err, _req, res, next) => {
+  if (err instanceof SyntaxError && 'body' in err) {
+    res.status(400).json({ success: false, message: 'Request body is not valid JSON.' });
+    return;
+  }
+  if ((err as { type?: string })?.type === 'entity.too.large') {
+    res.status(413).json({ success: false, message: 'Request body is too large.' });
+    return;
+  }
+  next(err);
+};
+
+export const notFoundHandler: RequestHandler = (_req, res) => {
+  res.status(404).json({ success: false, message: 'Not found' });
+};
+
+/**
+ * Terminal error handler.
+ *
+ * Only messages explicitly marked safe are returned. Stack traces and internal
+ * details never reach the client.
+ */
+export const errorHandler: ErrorRequestHandler = (err, req, res, _next) => {
+  const id = (req as Request & { id?: string }).id ?? 'unknown';
+
+  if (err instanceof AppError) {
+    if (!err.expose) {
+      logger.error('handled error', { id, status: err.status, reason: err.message });
+    }
+    res.status(err.status).json({
+      success: false,
+      message: err.expose
+        ? err.message
+        : 'Something went wrong on our end. Please try again shortly.',
+      ...(err.fields ? { errors: err.fields } : {}),
+    });
+    return;
+  }
+
+  logger.error('unhandled error', {
+    id,
+    reason: err instanceof Error ? err.message : 'unknown',
+    ...(isProduction ? {} : { stack: err instanceof Error ? err.stack : undefined }),
+  });
+
+  res.status(500).json({
+    success: false,
+    message: 'Something went wrong on our end. Please try again shortly.',
+  });
+};

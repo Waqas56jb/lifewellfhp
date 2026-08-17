@@ -1,0 +1,797 @@
+{
+  "https://lifewellfhp.com/": {
+    "title": "Telehealth Mental Health Care | PMHNP Online Therapy & Medication Management",
+    "description": "Compassionate telehealth mental health care by a board-certified PMHNP. Personalized online therapy, medication management, and secure virtual appointments.",
+    "canonical": "https://lifewellfhp.com/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "website",
+    "published": "2026-02-21T06:40:52+00:00",
+    "modified": "2026-06-07T04:33:12+00:00",
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/managing-anxiety-in-everyday-life/": {
+    "title": "Managing Anxiety in Everyday Life - LifeWell Family Health & Psychiatry",
+    "description": "Anxiety can affect daily functioning, relationships, and overall wellbeing, but with the right tools and support, it can be managed effectively.",
+    "canonical": "https://lifewellfhp.com/managing-anxiety-in-everyday-life/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/01/80-blog-2.webp",
+    "ogType": "article",
+    "published": "2025-04-12T16:08:51+00:00",
+    "modified": "2026-02-16T00:54:03+00:00",
+    "section": "Anxiety Support",
+    "tags": [
+      "anxiety management",
+      "emotional wellbeing",
+      "stress relief"
+    ]
+  },
+  "https://lifewellfhp.com/when-to-consider-therapy-for-your-teen/": {
+    "title": "When to Consider Therapy for Your Teen - LifeWell Family Health & Psychiatry",
+    "description": "Teen therapy can provide crucial support during periods of emotional, social, and academic stress, helping adolescents navigate challenges in a healthy way.",
+    "canonical": "https://lifewellfhp.com/when-to-consider-therapy-for-your-teen/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/01/80-blog-3.webp",
+    "ogType": "article",
+    "published": "2025-04-11T08:11:35+00:00",
+    "modified": "2026-02-16T00:54:03+00:00",
+    "section": "Teen Therapy",
+    "tags": [
+      "adolescent therapy",
+      "family support",
+      "teen mental health"
+    ]
+  },
+  "https://lifewellfhp.com/how-online-therapy-can-support-your-mental-health/": {
+    "title": "How Online Therapy Can Support Your Mental Health - LifeWell Family Health & Psychiatry",
+    "description": "Online therapy offers accessible, flexible mental health support, allowing individuals to work on emotional challenges and personal growth from the comfort of their own space.",
+    "canonical": "https://lifewellfhp.com/how-online-therapy-can-support-your-mental-health/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/01/80-blog-1.webp",
+    "ogType": "article",
+    "published": "2025-04-13T09:56:17+00:00",
+    "modified": "2026-02-16T00:54:03+00:00",
+    "section": "Online Therapy",
+    "tags": [
+      "mental health support",
+      "online therapy",
+      "virtual counseling"
+    ]
+  },
+  "https://lifewellfhp.com/the-benefits-of-online-therapy-for-mental-wellbeing/": {
+    "title": "The Benefits of Online Therapy for Mental Wellbeing - LifeWell Family Health & Psychiatry",
+    "description": "Online therapy makes professional mental health support more accessible, flexible, and comfortable — all without leaving your home.",
+    "canonical": "https://lifewellfhp.com/the-benefits-of-online-therapy-for-mental-wellbeing/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/01/80-blog-4.webp",
+    "ogType": "article",
+    "published": "2025-04-10T11:32:13+00:00",
+    "modified": null,
+    "section": "Online Therapy",
+    "tags": [
+      "mental health",
+      "online therapy",
+      "virtual care"
+    ]
+  },
+  "https://lifewellfhp.com/individual-therapy-a-safe-space-for-personal-growth/": {
+    "title": "Individual Therapy: A Safe Space for Personal Growth - LifeWell Family Health & Psychiatry",
+    "description": "Individual therapy offers a confidential environment to explore emotions, overcome challenges, and build resilience at your own pace.",
+    "canonical": "https://lifewellfhp.com/individual-therapy-a-safe-space-for-personal-growth/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/01/80-blog-5.webp",
+    "ogType": "article",
+    "published": "2025-04-08T11:12:16+00:00",
+    "modified": "2026-02-16T00:54:03+00:00",
+    "section": "Individual Therapy",
+    "tags": [
+      "emotional health",
+      "individual therapy",
+      "self-growth"
+    ]
+  },
+  "https://lifewellfhp.com/managing-anxiety-with-online-therapy/": {
+    "title": "Managing Anxiety with Online Therapy - LifeWell Family Health & Psychiatry",
+    "description": "Online therapy offers effective tools to manage anxiety, reduce overwhelm, and regain a sense of control in daily life.",
+    "canonical": "https://lifewellfhp.com/managing-anxiety-with-online-therapy/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/01/80-blog-9.webp",
+    "ogType": "article",
+    "published": "2025-04-02T16:01:07+00:00",
+    "modified": "2026-02-16T00:54:03+00:00",
+    "section": "Anxiety Support",
+    "tags": [
+      "anxiety therapy",
+      "online support",
+      "stress management"
+    ]
+  },
+  "https://lifewellfhp.com/how-online-couples-therapy-strengthens-relationships/": {
+    "title": "How Online Couples Therapy Strengthens Relationships - LifeWell Family Health & Psychiatry",
+    "description": "Obsessive-Compulsive Disorder can feel overwhelming, but with the right therapeutic support, individuals can learn to manage intrusive thoughts and reduce compulsive behaviors.",
+    "canonical": "https://lifewellfhp.com/how-online-couples-therapy-strengthens-relationships/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2025/04/80-blog-6.webp",
+    "ogType": "article",
+    "published": "2025-04-07T13:58:20+00:00",
+    "modified": null,
+    "section": "Couples Therapy",
+    "tags": [
+      "communication",
+      "couples therapy",
+      "relationships"
+    ]
+  },
+  "https://lifewellfhp.com/family-therapy-online-healing-together/": {
+    "title": "Family Therapy Online: Healing Together - LifeWell Family Health & Psychiatry",
+    "description": "Family therapy online supports healthier dynamics by helping family members understand each other and resolve ongoing conflicts.",
+    "canonical": "https://lifewellfhp.com/family-therapy-online-healing-together/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/01/80-blog-7.webp",
+    "ogType": "article",
+    "published": "2025-04-05T14:43:43+00:00",
+    "modified": null,
+    "section": "Family Therapy",
+    "tags": [
+      "family relationships",
+      "family therapy",
+      "online counseling"
+    ]
+  },
+  "https://lifewellfhp.com/online-therapy-for-teens-support-during-critical-years/": {
+    "title": "Online Therapy for Teens: Support During Critical Years - LifeWell Family Health & Psychiatry",
+    "description": "Teen therapy provides emotional support during adolescence, helping teens navigate stress, identity, and social pressures.",
+    "canonical": "https://lifewellfhp.com/online-therapy-for-teens-support-during-critical-years/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/01/80-blog-8.webp",
+    "ogType": "article",
+    "published": "2025-04-04T15:21:36+00:00",
+    "modified": null,
+    "section": "Teen Therapy",
+    "tags": [
+      "adolescent mental health",
+      "teen therapy",
+      "youth support"
+    ]
+  },
+  "https://lifewellfhp.com/fees-insurance/": {
+    "title": "Mental Health Fees and Insurance | Telehealth Payment Options",
+    "description": "View transparent mental health fees and insurance information, including accepted plans, self-pay rates, and telehealth payment options.",
+    "canonical": "https://lifewellfhp.com/fees-insurance/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/Mental-Health-Fees-and-Insurance.avif",
+    "ogType": "article",
+    "published": "2026-02-23T23:03:54+00:00",
+    "modified": "2026-06-07T04:27:26+00:00",
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/book-telehealth-mental-health-appointment/": {
+    "title": "Book Telehealth Mental Health Appointment: 3 Essential Steps for Better Mental Health",
+    "description": "Book telehealth mental health appointment with a board-certified PMHNP. Secure, confidential online therapy and medication management services available.",
+    "canonical": "https://lifewellfhp.com/book-telehealth-mental-health-appointment/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/How-It-Works.avif",
+    "ogType": "article",
+    "published": "2026-02-23T23:26:02+00:00",
+    "modified": "2026-06-07T00:24:16+00:00",
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/bio/": {
+    "title": "PMHNP Telehealth Services: 5 Powerful Benefits of Compassionate Online Care",
+    "description": "Learn about LifeWell Family Health & Psychiatry and our board-certified provider offering professional PMHNP telehealth services and personalized psychiatric care.",
+    "canonical": "https://lifewellfhp.com/bio/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2021/08/Lourdie-Chachoute-Image.jpeg",
+    "ogType": "article",
+    "published": "2026-02-21T09:27:32+00:00",
+    "modified": "2026-06-07T00:10:52+00:00",
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/terms-conditions/": {
+    "title": "Telehealth Mental Health Terms and Conditions: 5 Important Patient Guidelines",
+    "description": "Review our telehealth mental health terms and conditions to understand website usage, telehealth policies, and patient responsibilities.",
+    "canonical": "https://lifewellfhp.com/terms-conditions/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": "2026-02-25T01:34:21+00:00",
+    "modified": "2026-02-25T01:39:07+00:00",
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/contact-telehealth-mental-health-provider/": {
+    "title": "Contact Telehealth Mental Health Provider: 3 Easy Ways to Get Professional Help",
+    "description": "Contact telehealth mental health provider to schedule an appointment, ask questions about services, or verify insurance coverage.",
+    "canonical": "https://lifewellfhp.com/contact-telehealth-mental-health-provider/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/Contact-Telehealth-Mental-Health-Provider.avif",
+    "ogType": "article",
+    "published": "2026-02-24T00:41:14+00:00",
+    "modified": "2026-06-07T00:29:18+00:00",
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/accessibility-statement/": {
+    "title": "Telehealth Mental Health Accessibility Statement: 5 Accessibility Commitments",
+    "description": "Read our telehealth mental health accessibility statement and learn how we ensure accessible, inclusive, and user-friendly online mental health services.",
+    "canonical": "https://lifewellfhp.com/accessibility-statement/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": "2026-02-25T01:00:54+00:00",
+    "modified": "2026-02-25T01:05:10+00:00",
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/privacy-policy/": {
+    "title": "Telehealth Mental Health Privacy Policy: 5 Important Patient Rights",
+    "description": "Review our telehealth mental health privacy policy to understand how your personal and health information is securely collected, used, and protected.",
+    "canonical": "https://lifewellfhp.com/privacy-policy/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": "2026-02-25T00:43:17+00:00",
+    "modified": "2026-02-25T00:51:51+00:00",
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/faqs/": {
+    "title": "Telehealth Mental Health Privacy Policy: 5 Important Patient Rights",
+    "description": "Review our telehealth mental health privacy policy to understand how your personal and health information is securely collected, used, and protected.",
+    "canonical": "https://lifewellfhp.com/faqs/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": "2026-02-25T01:13:30+00:00",
+    "modified": "2026-02-25T01:20:24+00:00",
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/telehealth-mental-health-testimonials/": {
+    "title": "Telehealth Mental Health Testimonials: 5 Real Patient Best Experiences",
+    "description": "Read real telehealth mental health testimonials from patients who received compassionate therapy and professional psychiatric care online.",
+    "canonical": "https://lifewellfhp.com/telehealth-mental-health-testimonials/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": "2026-02-24T00:24:51+00:00",
+    "modified": "2026-02-25T00:59:22+00:00",
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/sms-consent-communication-policy/": {
+    "title": "Telehealth Mental Health SMS Consent Policy: 5 Important Communication Terms",
+    "description": "Review our telehealth mental health SMS consent policy to understand how text messages are used for appointment reminders and service communication.",
+    "canonical": "https://lifewellfhp.com/sms-consent-communication-policy/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": "2026-02-25T01:06:07+00:00",
+    "modified": "2026-02-25T01:12:06+00:00",
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/our-services/": {
+    "title": "Online Mental Health Services: 9 Comprehensive Telehealth Therapy Options",
+    "description": "Explore comprehensive online mental health services including therapy, medication management, trauma care, and telehealth psychiatric support.",
+    "canonical": "https://lifewellfhp.com/our-services/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/Online-Mental-Health-Services-1024x859.avif",
+    "ogType": "article",
+    "published": "2026-02-21T10:04:00+00:00",
+    "modified": "2026-02-23T01:46:03+00:00",
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/services/": {
+    "title": "Services - LifeWell Family Health & Psychiatry",
+    "description": "Services Archive - LifeWell Family Health & Psychiatry",
+    "canonical": "https://lifewellfhp.com/services/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/services/medication-management/": {
+    "title": "Psychiatric Medication Management Telehealth: 7 Essential Benefits for Safe Treatment",
+    "description": "Get psychiatric medication management telehealth services for depression, anxiety, ADHD, and mood disorders with safe, personalized treatment.",
+    "canonical": "https://lifewellfhp.com/services/medication-management/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/Psychiatric-Medication-Management-Telehealth.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/services/psychiatric-evaluations/": {
+    "title": "Psychiatric Evaluation Telehealth: 7 Essential Steps for Accurate Diagnosis",
+    "description": "Schedule a psychiatric evaluation telehealth appointment for accurate diagnosis, ADHD, anxiety, depression assessment, and personalized treatment planning.",
+    "canonical": "https://lifewellfhp.com/services/psychiatric-evaluations/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/Psychiatric-Evaluation-Telehealth.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/services/treatment-for-depression-anxiety-adhd-bipolar-disorder-ptsd/": {
+    "title": "Treatment for Depression, Anxiety, ADHD, Bipolar Disorder & PTSD: 7 Proven Benefits",
+    "description": "Get Telehealth Treatment for Depression, Anxiety, ADHD, Bipolar Disorder & PTSD with personalized medication management and expert care.",
+    "canonical": "https://lifewellfhp.com/services/treatment-for-depression-anxiety-adhd-bipolar-disorder-ptsd/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/Telehealth-Treatment-for-Depression-Anxiety-ADHD-PTSD.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/services/psychiatric-follow-up-visits-telehealth/": {
+    "title": "Psychiatric Follow-Up Visits Telehealth: 7 Essential Benefits for Ongoing Care",
+    "description": "Schedule psychiatric follow-up visits telehealth for medication monitoring, symptom evaluation, and ongoing mental health support.",
+    "canonical": "https://lifewellfhp.com/services/psychiatric-follow-up-visits-telehealth/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/Psychiatric-Follow-Up-Visits-Telehealth.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/services/lab-testing-coordination-telehealth/": {
+    "title": "Lab Testing Coordination Telehealth: 7 Essential Tests for Accurate Diagnosis",
+    "description": "Get lab testing coordination telehealth including CBC, CMP, lipid panel, A1C, thyroid testing, and personalized result interpretation.",
+    "canonical": "https://lifewellfhp.com/services/lab-testing-coordination-telehealth/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/Lab-Testing-Coordination-Telehealth.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/services/wellness-and-lifestyle-counseling-telehealth/": {
+    "title": "Wellness and Lifestyle Counseling Telehealth: 7 Powerful Benefits for Better Health",
+    "description": "Get wellness and lifestyle counseling telehealth services including nutrition guidance, sleep support, and stress management.",
+    "canonical": "https://lifewellfhp.com/services/wellness-and-lifestyle-counseling-telehealth/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/Wellness-and-Lifestyle-Counseling-Telehealth.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/services/weight-management-telehealth/": {
+    "title": "Weight Management Telehealth: 7 Powerful Benefits for Safe Weight Loss",
+    "description": "Get weight management telehealth services including metabolic review, medication-assisted weight loss, and personalized care.",
+    "canonical": "https://lifewellfhp.com/services/weight-management-telehealth/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/Weight-Management-Telehealth.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/services/telehealth-sick-visits-primary-care/": {
+    "title": "Telehealth Sick Visits Primary Care: 7 Fast and Effective Treatment Options",
+    "description": "Schedule telehealth sick visits primary care for cold symptoms, sinus infections, UTIs, allergies, and minor acute health concerns.",
+    "canonical": "https://lifewellfhp.com/services/telehealth-sick-visits-primary-care/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/Telehealth-Sick-Visits-Primary-Care.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/services/preventive-care-telehealth/": {
+    "title": "Preventive Care Telehealth: 7 Essential Benefits for Long-Term Wellness",
+    "description": "Get preventive care telehealth services including preventive screenings, lifestyle support, nutrition, sleep, and stress management.",
+    "canonical": "https://lifewellfhp.com/services/preventive-care-telehealth/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/Preventive-Care-Telehealth.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/services/chronic-disease-management-telehealth/": {
+    "title": "Chronic Disease Management Telehealth: 7 Essential Benefits for Long-Term Health",
+    "description": "Get chronic disease management telehealth for hypertension, diabetes, thyroid disorders, and cholesterol with personalized primary care support.",
+    "canonical": "https://lifewellfhp.com/services/chronic-disease-management-telehealth/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/Chronic-Disease-Management-Telehealth.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/services/annual-physical-exam-telehealth/": {
+    "title": "Annual Physical Exam Telehealth: 7 Essential Preventive Health Benefits",
+    "description": "Schedule an annual physical exam telehealth visit for preventive screenings, health monitoring, and personalized primary care support.",
+    "canonical": "https://lifewellfhp.com/services/annual-physical-exam-telehealth/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/Annual-Physical-Exam-Telehealth.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/category/uncategorized/": {
+    "title": "Uncategorized - LifeWell Family Health & Psychiatry",
+    "description": null,
+    "canonical": "https://lifewellfhp.com/category/uncategorized/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/category/couples-therapy/": {
+    "title": "Couples Therapy - LifeWell Family Health & Psychiatry",
+    "description": null,
+    "canonical": "https://lifewellfhp.com/category/couples-therapy/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/category/individual-therapy/": {
+    "title": "Individual Therapy - LifeWell Family Health & Psychiatry",
+    "description": null,
+    "canonical": "https://lifewellfhp.com/category/individual-therapy/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/category/anxiety-support/": {
+    "title": "Anxiety Support - LifeWell Family Health & Psychiatry",
+    "description": null,
+    "canonical": "https://lifewellfhp.com/category/anxiety-support/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/category/family-therapy/": {
+    "title": "Family Therapy - LifeWell Family Health & Psychiatry",
+    "description": null,
+    "canonical": "https://lifewellfhp.com/category/family-therapy/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/author/admin/": {
+    "title": "admin - LifeWell Family Health & Psychiatry",
+    "description": null,
+    "canonical": "https://lifewellfhp.com/author/admin/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "profile",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/tag/emotional-wellbeing/": {
+    "title": "emotional wellbeing - LifeWell Family Health & Psychiatry",
+    "description": null,
+    "canonical": "https://lifewellfhp.com/tag/emotional-wellbeing/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/tag/anxiety-management/": {
+    "title": "anxiety management - LifeWell Family Health & Psychiatry",
+    "description": null,
+    "canonical": "https://lifewellfhp.com/tag/anxiety-management/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/tag/stress-relief/": {
+    "title": "stress relief - LifeWell Family Health & Psychiatry",
+    "description": null,
+    "canonical": "https://lifewellfhp.com/tag/stress-relief/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/tag/adolescent-therapy/": {
+    "title": "adolescent therapy - LifeWell Family Health & Psychiatry",
+    "description": null,
+    "canonical": "https://lifewellfhp.com/tag/adolescent-therapy/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/tag/family-support/": {
+    "title": "family support - LifeWell Family Health & Psychiatry",
+    "description": null,
+    "canonical": "https://lifewellfhp.com/tag/family-support/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/tag/mental-health-support/": {
+    "title": "mental health support - LifeWell Family Health & Psychiatry",
+    "description": null,
+    "canonical": "https://lifewellfhp.com/tag/mental-health-support/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/tag/online-therapy/": {
+    "title": "online therapy - LifeWell Family Health & Psychiatry",
+    "description": null,
+    "canonical": "https://lifewellfhp.com/tag/online-therapy/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/tag/virtual-counseling/": {
+    "title": "virtual counseling - LifeWell Family Health & Psychiatry",
+    "description": null,
+    "canonical": "https://lifewellfhp.com/tag/virtual-counseling/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/tag/mental-health/": {
+    "title": "mental health - LifeWell Family Health & Psychiatry",
+    "description": null,
+    "canonical": "https://lifewellfhp.com/tag/mental-health/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/tag/virtual-care/": {
+    "title": "virtual care - LifeWell Family Health & Psychiatry",
+    "description": null,
+    "canonical": "https://lifewellfhp.com/tag/virtual-care/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/tag/emotional-health/": {
+    "title": "emotional health - LifeWell Family Health & Psychiatry",
+    "description": null,
+    "canonical": "https://lifewellfhp.com/tag/emotional-health/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/tag/individual-therapy/": {
+    "title": "individual therapy - LifeWell Family Health & Psychiatry",
+    "description": null,
+    "canonical": "https://lifewellfhp.com/tag/individual-therapy/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/tag/self-growth/": {
+    "title": "self-growth - LifeWell Family Health & Psychiatry",
+    "description": null,
+    "canonical": "https://lifewellfhp.com/tag/self-growth/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/tag/online-support/": {
+    "title": "online support - LifeWell Family Health & Psychiatry",
+    "description": null,
+    "canonical": "https://lifewellfhp.com/tag/online-support/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/category/online-therapy/": {
+    "title": "Online Therapy - LifeWell Family Health & Psychiatry",
+    "description": null,
+    "canonical": "https://lifewellfhp.com/category/online-therapy/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/category/teen-therapy/": {
+    "title": "Teen Therapy - LifeWell Family Health & Psychiatry",
+    "description": null,
+    "canonical": "https://lifewellfhp.com/category/teen-therapy/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/tag/communication/": {
+    "title": "communication - LifeWell Family Health & Psychiatry",
+    "description": null,
+    "canonical": "https://lifewellfhp.com/tag/communication/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/tag/teen-mental-health/": {
+    "title": "teen mental health - LifeWell Family Health & Psychiatry",
+    "description": null,
+    "canonical": "https://lifewellfhp.com/tag/teen-mental-health/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/tag/family-relationships/": {
+    "title": "family relationships - LifeWell Family Health & Psychiatry",
+    "description": null,
+    "canonical": "https://lifewellfhp.com/tag/family-relationships/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/tag/relationships/": {
+    "title": "relationships - LifeWell Family Health & Psychiatry",
+    "description": null,
+    "canonical": "https://lifewellfhp.com/tag/relationships/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/tag/anxiety-therapy/": {
+    "title": "anxiety therapy - LifeWell Family Health & Psychiatry",
+    "description": null,
+    "canonical": "https://lifewellfhp.com/tag/anxiety-therapy/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/tag/couples-therapy/": {
+    "title": "couples therapy - LifeWell Family Health & Psychiatry",
+    "description": null,
+    "canonical": "https://lifewellfhp.com/tag/couples-therapy/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/tag/family-therapy/": {
+    "title": "family therapy - LifeWell Family Health & Psychiatry",
+    "description": null,
+    "canonical": "https://lifewellfhp.com/tag/family-therapy/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/tag/online-counseling/": {
+    "title": "online counseling - LifeWell Family Health & Psychiatry",
+    "description": null,
+    "canonical": "https://lifewellfhp.com/tag/online-counseling/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/tag/adolescent-mental-health/": {
+    "title": "adolescent mental health - LifeWell Family Health & Psychiatry",
+    "description": null,
+    "canonical": "https://lifewellfhp.com/tag/adolescent-mental-health/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/tag/stress-management/": {
+    "title": "stress management - LifeWell Family Health & Psychiatry",
+    "description": null,
+    "canonical": "https://lifewellfhp.com/tag/stress-management/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/tag/teen-therapy/": {
+    "title": "teen therapy - LifeWell Family Health & Psychiatry",
+    "description": null,
+    "canonical": "https://lifewellfhp.com/tag/teen-therapy/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/tag/youth-support/": {
+    "title": "youth support - LifeWell Family Health & Psychiatry",
+    "description": null,
+    "canonical": "https://lifewellfhp.com/tag/youth-support/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/services/page/2/": {
+    "title": "Services - Page 2 of 2 - LifeWell Family Health & Psychiatry",
+    "description": "Services Archive - Page 2 of 2 - LifeWell Family Health & Psychiatry",
+    "canonical": "https://lifewellfhp.com/services/page/2/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "article",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  },
+  "https://lifewellfhp.com/author/mohidulwebsite/": {
+    "title": "Mohidul Islam - LifeWell Family Health & Psychiatry",
+    "description": null,
+    "canonical": "https://lifewellfhp.com/author/mohidulwebsite/",
+    "ogImage": "https://lifewellfhp.com/wp-content/uploads/2026/02/favicon.avif",
+    "ogType": "profile",
+    "published": null,
+    "modified": null,
+    "section": null,
+    "tags": []
+  }
+}

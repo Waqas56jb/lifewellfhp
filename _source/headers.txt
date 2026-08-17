@@ -1,0 +1,21 @@
+HTTP/1.1 200 OK
+Connection: Keep-Alive
+Keep-Alive: timeout=5, max=100
+X-Powered-By: PHP/8.3.30
+Content-Type: application/json; charset=UTF-8
+X-Robots-Tag: noindex
+X-Content-Type-Options: nosniff
+Access-Control-Expose-Headers: X-WP-Total, X-WP-TotalPages, Link
+Access-Control-Allow-Headers: Authorization, X-WP-Nonce, Content-Disposition, Content-MD5, Content-Type
+X-WP-Total: 213
+X-WP-TotalPages: 3
+Link: <https://lifewellfhp.com/wp-json/wp/v2/media?per_page=100&page=1>; rel="prev", <https://lifewellfhp.com/wp-json/wp/v2/media?per_page=100&page=3>; rel="next"
+Allow: GET
+Vary: Origin
+X-LiteSpeed-Cache-Control: no-cache
+Cache-Control: no-cache, must-revalidate, max-age=0, no-store, private
+Transfer-Encoding: chunked
+Date: Sun, 16 Aug 2026 23:11:36 GMT
+Server: LiteSpeed
+alt-svc: h3=":443"; ma=2592000, h3-29=":443"; ma=2592000
+
