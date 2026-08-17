@@ -19,7 +19,7 @@ export function ServiceCard({
   return (
     <article
       className={cn(
-        'group relative flex h-full flex-col rounded-md border border-border-subtle bg-surface-raised p-7',
+        'group relative flex h-full flex-col rounded-md border border-border-subtle bg-surface-raised p-5 sm:p-7',
         'transition-[border-color,box-shadow,transform] duration-fast ease-out-soft',
         'hover:-translate-y-0.5 hover:border-brand-primary/40 hover:shadow-md',
         'focus-within:border-brand-primary/40 focus-within:shadow-md',

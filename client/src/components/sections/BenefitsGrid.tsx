@@ -54,7 +54,7 @@ export function BenefitsGrid({
                     {i + 1}
                   </span>
                 </div>
-                <div className="flex flex-1 flex-col p-6">
+                <div className="flex flex-1 flex-col p-5 sm:p-6">
                   <h3 className="text-h5">{benefit.title}</h3>
                   <p className="mt-3 text-sm leading-relaxed text-text-secondary">
                     {benefit.description}

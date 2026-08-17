@@ -84,7 +84,7 @@ export default function FeesInsurancePage() {
           <ul className="mt-11 grid list-none gap-6 lg:grid-cols-3">
             {pricingTiers.map((tier) => (
               <li key={tier.name} className="flex">
-                <article className="flex w-full flex-col rounded-md border border-border-subtle bg-surface-raised p-7 transition-shadow duration-fast hover:shadow-md">
+                <article className="flex w-full flex-col rounded-md border border-border-subtle bg-surface-raised p-5 transition-shadow duration-fast hover:shadow-md sm:p-7">
                   <h3 className="text-h4">{tier.name}</h3>
 
                   <dl className="mt-6 space-y-4 border-y border-border-subtle py-6">
@@ -153,7 +153,7 @@ export default function FeesInsurancePage() {
           <ul className="mt-11 grid list-none gap-6 md:grid-cols-2">
             {pricingPackages.map((pkg) => (
               <li key={pkg.name} className="flex">
-                <article className="flex w-full flex-col rounded-md border border-border-subtle bg-surface-raised p-7">
+                <article className="flex w-full flex-col rounded-md border border-border-subtle bg-surface-raised p-5 sm:p-7">
                   <h3 className="text-h4">{pkg.name}</h3>
                   <p className="mt-4 font-heading text-h3 text-brand-primary-solid">
                     {pkg.priceRange}
@@ -181,7 +181,7 @@ export default function FeesInsurancePage() {
       {/* Additional information */}
       <Section tone="base" spacing="sm">
         <Container size="narrow">
-          <div className="rounded-md border border-border-subtle bg-surface-muted p-8">
+          <div className="rounded-md border border-border-subtle bg-surface-muted p-6 sm:p-8">
             <Eyebrow>Good to know</Eyebrow>
             <h2 className="text-h4">{additionalInfo.heading}</h2>
             <p className="mt-4 text-md leading-relaxed text-text-secondary">

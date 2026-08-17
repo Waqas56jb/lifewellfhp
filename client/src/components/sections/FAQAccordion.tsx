@@ -52,8 +52,8 @@ export function FAQAccordion({
                 aria-controls={panelId}
                 onClick={() => toggle(i)}
                 className={cn(
-                  'flex w-full items-start justify-between gap-5 px-6 py-5 text-left transition-colors duration-quick',
-                  'min-h-14 hover:bg-surface-muted',
+                  'flex w-full items-start justify-between gap-3 px-4 py-4 text-left transition-colors duration-quick sm:gap-5 sm:px-6 sm:py-5',
+                  'min-h-14 touch-manipulation hover:bg-surface-muted',
                   expanded && 'bg-surface-muted/60'
                 )}
               >
@@ -79,7 +79,7 @@ export function FAQAccordion({
               role="region"
               aria-labelledby={buttonId}
               hidden={!expanded}
-              className="px-6 pb-6"
+              className="px-4 pb-5 sm:px-6 sm:pb-6"
             >
               <p className="max-w-[70ch] text-md leading-relaxed text-text-secondary">
                 {faq.answer}

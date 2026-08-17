@@ -31,7 +31,7 @@ export function CTASection({
             <p className="mx-auto mt-6 max-w-[56ch] text-lead text-text-inverse/85">{body}</p>
           )}
 
-          <div className="mt-9 flex flex-col justify-center gap-4 sm:flex-row sm:flex-wrap">
+          <div className="mt-9 flex flex-col items-stretch justify-center gap-4 sm:flex-row sm:flex-wrap sm:items-center">
             <Button href={primaryHref} variant="inverse" size="lg" chip>
               {primaryLabel}
             </Button>
@@ -101,7 +101,7 @@ export function ContactCTA() {
               </div>
             </dl>
 
-            <div className="mt-9 flex flex-col gap-4 sm:flex-row">
+            <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
               <Button href="/contact-telehealth-mental-health-provider" size="lg">
                 Contact us
               </Button>

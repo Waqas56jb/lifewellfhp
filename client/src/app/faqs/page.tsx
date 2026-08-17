@@ -45,7 +45,7 @@ export default function FaqsPage() {
           {/* Primary content of this page, so questions sit at h2. */}
           <FAQAccordion faqs={faqs} headingLevel={2} />
 
-          <div className="mt-12 rounded-md border border-border-subtle bg-surface-muted p-8 text-center">
+          <div className="mt-12 rounded-md border border-border-subtle bg-surface-muted p-6 text-center sm:p-8">
             <h2 className="text-h4">Still have a question?</h2>
             <p className="mx-auto mt-4 max-w-[56ch] text-text-secondary">
               If your question isn’t answered here, reach out — you’ll receive a confidential

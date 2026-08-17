@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { searchEntries, type SearchEntry } from '@/data/search-index';
@@ -39,7 +40,7 @@ export function SiteSearch() {
         ref={triggerRef}
         type="button"
         onClick={() => setOpen(true)}
-        className="inline-flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-sm border border-border-subtle px-3 text-sm text-text-secondary transition-colors duration-quick hover:border-brand-primary hover:text-brand-primary-solid"
+        className="inline-flex min-h-11 min-w-11 touch-manipulation items-center justify-center gap-2 rounded-sm border border-border-subtle px-3 text-sm text-text-secondary transition-colors duration-quick hover:border-brand-primary hover:text-brand-primary-solid"
       >
         <SearchIcon />
         <span className="sr-only">Search this site</span>
@@ -119,8 +120,8 @@ function SearchDialog({ onClose }: { onClose: () => void }) {
     }
   };
 
-  return (
-    <div className="fixed inset-0 z-[70]" onKeyDown={onKeyDown}>
+  const dialog = (
+    <div className="fixed inset-0 z-[90] h-[100dvh]" onKeyDown={onKeyDown}>
       <div className="absolute inset-0 bg-text-primary/50" onClick={onClose} aria-hidden="true" />
 
       <div
@@ -128,9 +129,9 @@ function SearchDialog({ onClose }: { onClose: () => void }) {
         role="dialog"
         aria-modal="true"
         aria-label="Search this site"
-        className="absolute left-1/2 top-[10vh] w-[min(40rem,calc(100vw-2rem))] -translate-x-1/2 overflow-hidden rounded-md border border-border-subtle bg-surface-raised shadow-lg"
+        className="absolute left-1/2 top-[max(1rem,env(safe-area-inset-top))] w-[min(40rem,calc(100vw-1.5rem))] -translate-x-1/2 overflow-hidden rounded-md border border-border-subtle bg-surface-raised shadow-lg sm:top-[10vh] sm:w-[min(40rem,calc(100vw-2rem))]"
       >
-        <div className="flex items-center gap-3 border-b border-border-subtle px-5">
+        <div className="flex items-center gap-2 border-b border-border-subtle px-3 sm:gap-3 sm:px-5">
           <SearchIcon />
           <label htmlFor={inputId} className="sr-only">
             Search services, questions and pages
@@ -147,7 +148,7 @@ function SearchDialog({ onClose }: { onClose: () => void }) {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search services, questions and pages…"
-            className="min-h-14 flex-1 border-0 bg-transparent text-md text-text-primary outline-none placeholder:text-text-secondary/60"
+            className="min-h-14 min-w-0 flex-1 border-0 bg-transparent text-md text-text-primary outline-none placeholder:text-text-secondary/60"
           />
           <button
             type="button"
@@ -197,7 +198,7 @@ function SearchDialog({ onClose }: { onClose: () => void }) {
                     )}
                   >
                     <span className="flex items-baseline justify-between gap-3">
-                      <span className="font-semibold text-text-primary">{entry.title}</span>
+                      <span className="min-w-0 font-semibold text-text-primary">{entry.title}</span>
                       <span className="shrink-0 text-xs uppercase tracking-wide text-text-secondary">
                         {entry.section}
                       </span>
@@ -222,6 +223,8 @@ function SearchDialog({ onClose }: { onClose: () => void }) {
       </div>
     </div>
   );
+
+  return createPortal(dialog, document.body);
 }
 
 function SearchIcon() {

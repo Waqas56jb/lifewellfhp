@@ -15,7 +15,7 @@ export function Container({
   return (
     <div
       className={cn(
-        'mx-auto w-full px-5 sm:px-6 lg:px-10',
+        'mx-auto w-full px-4 sm:px-6 lg:px-10',
         size === 'page' && 'max-w-page',
         size === 'narrow' && 'max-w-narrow',
         size === 'prose' && 'max-w-prose',

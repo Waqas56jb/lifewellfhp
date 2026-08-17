@@ -26,7 +26,7 @@ export function Hero() {
   return (
     <section
       aria-labelledby="hero-heading"
-      className="relative isolate flex min-h-[36rem] items-center overflow-hidden md:min-h-[42rem] lg:min-h-[50rem]"
+      className="relative isolate flex min-h-[32rem] items-center overflow-hidden sm:min-h-[36rem] md:min-h-[42rem] lg:min-h-[50rem]"
     >
       {/* Looping background footage, with its poster as the LCP paint */}
       <HeroMedia />
@@ -58,16 +58,16 @@ export function Hero() {
         className="absolute inset-0 -z-10 bg-gradient-to-r from-[#0e2130]/80 via-[#0e2130]/45 to-transparent"
       />
 
-      <Container className="relative py-20 md:py-24">
+      <Container className="relative py-16 sm:py-20 md:py-24">
         <div className="max-w-2xl">
           <h1 id="hero-heading" className="text-balance">
             <span className="text-brand-primary-on-dark">Compassionate Telehealth </span>
             <span className="text-text-inverse">Mental Care You Can Trust</span>
           </h1>
 
-          <p className="mt-7 max-w-[46ch] text-lead text-text-inverse/90">{hero.subheading}</p>
+          <p className="mt-6 max-w-[46ch] text-lead text-text-inverse/90 sm:mt-7">{hero.subheading}</p>
 
-          <div className="mt-10 flex flex-col gap-5 sm:flex-row sm:flex-wrap sm:items-center">
+          <div className="mt-8 flex flex-col items-stretch gap-4 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center sm:gap-5">
             <Button href={site.booking.url} size="lg" chip>
               {site.booking.label}
             </Button>

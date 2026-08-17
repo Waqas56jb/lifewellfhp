@@ -22,14 +22,14 @@ const VARIANTS: Record<Variant, string> = {
 
 /* min-h keeps every control at or above the 44px comfortable touch target. */
 const SIZES: Record<Size, string> = {
-  sm: 'text-sm px-6 py-4 min-h-11 gap-3',
-  md: 'text-md px-8 py-5 min-h-12 gap-4',
-  lg: 'text-md px-9 py-6 min-h-14 gap-4',
+  sm: 'text-sm px-5 py-3.5 min-h-11 gap-3 sm:px-6 sm:py-4',
+  md: 'text-md px-6 py-4 min-h-12 gap-3 sm:px-8 sm:py-5 sm:gap-4',
+  lg: 'text-md px-6 py-4 min-h-12 gap-3 sm:px-9 sm:py-6 sm:min-h-14 sm:gap-4',
 };
 
 const BASE =
   'inline-flex items-center justify-center rounded-sm font-semibold leading-tight text-center no-underline ' +
-  'transition-colors duration-quick ease-out-soft cursor-pointer ' +
+  'transition-colors duration-quick ease-out-soft cursor-pointer touch-manipulation ' +
   'disabled:cursor-not-allowed disabled:opacity-60';
 
 interface CommonProps {
@@ -63,12 +63,20 @@ export type ButtonProps = ButtonAsButton | ButtonAsLink;
  */
 function withChip(node: ReactNode, variant: Variant, fullWidth?: boolean) {
   return (
-    <span className={cn('inline-flex items-center gap-2', fullWidth && 'w-full')}>
+    <span
+      className={cn(
+        'inline-flex max-w-full items-center gap-2',
+        fullWidth ? 'w-full' : 'w-full sm:w-auto',
+        '[&>a]:min-w-0 [&>a]:flex-1 sm:[&>a]:flex-initial',
+        '[&>button]:min-w-0 [&>button]:flex-1 sm:[&>button]:flex-initial',
+        fullWidth && '[&>a]:flex-1 [&>button]:flex-1'
+      )}
+    >
       {node}
       <span
         aria-hidden="true"
         className={cn(
-          'inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full transition-colors duration-quick',
+          'inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition-colors duration-quick sm:h-12 sm:w-12',
           variant === 'primary' && 'bg-brand-primary-solid text-text-inverse',
           variant === 'accent' && 'bg-brand-accent-strong text-text-inverse',
           variant === 'inverse' && 'bg-surface-raised text-text-link',

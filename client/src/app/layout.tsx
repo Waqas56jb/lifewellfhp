@@ -58,6 +58,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
+  viewportFit: 'cover',
   // Not capped — users must be able to zoom (WCAG 1.4.4).
   themeColor: '#3e7fb1',
   colorScheme: 'light',

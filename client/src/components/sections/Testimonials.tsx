@@ -93,7 +93,7 @@ export function Testimonials({ testimonials }: { testimonials: Testimonial[] }) 
           {testimonials.map((t, i) => (
             <li
               key={i}
-              className="w-[min(85vw,26rem)] shrink-0 snap-start sm:w-[24rem] lg:w-[26rem]"
+              className="w-[min(88vw,26rem)] shrink-0 snap-start sm:w-[24rem] lg:w-[26rem]"
               aria-roledescription="testimonial"
               aria-label={`Testimonial ${i + 1} of ${testimonials.length}`}
             >
@@ -114,7 +114,7 @@ export function Testimonials({ testimonials }: { testimonials: Testimonial[] }) 
 
 export function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
   return (
-    <figure className="flex h-full flex-col rounded-md border border-border-subtle bg-surface-raised p-7">
+    <figure className="flex h-full flex-col rounded-md border border-border-subtle bg-surface-raised p-5 sm:p-7">
       {testimonial.rating !== null && <Rating value={testimonial.rating} />}
 
       <blockquote className="mt-5 flex-1">

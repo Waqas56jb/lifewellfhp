@@ -22,11 +22,11 @@ export function InsuranceGrid({ showCta = true }: { showCta?: boolean }) {
           align="center"
         />
 
-        <ul className="mt-12 grid list-none grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+        <ul className="mt-12 grid list-none grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
           {insuranceCarriers.map((carrier) => (
             <li
               key={carrier.name}
-              className="flex items-center justify-center rounded-sm border border-border-subtle bg-surface-raised px-5 py-6 transition-colors duration-fast hover:border-border-strong"
+              className="flex items-center justify-center rounded-sm border border-border-subtle bg-surface-raised px-3 py-5 sm:px-5 sm:py-6 transition-colors duration-fast hover:border-border-strong"
             >
               <Image
                 src={carrier.logo}
@@ -35,7 +35,7 @@ export function InsuranceGrid({ showCta = true }: { showCta?: boolean }) {
                 height={carrier.height}
                 loading="lazy"
                 sizes="(min-width: 1024px) 15vw, (min-width: 640px) 28vw, 42vw"
-                className="h-8 w-auto max-w-full object-contain"
+                className="h-7 w-auto max-w-full object-contain sm:h-8"
               />
             </li>
           ))}

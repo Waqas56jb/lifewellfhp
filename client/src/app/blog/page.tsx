@@ -124,7 +124,7 @@ function EmptyState() {
 
   return (
     <div className="mx-auto max-w-3xl">
-      <div className="rounded-md border border-border-subtle bg-surface-raised px-8 py-12 text-center">
+      <div className="rounded-md border border-border-subtle bg-surface-raised px-5 py-8 text-center sm:px-8 sm:py-12">
         <span
           aria-hidden="true"
           className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-brand-primary-soft text-brand-primary-solid"

@@ -45,7 +45,7 @@ export function HowItWorks({
           <ol className="relative list-none space-y-5">
             {steps.map((step, i) => (
               <li key={step.title}>
-                <article className="relative flex gap-5 rounded-md border border-border-subtle bg-surface-raised p-7 transition-shadow duration-fast hover:shadow-md">
+                <article className="relative flex flex-col gap-4 rounded-md border border-border-subtle bg-surface-raised p-5 transition-shadow duration-fast hover:shadow-md xs:flex-row xs:gap-5 sm:p-7">
                   <span
                     aria-hidden="true"
                     className="flex h-12 w-12 shrink-0 items-center justify-center rounded-sm bg-brand-primary-soft font-heading text-h5 font-semibold text-brand-primary-solid"
@@ -87,9 +87,9 @@ export function CrisisCallout({ className }: { className?: string }) {
   return (
     <aside
       aria-labelledby="crisis-heading"
-      className={`rounded-md border-2 border-crisis/30 bg-crisis-soft p-6 ${className ?? ''}`}
+      className={`rounded-md border-2 border-crisis/30 bg-crisis-soft p-5 sm:p-6 ${className ?? ''}`}
     >
-      <div className="flex gap-4">
+      <div className="flex flex-col gap-4 xs:flex-row">
         <span
           aria-hidden="true"
           className="flex h-11 w-11 shrink-0 items-center justify-center rounded-sm bg-crisis text-text-inverse"

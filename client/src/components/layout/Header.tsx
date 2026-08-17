@@ -18,7 +18,7 @@ export function Header() {
     <header className="sticky top-0 z-50">
       <div className="bg-surface-inverse text-text-inverse on-inverse">
         <Container>
-          <p className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 py-2 text-center text-xs">
+          <p className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 py-2 text-center text-xs sm:gap-x-4">
             <span className="opacity-90">In crisis or thinking about self-harm?</span>
             <a
               href={site.crisis.phoneHref}
@@ -36,10 +36,10 @@ export function Header() {
 
       <div className="border-b border-border-subtle bg-surface-raised/95 backdrop-blur-sm">
         <Container>
-          <div className="flex items-center justify-between gap-6 py-4">
+          <div className="flex items-center justify-between gap-3 py-3 sm:gap-6 sm:py-4">
             <Link
               href="/"
-              className="shrink-0 rounded-xs no-underline"
+              className="min-w-0 shrink rounded-xs no-underline"
               aria-label={`${site.name} — home`}
             >
               <Image
@@ -48,7 +48,7 @@ export function Header() {
                 width={354}
                 height={63}
                 priority
-                className="h-9 w-auto sm:h-10"
+                className="h-8 w-auto max-w-[min(11.5rem,46vw)] sm:h-10 sm:max-w-none"
               />
             </Link>
 

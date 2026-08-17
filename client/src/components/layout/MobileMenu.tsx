@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { NavItem, NavLink } from '@/types/content';
@@ -82,8 +83,11 @@ export function MobileMenu({ id, open, onClose, items, cta, pathname }: MobileMe
 
   if (!open) return null;
 
-  return (
-    <div className="fixed inset-0 z-[60] lg:hidden">
+  // Rendered on document.body so `position: fixed` is not trapped by the
+  // header's `backdrop-filter` / sticky ancestors (the usual reason this
+  // drawer appears clipped or inert on iOS and Android).
+  const drawer = (
+    <div className="fixed inset-0 z-[80] h-[100dvh] lg:hidden">
       <div
         className="absolute inset-0 bg-text-primary/50"
         onClick={onClose}
@@ -96,31 +100,31 @@ export function MobileMenu({ id, open, onClose, items, cta, pathname }: MobileMe
         role="dialog"
         aria-modal="true"
         aria-label="Site navigation"
-        className="absolute inset-y-0 right-0 flex w-full max-w-sm flex-col bg-surface-raised shadow-lg"
+        className="absolute inset-y-0 right-0 flex h-full w-full max-w-[min(24rem,100%)] flex-col bg-surface-raised shadow-lg pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]"
       >
-        <div className="flex items-center justify-between gap-4 border-b border-border-subtle px-5 py-4">
+        <div className="flex items-center justify-between gap-3 border-b border-border-subtle px-4 py-3 sm:gap-4 sm:px-5 sm:py-4">
           <Image
             src="/images/brand/logo.avif"
             alt={site.name}
             width={354}
             height={63}
-            className="h-8 w-auto"
+            className="h-8 w-auto max-w-[min(12rem,55vw)]"
           />
           <button
             type="button"
             onClick={onClose}
-            className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-sm border border-border-subtle text-text-primary transition-colors duration-quick hover:bg-surface-muted"
+            className="inline-flex min-h-11 min-w-11 shrink-0 touch-manipulation items-center justify-center rounded-sm border border-border-subtle text-text-primary transition-colors duration-quick hover:bg-surface-muted"
           >
             <span className="sr-only">Close menu</span>
             <CloseIcon />
           </button>
         </div>
 
-        <div className="border-b border-border-subtle px-5 py-4">
+        <div className="border-b border-border-subtle px-4 py-3 sm:px-5 sm:py-4">
           <SiteSearch />
         </div>
 
-        <nav aria-label="Mobile" className="flex-1 overflow-y-auto overscroll-contain px-5 py-6">
+        <nav aria-label="Mobile" className="flex-1 overflow-y-auto overscroll-contain px-4 py-5 sm:px-5 sm:py-6">
           <ul className="space-y-1">
             {items.map((item) =>
               item.groups ? (
@@ -147,7 +151,7 @@ export function MobileMenu({ id, open, onClose, items, cta, pathname }: MobileMe
           </ul>
         </nav>
 
-        <div className="space-y-4 border-t border-border-subtle px-5 py-5">
+        <div className="space-y-4 border-t border-border-subtle px-4 py-4 sm:px-5 sm:py-5">
           <Button href={cta.href} fullWidth>
             {cta.label}
           </Button>
@@ -161,6 +165,8 @@ export function MobileMenu({ id, open, onClose, items, cta, pathname }: MobileMe
       </div>
     </div>
   );
+
+  return createPortal(drawer, document.body);
 }
 
 function Accordion({ item, pathname }: { item: NavItem; pathname: string }) {

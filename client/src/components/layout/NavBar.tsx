@@ -18,6 +18,16 @@ export function NavBar({ items, cta }: { items: NavItem[]; cta: NavLink }) {
     setMobileOpen(false);
   }, [pathname]);
 
+  // Hide the drawer if the viewport grows into the desktop nav.
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 1024px)');
+    const onChange = () => {
+      if (mq.matches) setMobileOpen(false);
+    };
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
+
   return (
     <>
       <nav aria-label="Main" className="hidden lg:block">
@@ -48,10 +58,11 @@ export function NavBar({ items, cta }: { items: NavItem[]; cta: NavLink }) {
         onClick={() => setMobileOpen(true)}
         aria-expanded={mobileOpen}
         aria-controls="mobile-menu"
-        className="inline-flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-sm border border-border-subtle px-4 text-sm font-semibold text-text-primary transition-colors duration-quick hover:bg-surface-muted lg:hidden"
+        aria-label="Open menu"
+        className="relative z-10 inline-flex min-h-11 min-w-11 shrink-0 touch-manipulation items-center justify-center gap-2 rounded-sm border border-border-subtle px-3 text-sm font-semibold text-text-primary transition-colors duration-quick hover:bg-surface-muted sm:px-4 lg:hidden"
       >
         <BurgerIcon />
-        Menu
+        <span>Menu</span>
       </button>
 
       <MobileMenu

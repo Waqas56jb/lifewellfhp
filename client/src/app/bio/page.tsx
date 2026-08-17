@@ -160,7 +160,7 @@ export default function BioPage() {
       {/* Consultation prompt */}
       <Section tone="muted" spacing="sm">
         <Container size="narrow">
-          <div className="rounded-md border border-border-subtle bg-surface-raised p-8 text-center">
+          <div className="rounded-md border border-border-subtle bg-surface-raised p-6 text-center sm:p-8">
             <h2 className="text-h4">{providerPage.consultation.heading}</h2>
             <p className="mx-auto mt-4 max-w-[56ch] text-text-secondary">
               {providerPage.consultation.body}

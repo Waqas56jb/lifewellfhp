@@ -133,6 +133,9 @@
     scroll-behavior: smooth;
     /* Offset anchor targets so the sticky header never covers them. */
     scroll-padding-top: 6rem;
+    /* clip does not create a scroll container, so position:fixed overlays
+       (mobile menu, search) stay viewport-relative on iOS. */
+    overflow-x: clip;
   }
 
   body {
@@ -144,8 +147,9 @@
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* Nothing should ever scroll sideways. */
-    overflow-x: hidden;
+    overflow-x: clip;
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
   }
 
   h1,
@@ -219,6 +223,7 @@
   button {
     font: inherit;
     color: inherit;
+    touch-action: manipulation;
   }
 
   /* Single, consistent focus ring across the whole site (WCAG 2.2 AA). */

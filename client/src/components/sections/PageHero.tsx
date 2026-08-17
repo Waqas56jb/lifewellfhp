@@ -31,7 +31,7 @@ export function PageHero({
     <section className="relative overflow-hidden border-b border-border-subtle bg-surface-raised">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -right-32 -top-40 h-[26rem] w-[26rem] rounded-full bg-brand-primary-soft/60 blur-3xl"
+        className="pointer-events-none absolute -right-24 -top-32 h-[18rem] w-[18rem] rounded-full bg-brand-primary-soft/60 blur-3xl sm:-right-32 sm:-top-40 sm:h-[26rem] sm:w-[26rem]"
       />
 
       <Container className="relative">

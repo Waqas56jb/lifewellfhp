@@ -25,7 +25,7 @@ export function Footer() {
       </div>
 
       <Container>
-        <div className="grid gap-10 py-14 md:py-16 lg:grid-cols-[1.1fr_1fr_1fr_1fr]">
+        <div className="grid gap-10 py-14 md:grid-cols-2 md:py-16 lg:grid-cols-[1.1fr_1fr_1fr_1fr]">
           {/* Brand + contact */}
           <div>
             <Link href="/" className="inline-block rounded-xs" aria-label={`${site.name} — home`}>
@@ -107,7 +107,7 @@ export function Footer() {
         </div>
 
         {/* Crisis notice — repeated at the foot of every page. */}
-        <div className="mb-8 rounded-md border border-crisis/25 bg-crisis-soft px-6 py-5">
+        <div className="mb-8 rounded-md border border-crisis/25 bg-crisis-soft px-4 py-4 sm:px-6 sm:py-5">
           <p className="text-sm text-text-primary">
             <strong className="font-semibold text-crisis">In an emergency:</strong>{' '}
             If you are in immediate danger or thinking about harming yourself, call{' '}

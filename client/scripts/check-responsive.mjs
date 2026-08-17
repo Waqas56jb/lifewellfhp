@@ -89,7 +89,7 @@ for (const path of PAGES) {
         let node = el.parentElement;
         while (node && node !== document.body) {
           const o = getComputedStyle(node).overflowX;
-          if (o === 'auto' || o === 'scroll' || o === 'hidden') return true;
+          if (o === 'auto' || o === 'scroll' || o === 'hidden' || o === 'clip') return true;
           node = node.parentElement;
         }
         return false;

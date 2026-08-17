@@ -126,7 +126,7 @@ export default function ContactPage() {
 
             {/* Enquiry form */}
             <div>
-              <div className="rounded-md border border-border-subtle bg-surface-raised p-7 md:p-9">
+              <div className="rounded-md border border-border-subtle bg-surface-raised p-5 sm:p-7 md:p-9">
                 <Eyebrow>Ask a question</Eyebrow>
                 <h2 className="text-h3">Send a confidential message</h2>
                 <p className="mt-4 text-md leading-relaxed text-text-secondary">
@@ -157,7 +157,7 @@ function QuickAction({ href, label, value }: { href: string; label: string; valu
     <li>
       <a
         href={href}
-        className="inline-flex min-h-11 items-center gap-2 rounded-sm border border-border-strong bg-surface-raised px-5 text-sm font-semibold text-text-link no-underline transition-colors duration-quick hover:border-brand-primary hover:bg-brand-primary-soft"
+        className="inline-flex min-h-11 max-w-full items-center gap-2 rounded-sm border border-border-strong bg-surface-raised px-4 text-sm font-semibold text-text-link no-underline transition-colors duration-quick hover:border-brand-primary hover:bg-brand-primary-soft sm:px-5"
       >
         <span className="text-text-secondary">{label}</span>
         {value}
