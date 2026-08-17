@@ -75,6 +75,8 @@ npm run dev                   # http://localhost:3000
 | `client/` | `npm run check:forms`     | End-to-end browser → API form tests                   |
 | `client/` | `npm run check:coverage`  | Flags source prose the extractor did not capture      |
 | `client/` | `npm run check:hero`      | Screenshots the hero and measures heading contrast against the composited video |
+| `client/` | `npm run check:deeplinks`| Loads all 41 routes cold, as a browser refresh does  |
+| `client/` | `npm run check:vercel`   | Validates every `vercel.json` against Vercel's schema |
 | `client/` | `npm run generate:content`| Regenerates content from `_source/`                   |
 | `server/` | `npm run dev`             | API with reload                                       |
 | `server/` | `npm run build && npm start` | Production API                                     |
@@ -287,6 +289,11 @@ Recorded here because each one is a judgement call the client should confirm.
 `client/vercel.json` sets long-lived caching for `/video` and `/images`, and short shared caching
 for the sitemap and robots file. Build and install commands are left to Vercel's Next.js preset —
 overriding them only creates ways for the deploy to fail.
+
+> Vercel validates `vercel.json` with `additionalProperties: false`, so **any** unrecognised
+> top-level key rejects the import — including the `"//"` pseudo-comment convention, since JSON has
+> no comment syntax. `npm run check:vercel` validates every config in the repo against Vercel's
+> published schema before you push.
 
 | Variable | Required | Notes |
 | --- | --- | --- |

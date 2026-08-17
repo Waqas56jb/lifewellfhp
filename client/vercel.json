@@ -1,21 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
-
-  "//": [
-    "Deliberately NOT present: a catch-all rewrite to index.html.",
-    "That pattern is for single-page apps on static hosts, where a refresh on",
-    "/some/route 404s because no such file exists. Next.js App Router",
-    "prerenders every route to its own document, so refresh already works.",
-    "Adding the rewrite here would shadow the real routes and break the 404",
-    "page. Verified by `npm run check:deeplinks`.",
-    "",
-    "Build/install commands and the output directory are left to Vercel's",
-    "Next.js preset — overriding them only creates ways for the deploy to fail.",
-    "",
-    "Set the project's Root Directory to `client` in the Vercel dashboard."
-  ],
-
   "headers": [
     {
       "source": "/video/(.*)",
