@@ -20,13 +20,18 @@ export function FAQAccordion({
    * so the outline never skips a level.
    */
   headingLevel = 3,
+  /** `toggles` matches the live cmsmasters FAQ cards (rounded, blue when open). */
+  variant = 'default',
+  defaultOpen = [0],
 }: {
   faqs: Faq[];
   allowMultiple?: boolean;
   headingLevel?: 2 | 3;
+  variant?: 'default' | 'toggles';
+  defaultOpen?: number[];
 }) {
   const baseId = useId();
-  const [open, setOpen] = useState<number[]>([0]);
+  const [open, setOpen] = useState<number[]>(defaultOpen);
   const Heading = (headingLevel === 2 ? 'h2' : 'h3') as 'h2' | 'h3';
 
   const toggle = (i: number) =>
@@ -34,6 +39,65 @@ export function FAQAccordion({
       if (current.includes(i)) return current.filter((n) => n !== i);
       return allowMultiple ? [...current, i] : [i];
     });
+
+  if (variant === 'toggles') {
+    return (
+      <ul className="flex list-none flex-col gap-2.5">
+        {faqs.map((faq, i) => {
+          const expanded = open.includes(i);
+          const buttonId = `${baseId}-q-${i}`;
+          const panelId = `${baseId}-a-${i}`;
+
+          return (
+            <li
+              key={faq.question}
+              className={cn(
+                'group rounded-[20px] bg-[#EEF3F7] px-5 py-7 transition-colors duration-300 sm:px-[30px] sm:py-[35px]',
+                'hover:bg-[#3E7FB1]',
+                expanded && 'bg-[#3E7FB1] hover:bg-[#3E7FB1]'
+              )}
+            >
+              <Heading>
+                <button
+                  type="button"
+                  id={buttonId}
+                  aria-expanded={expanded}
+                  aria-controls={panelId}
+                  onClick={() => toggle(i)}
+                  className="flex w-full items-center justify-between gap-5 text-left"
+                >
+                  <span className="font-heading text-[22px] font-normal leading-[1.25] tracking-[-1px] text-[#5FAF6B] sm:text-[24px] min-[1181px]:text-[30px]">
+                    {faq.question}
+                  </span>
+                  <span
+                    aria-hidden="true"
+                    className={cn(
+                      'shrink-0 text-[#5FAF6B] transition-colors duration-300 group-hover:text-white',
+                      expanded && 'text-white'
+                    )}
+                  >
+                    <PlusMinusIcon open={expanded} />
+                  </span>
+                </button>
+              </Heading>
+
+              <div
+                id={panelId}
+                role="region"
+                aria-labelledby={buttonId}
+                hidden={!expanded}
+                className="mt-5"
+              >
+                <p className="text-[16px] leading-[1.45] text-white min-[1181px]:text-[18px]">
+                  {faq.answer}
+                </p>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    );
+  }
 
   return (
     <ul className="divide-y divide-border-subtle overflow-hidden rounded-md border border-border-subtle bg-surface-raised">
@@ -89,6 +153,22 @@ export function FAQAccordion({
         );
       })}
     </ul>
+  );
+}
+
+function PlusMinusIcon({ open }: { open: boolean }) {
+  return (
+    <svg
+      aria-hidden="true"
+      focusable="false"
+      width="20"
+      height="20"
+      viewBox="0 0 20 20"
+      fill="none"
+    >
+      <path d="M4 10h12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      {!open && <path d="M10 4v12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />}
+    </svg>
   );
 }
 

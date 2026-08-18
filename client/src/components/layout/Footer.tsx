@@ -1,144 +1,107 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { site } from '@/data/site';
-import { footerColumns, legalLinks } from '@/data/navigation';
+import { footerColumns } from '@/data/navigation';
 import { Container } from '@/components/ui/Section';
-import { NewsletterForm } from '@/components/forms/NewsletterForm';
+import { FooterNewsletter } from '@/components/forms/NewsletterForm';
 import { newsletter } from '@/data/marketing';
 
 export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-border-subtle bg-surface-raised">
-      {/* Newsletter */}
-      <div className="border-b border-border-subtle bg-surface-muted">
+    <footer className="bg-[#F4F7FA]">
+      <div className="footer-band rounded-t-[30px] bg-[#3E7FB1] text-white sm:rounded-t-[40px]">
         <Container>
-          <div className="grid items-center gap-8 py-14 md:grid-cols-2 md:py-16">
+          <div className="flex flex-col gap-5 border-b border-white/30 py-10 sm:flex-row sm:items-start sm:justify-between sm:gap-8 sm:py-12 lg:py-14">
+            <h2 className="max-w-[16ch] font-heading text-[28px] font-normal leading-[1.2] text-white sm:text-[34px] lg:max-w-[18ch] min-[1181px]:text-[42px]">
+              {newsletter.heading}
+            </h2>
+            <FooterNewsletter />
+          </div>
+
+          <div className="grid grid-cols-1 gap-10 py-10 sm:grid-cols-2 sm:gap-x-8 sm:gap-y-12 lg:grid-cols-4 lg:gap-x-10 lg:py-14">
             <div>
-              <h2 className="text-h4">{newsletter.heading}</h2>
-              <p className="mt-3 max-w-[48ch] text-text-secondary">{newsletter.body}</p>
-            </div>
-            <NewsletterForm />
-          </div>
-        </Container>
-      </div>
-
-      <Container>
-        <div className="grid gap-10 py-14 md:grid-cols-2 md:py-16 lg:grid-cols-[1.1fr_1fr_1fr_1fr]">
-          {/* Brand + contact */}
-          <div>
-            <Link href="/" className="inline-block rounded-xs" aria-label={`${site.name} — home`}>
-              <Image
-                src="/images/brand/logo.avif"
-                alt={site.name}
-                width={354}
-                height={63}
-                className="h-10 w-auto"
-              />
-            </Link>
-            <p className="mt-5 max-w-[42ch] text-sm text-text-secondary">{site.footerBlurb}</p>
-
-            <address className="mt-6 space-y-2 text-sm not-italic text-text-secondary">
-              <p className="flex flex-wrap items-center gap-x-2">
-                <a
-                  href={site.contact.phoneHref}
-                  className="inline-flex min-h-6 items-center py-1 font-semibold text-text-link"
-                >
-                  {site.contact.phone}
-                </a>
-                <span className="text-border-strong" aria-hidden="true">
-                  |
-                </span>
-                <span>Fax {site.contact.fax}</span>
+              <Link
+                href="/"
+                className="inline-flex rounded-[12px] bg-white px-3 py-2.5 sm:px-4 sm:py-3"
+                aria-label={`${site.name} — home`}
+              >
+                <Image
+                  src="/images/brand/logo.avif"
+                  alt={site.name}
+                  width={354}
+                  height={63}
+                  className="h-8 w-auto sm:h-10"
+                />
+              </Link>
+              <p className="mt-6 max-w-[38ch] font-body text-[15px] font-normal leading-[1.6] text-white sm:text-[16px]">
+                {site.footerBlurb}
               </p>
-              <p>
-                <a
-                  href={site.contact.emailHref}
-                  className="inline-flex min-h-6 items-center py-1 text-text-link"
-                >
-                  {site.contact.email}
-                </a>
-              </p>
-              <p className="max-w-[32ch]">
-                <span className="block text-xs uppercase tracking-wide text-text-secondary/80">
-                  {site.address.type}
-                </span>
-                {site.address.full}
-              </p>
-            </address>
 
-            <ul className="mt-6 flex gap-2">
-              {site.social.map((s) => (
-                <li key={s.name}>
-                  <a
-                    href={s.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-sm border border-border-subtle text-text-secondary transition-colors duration-quick hover:border-brand-primary hover:text-brand-primary-solid"
-                  >
-                    <span className="sr-only">{site.name} on {s.name}</span>
-                    <SocialIcon name={s.name} />
+              <address className="mt-5 space-y-1.5 font-body text-[15px] font-normal not-italic leading-relaxed text-white sm:text-[16px]">
+                <p>
+                  Phone:-{' '}
+                  <a href={site.contact.phoneHref} className="text-white no-underline hover:underline">
+                    (407) 603 - 1717
                   </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+                </p>
+                <p>Fax:- {site.contact.fax}</p>
+                <p>
+                  Email:-{' '}
+                  <a href={site.contact.emailHref} className="text-white no-underline hover:underline">
+                    {site.contact.email}
+                  </a>
+                </p>
+              </address>
 
-          {footerColumns.map((col) => (
-            <nav key={col.heading} aria-label={col.heading}>
-              <h2 className="text-sm font-semibold uppercase tracking-[0.1em] text-text-primary">
-                {col.heading}
-              </h2>
-              <ul className="mt-5 space-y-1">
-                {col.links.map((link) => (
-                  <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className="flex min-h-9 items-center py-1 text-sm leading-snug text-text-secondary no-underline transition-colors duration-quick hover:text-text-link hover:underline"
+              <ul className="mt-6 flex gap-3">
+                {site.social.map((s) => (
+                  <li key={s.name}>
+                    <a
+                      href={s.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex size-10 items-center justify-center rounded-full bg-[#5FAF6B] text-white transition-colors duration-300 hover:bg-white hover:text-[#5FAF6B]"
                     >
-                      {link.label}
-                    </Link>
+                      <span className="sr-only">
+                        {site.name} on {s.name}
+                      </span>
+                      <SocialIcon name={s.name} />
+                    </a>
                   </li>
                 ))}
               </ul>
-            </nav>
-          ))}
-        </div>
+            </div>
 
-        {/* Crisis notice — repeated at the foot of every page. */}
-        <div className="mb-8 rounded-md border border-crisis/25 bg-crisis-soft px-4 py-4 sm:px-6 sm:py-5">
-          <p className="text-sm text-text-primary">
-            <strong className="font-semibold text-crisis">In an emergency:</strong>{' '}
-            If you are in immediate danger or thinking about harming yourself, call{' '}
-            <a href={site.crisis.phoneHref} className="font-semibold text-crisis underline">
-              988
-            </a>{' '}
-            (Suicide &amp; Crisis Lifeline) or dial 911. This website is not monitored for
-            emergencies.
-          </p>
-        </div>
+            {footerColumns.map((col) => (
+              <nav key={col.heading} aria-label={col.heading}>
+                <h3 className="font-heading text-[20px] font-normal leading-[1.3] text-white sm:text-[22px] min-[1181px]:text-[24px]">
+                  {col.heading}
+                </h3>
+                <ul className="mt-5 flex flex-col gap-3 sm:gap-3.5">
+                  {col.links.map((link) => (
+                    <li key={link.href}>
+                      <Link
+                        href={link.href}
+                        className="font-body text-[15px] font-normal leading-snug text-white no-underline transition-opacity duration-300 hover:opacity-80 sm:text-[16px]"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            ))}
+          </div>
 
-        <div className="flex flex-col gap-4 border-t border-border-subtle py-8 md:flex-row md:items-center md:justify-between">
-          <p className="text-xs text-text-secondary">
-            © {year} {site.name}. All Rights Reserved.
-          </p>
-          <nav aria-label="Legal">
-            <ul className="flex flex-wrap gap-x-5 gap-y-2">
-              {legalLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="inline-flex min-h-6 items-center py-1 text-xs text-text-secondary no-underline hover:text-text-link hover:underline"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        </div>
-      </Container>
+          <div className="border-t border-white/30 py-5 text-center sm:py-6">
+            <p className="font-body text-[13px] font-normal leading-relaxed text-white sm:text-[14px]">
+              © {year} {site.name}. All Rights Reserved. | Design By
+            </p>
+          </div>
+        </Container>
+      </div>
     </footer>
   );
 }
@@ -147,29 +110,28 @@ function SocialIcon({ name }: { name: string }) {
   const common = {
     'aria-hidden': true as const,
     focusable: 'false' as const,
-    width: 17,
-    height: 17,
-    viewBox: '0 0 24 24',
+    width: 15,
+    height: 15,
     fill: 'currentColor',
   };
 
   if (name === 'Facebook') {
     return (
-      <svg {...common}>
-        <path d="M14 9V7c0-.8.2-1.2 1.4-1.2H17V3h-2.6C11.5 3 10.5 4.4 10.5 6.8V9H8.5v3h2v9h3.5v-9h2.4l.3-3H14Z" />
+      <svg {...common} viewBox="0 0 320 512">
+        <path d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z" />
       </svg>
     );
   }
   if (name === 'LinkedIn') {
     return (
-      <svg {...common}>
-        <path d="M6.9 8.4v11.7H3.2V8.4h3.7ZM5.1 2.6a2.1 2.1 0 1 1 0 4.3 2.1 2.1 0 0 1 0-4.3ZM20.8 20.1h-3.7v-5.9c0-1.5-.5-2.5-1.8-2.5-1 0-1.6.7-1.8 1.4-.1.2-.1.6-.1.9v6.1H9.6V8.4h3.7v1.6a3.7 3.7 0 0 1 3.4-1.9c2.4 0 4.2 1.6 4.2 5v7Z" />
+      <svg {...common} viewBox="0 0 448 512">
+        <path d="M100.28 448H7.4V148.9h92.88zM53.79 108.1C24.09 108.1 0 83.5 0 53.8a53.79 53.79 0 0 1 107.58 0c0 29.7-24.1 54.3-53.79 54.3zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.69-48.3 87.88-48.3 94 0 111.28 61.9 111.28 142.3V448z" />
       </svg>
     );
   }
   return (
-    <svg {...common}>
-      <path d="M12 2.2c3.2 0 3.6 0 4.9.1 1.2 0 1.8.3 2.2.4.5.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1 .4 2.2.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c0 1.2-.3 1.8-.4 2.2-.2.5-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1 .4-2.2.4-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2 0-1.8-.3-2.2-.4-.5-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1-.4-2.2-.1-1.3-.1-1.7-.1-4.9s0-3.6.1-4.9c0-1.2.3-1.8.4-2.2.2-.5.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1-.4 2.2-.4 1.3-.1 1.7-.1 4.9-.1Zm0 3.8a6 6 0 1 0 0 12 6 6 0 0 0 0-12Zm0 9.9a3.9 3.9 0 1 1 0-7.8 3.9 3.9 0 0 1 0 7.8Zm7.6-10.1a1.4 1.4 0 1 1-2.8 0 1.4 1.4 0 0 1 2.8 0Z" />
+    <svg {...common} viewBox="0 0 448 512">
+      <path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z" />
     </svg>
   );
 }

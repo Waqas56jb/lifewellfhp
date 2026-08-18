@@ -1,112 +1,110 @@
 'use client';
 
-import { useId, useRef, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
+import Image from 'next/image';
 import type { Testimonial } from '@/types/content';
-import { Container, Section, SectionHeading } from '@/components/ui/Section';
+import { Container, Section } from '@/components/ui/Section';
 import { testimonialsSection } from '@/data/marketing';
 import { cn } from '@/lib/utils';
 
 /**
- * Testimonial carousel.
- *
- * WCAG 2.2 notes:
- *  - Previous/Next are real buttons, so the control is fully keyboard operable
- *    and never drag-only (2.5.7 Dragging Movements).
- *  - The track is a focusable, labelled region with horizontal scroll, so
- *    pointer users can swipe and keyboard users can arrow through it.
- *  - Nothing auto-advances, so there is no moving content to pause (2.2.2).
+ * Homepage testimonials — live layout is a featured quote (left) + photo
+ * (right) with bullet navigation. One quote at a time, matching the
+ * Elementor slider (`slider_per_view: 1`).
  */
 export function Testimonials({ testimonials }: { testimonials: Testimonial[] }) {
-  const trackRef = useRef<HTMLUListElement>(null);
-  const [index, setIndex] = useState(0);
   const headingId = useId();
+  const [index, setIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const current = testimonials[index] ?? testimonials[0];
 
-  const scrollTo = (next: number) => {
-    const track = trackRef.current;
-    if (!track) return;
-    const clamped = Math.max(0, Math.min(next, testimonials.length - 1));
-    const card = track.children[clamped] as HTMLElement | undefined;
-    if (!card) return;
-    track.scrollTo({ left: card.offsetLeft - track.offsetLeft, behavior: 'smooth' });
-    setIndex(clamped);
-  };
+  useEffect(() => {
+    if (testimonials.length < 2) return;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced || paused) return;
+    const id = window.setInterval(() => {
+      setIndex((i) => (i + 1) % testimonials.length);
+    }, 5000);
+    return () => window.clearInterval(id);
+  }, [paused, testimonials.length]);
 
-  // Keep the indicator in step when the user swipes or scrolls directly.
-  const onScroll = () => {
-    const track = trackRef.current;
-    if (!track) return;
-    const children = Array.from(track.children) as HTMLElement[];
-    const left = track.scrollLeft + track.offsetLeft;
-    let closest = 0;
-    let min = Infinity;
-    children.forEach((child, i) => {
-      const distance = Math.abs(child.offsetLeft - left);
-      if (distance < min) {
-        min = distance;
-        closest = i;
-      }
-    });
-    setIndex(closest);
-  };
+  if (!current) return null;
 
   return (
-    <Section tone="base" aria-labelledby={headingId}>
-      <Container>
-        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-          <SectionHeading
-            eyebrow={testimonialsSection.eyebrow}
-            title={testimonialsSection.heading}
-            description={testimonialsSection.body}
+    <Section
+      tone="base"
+      aria-labelledby={headingId}
+      className="relative overflow-hidden bg-white"
+    >
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,_#e8f4f2_0%,_transparent_68%)]"
+      />
+      <Container className="relative">
+        <div className="mx-auto max-w-[46rem] text-center">
+          <h2
             id={headingId}
-            align="left"
-            className="md:max-w-2xl"
-          />
+            className="font-heading text-[30px] font-normal leading-[1.15] tracking-[-2px] sm:text-[48px] min-[1181px]:text-[56px]"
+          >
+            <span className="text-[#5FAF6B]">What Patients </span>
+            <span className="italic text-[#3E7FB1]">Are Saying</span>
+          </h2>
+          <p className="mx-auto mt-5 max-w-[52ch] text-[16px] leading-[1.45] text-[#5b6675] min-[1181px]:text-[18px]">
+            {testimonialsSection.body}
+          </p>
+        </div>
 
-          <div className="flex shrink-0 gap-3">
-            <CarouselButton
-              label="Previous testimonial"
-              onClick={() => scrollTo(index - 1)}
-              disabled={index === 0}
-              direction="prev"
-            />
-            <CarouselButton
-              label="Next testimonial"
-              onClick={() => scrollTo(index + 1)}
-              disabled={index >= testimonials.length - 1}
-              direction="next"
+        <div className="mt-12 grid items-center gap-10 lg:mt-16 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
+          <figure
+            className="min-w-0"
+            onMouseEnter={() => setPaused(true)}
+            onMouseLeave={() => setPaused(false)}
+            onFocusCapture={() => setPaused(true)}
+            onBlurCapture={() => setPaused(false)}
+          >
+            <blockquote>
+              <p className="font-heading text-[20px] font-normal leading-[1.55] text-[#5FAF6B] sm:text-[24px] min-[1181px]:text-[28px]">
+                {current.quote}
+              </p>
+            </blockquote>
+            {current.author && (
+              <figcaption className="mt-8 font-body text-[13px] font-semibold uppercase tracking-[2px] text-[#8A94A0]">
+                {current.author}
+              </figcaption>
+            )}
+
+            {testimonials.length > 1 && (
+              <div className="mt-10 flex items-center gap-2.5" role="tablist" aria-label="Testimonials">
+                {testimonials.map((t, i) => (
+                  <button
+                    key={t.author ?? i}
+                    type="button"
+                    role="tab"
+                    aria-selected={i === index}
+                    aria-label={`Show testimonial ${i + 1} of ${testimonials.length}`}
+                    onClick={() => setIndex(i)}
+                    className={cn(
+                      'size-2.5 rounded-full transition-colors duration-300',
+                      i === index ? 'bg-[#374151]' : 'bg-[#D5DCE3] hover:bg-[#9AA6B2]'
+                    )}
+                  />
+                ))}
+              </div>
+            )}
+          </figure>
+
+          <div className="overflow-hidden rounded-[30px] lg:rounded-[40px]">
+            <Image
+              src={testimonialsSection.image.src}
+              alt=""
+              width={testimonialsSection.image.width}
+              height={testimonialsSection.image.height}
+              loading="lazy"
+              sizes="(min-width: 1024px) 42vw, 92vw"
+              className="w-full object-cover"
             />
           </div>
         </div>
-
-        <ul
-          ref={trackRef}
-          onScroll={onScroll}
-          tabIndex={0}
-          role="region"
-          aria-label="Patient testimonials, scrollable"
-          className={cn(
-            'mt-11 flex list-none snap-x snap-mandatory gap-6 overflow-x-auto pb-4',
-            // Hide the native bar; the buttons and swipe are the affordances.
-            '[scrollbar-width:none] [&::-webkit-scrollbar]:hidden'
-          )}
-        >
-          {testimonials.map((t, i) => (
-            <li
-              key={i}
-              className="w-[min(88vw,26rem)] shrink-0 snap-start sm:w-[24rem] lg:w-[26rem]"
-              aria-roledescription="testimonial"
-              aria-label={`Testimonial ${i + 1} of ${testimonials.length}`}
-            >
-              <TestimonialCard testimonial={t} />
-            </li>
-          ))}
-        </ul>
-
-        {/* Position indicator — presentational; the region above is the control. */}
-        <p aria-live="polite" className="mt-2 text-center text-sm text-text-secondary">
-          <span className="sr-only">Showing testimonial </span>
-          {index + 1} of {testimonials.length}
-        </p>
       </Container>
     </Section>
   );
@@ -114,7 +112,7 @@ export function Testimonials({ testimonials }: { testimonials: Testimonial[] }) 
 
 export function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
   return (
-    <figure className="flex h-full flex-col rounded-md border border-border-subtle bg-surface-raised p-5 sm:p-7">
+    <figure className="flex h-full flex-col rounded-[30px] border border-border-subtle bg-surface-raised p-5 sm:p-7">
       {testimonial.rating !== null && <Rating value={testimonial.rating} />}
 
       <blockquote className="mt-5 flex-1">
@@ -165,48 +163,5 @@ function StarIcon({ filled }: { filled: boolean }) {
     >
       <path d="M10 1.8l2.4 5 5.5.8-4 3.9.95 5.5L10 14.4l-4.9 2.6.95-5.5-4-3.9 5.5-.8L10 1.8Z" />
     </svg>
-  );
-}
-
-function CarouselButton({
-  label,
-  onClick,
-  disabled,
-  direction,
-}: {
-  label: string;
-  onClick: () => void;
-  disabled: boolean;
-  direction: 'prev' | 'next';
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      className={cn(
-        'inline-flex h-12 w-12 items-center justify-center rounded-sm border transition-colors duration-quick',
-        disabled
-          ? 'cursor-not-allowed border-border-subtle text-text-secondary/40'
-          : 'border-border-strong text-text-link hover:border-brand-primary hover:bg-brand-primary-soft'
-      )}
-    >
-      <span className="sr-only">{label}</span>
-      <svg
-        aria-hidden="true"
-        focusable="false"
-        width="17"
-        height="17"
-        viewBox="0 0 16 16"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className={direction === 'prev' ? 'rotate-180' : undefined}
-      >
-        <path d="M2 8h11M9 4l4 4-4 4" />
-      </svg>
-    </button>
   );
 }

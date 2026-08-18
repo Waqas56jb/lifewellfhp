@@ -67,13 +67,82 @@ const MENU_LABEL: Record<string, string> = {
 
 export const serviceHref = (slug: string) => `/services/${slug}`;
 
-export const serviceSummaries: ServiceSummary[] = services.map((s) => ({
-  slug: s.slug,
-  title: MENU_LABEL[s.slug] ?? s.title,
-  category: s.category,
-  description: SUMMARY[s.slug] ?? s.intro[0] ?? '',
-  href: serviceHref(s.slug),
-}));
+/** Featured-image files scraped from the live WordPress media library. */
+const SERVICE_IMAGE: Record<string, { file: string; alt: string }> = {
+  'psychiatric-evaluations': {
+    file: 'Psychiatric-Evaluation-Telehealth.avif',
+    alt: 'Psychiatric evaluation telehealth visit',
+  },
+  'medication-management': {
+    file: 'Psychiatric-Medication-Management-Telehealth.avif',
+    alt: 'Psychiatric medication management telehealth visit',
+  },
+  'psychiatric-follow-up-visits-telehealth': {
+    file: 'Psychiatric-Follow-Up-Visits-Telehealth.avif',
+    alt: 'Psychiatric follow-up visit by telehealth',
+  },
+  'treatment-for-depression-anxiety-adhd-bipolar-disorder-ptsd': {
+    file: 'Telehealth-Treatment-for-Depression-Anxiety-ADHD-PTSD.avif',
+    alt: 'Telehealth treatment for depression, anxiety, ADHD, bipolar disorder and PTSD',
+  },
+  'annual-physical-exam-telehealth': {
+    file: 'Annual-Physical-Exam-Telehealth.avif',
+    alt: 'Annual physical exam by telehealth',
+  },
+  'chronic-disease-management-telehealth': {
+    file: 'Chronic-Disease-Management-Telehealth.avif',
+    alt: 'Chronic disease management by telehealth',
+  },
+  'preventive-care-telehealth': {
+    file: 'Preventive-Care-Telehealth.avif',
+    alt: 'Preventive care by telehealth',
+  },
+  'telehealth-sick-visits-primary-care': {
+    file: 'Telehealth-Sick-Visits-Primary-Care.avif',
+    alt: 'Telehealth sick visit for primary care',
+  },
+  'weight-management-telehealth': {
+    file: 'Weight-Management-Telehealth.avif',
+    alt: 'Weight management by telehealth',
+  },
+  'wellness-and-lifestyle-counseling-telehealth': {
+    file: 'Wellness-and-Lifestyle-Counseling-Telehealth.avif',
+    alt: 'Wellness and lifestyle counseling by telehealth',
+  },
+  'lab-testing-coordination-telehealth': {
+    file: 'Lab-Testing-Coordination-Telehealth.avif',
+    alt: 'Lab testing coordination by telehealth',
+  },
+};
+
+export const serviceSummaries: ServiceSummary[] = services.map((s) => {
+  const image = SERVICE_IMAGE[s.slug];
+  return {
+    slug: s.slug,
+    title: MENU_LABEL[s.slug] ?? s.title,
+    category: s.category,
+    description: SUMMARY[s.slug] ?? s.intro[0] ?? '',
+    href: serviceHref(s.slug),
+    image: {
+      src: `/images/services/${image?.file ?? 'Psychiatric-Evaluation-Telehealth.avif'}`,
+      alt: image?.alt ?? s.title,
+      width: 1180,
+      height: 990,
+    },
+  };
+});
+
+/** Homepage “How I Help” order, matching the live 4-column services grid. */
+export const HOME_SERVICE_SLUGS = [
+  'psychiatric-evaluations',
+  'medication-management',
+  'psychiatric-follow-up-visits-telehealth',
+  'treatment-for-depression-anxiety-adhd-bipolar-disorder-ptsd',
+] as const;
+
+export const homeServiceSummaries: ServiceSummary[] = HOME_SERVICE_SLUGS.map(
+  (slug) => serviceSummaries.find((s) => s.slug === slug)!
+);
 
 export const getService = (slug: string): Service | undefined =>
   services.find((s) => s.slug === slug);

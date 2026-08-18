@@ -44,6 +44,12 @@ export interface ServiceSummary {
   category: ServiceCategory;
   description: string;
   href: string;
+  image: {
+    src: string;
+    alt: string;
+    width: number;
+    height: number;
+  };
 }
 
 /* --------------------------------------------------------------- blog --- */

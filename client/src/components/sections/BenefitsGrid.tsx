@@ -3,68 +3,83 @@ import { Container, Section, SectionHeading } from '@/components/ui/Section';
 import { benefits, benefitsSection } from '@/data/marketing';
 
 /**
- * "Why Patients Choose My Telehealth Clinic" — the most reused block on the
- * site, appearing on the homepage and all eleven service pages.
+ * “Why Patients Choose My Telehealth Clinic”
  *
- * Five cards do not divide evenly into a 2/3/4 grid, so the last row is
- * centred rather than left-orphaned.
+ * Live Elementor `cmsmasters-list-hover` rows: number + title + description
+ * + arrow. On hover the row fills green, copy turns white, the number fades
+ * out and the thumbnail slides in from below-left (fade-right).
  */
 export function BenefitsGrid({
   heading = benefitsSection.heading,
-  tone = 'base',
+  tone = 'raised',
 }: {
   heading?: string;
-  tone?: 'base' | 'muted';
+  tone?: 'base' | 'muted' | 'raised';
 }) {
+  const parts = heading.split(' My ');
+  const lead = parts[0] ?? heading;
+  const accent = parts.length > 1 ? `My ${parts.slice(1).join(' My ')}` : undefined;
+
   return (
     <Section tone={tone} aria-labelledby="benefits-heading">
       <Container>
         <SectionHeading
-          eyebrow="Why LifeWell"
-          title={heading}
+          title={accent ? lead : heading}
+          accent={accent}
           id="benefits-heading"
           align="center"
         />
 
-        <ul className="mx-auto mt-12 grid max-w-5xl list-none gap-6 sm:grid-cols-2 lg:grid-cols-6">
+        <ul className="mt-10 flex list-none flex-col gap-2.5 min-[1181px]:mt-16">
           {benefits.map((benefit, i) => (
-            <li
-              key={benefit.title}
-              className={[
-                'flex',
-                'lg:col-span-2',
-                // Centre the final row of two on wide screens.
-                i === 3 ? 'lg:col-start-2' : '',
-              ].join(' ')}
-            >
-              <article className="flex h-full w-full flex-col overflow-hidden rounded-md border border-border-subtle bg-surface-raised transition-shadow duration-fast hover:shadow-md">
-                <div className="relative aspect-[4/3] overflow-hidden bg-surface-muted">
-                  <Image
-                    src={benefit.image.src}
-                    alt=""
-                    fill
-                    loading="lazy"
-                    sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 92vw"
-                    className="object-cover"
-                  />
+            <li key={benefit.title}>
+              <article className="group flex min-h-[140px] items-center gap-[15px] overflow-hidden rounded-[30px] bg-[#EEF3F7] px-5 py-5 transition-colors duration-500 hover:bg-[#5FAF6B] max-[767px]:flex-col max-[767px]:items-start sm:px-[30px] sm:py-[30px]">
+                <div className="relative flex h-[88px] w-[88px] shrink-0 items-center justify-center">
                   <span
                     aria-hidden="true"
-                    className="absolute left-4 top-4 inline-flex h-9 w-9 items-center justify-center rounded-sm bg-surface-raised/95 font-heading text-sm font-semibold text-brand-primary-solid shadow-sm"
+                    className="font-heading text-[22px] font-normal leading-none tracking-[-1px] text-[#4A8F55] transition-opacity duration-500 group-hover:opacity-0 sm:text-[24px] min-[1181px]:text-[30px]"
                   >
                     {i + 1}
                   </span>
+                  <Image
+                    src={benefit.image.src}
+                    alt=""
+                    width={150}
+                    height={150}
+                    loading="lazy"
+                    sizes="88px"
+                    className="pointer-events-none absolute inset-0 h-full w-full rounded-[16px] object-cover opacity-0 [transform:translate(-18px,28px)] transition-[opacity,transform] duration-500 ease-out group-hover:opacity-100 group-hover:[transform:translate(0,0)]"
+                  />
                 </div>
-                <div className="flex flex-1 flex-col p-5 sm:p-6">
-                  <h3 className="text-h5">{benefit.title}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-text-secondary">
+
+                <div className="flex min-w-0 flex-1 flex-col gap-2 transition-transform duration-500 ease-out group-hover:translate-x-2 sm:flex-row sm:items-center sm:gap-8">
+                  <h3 className="w-full shrink-0 font-body text-[18px] font-semibold leading-snug tracking-normal text-[#3E7FB1] transition-colors duration-500 group-hover:text-white sm:w-[240px] sm:text-[20px] min-[1181px]:w-[280px] min-[1181px]:text-[22px]">
+                    {benefit.title}
+                  </h3>
+                  <p className="min-w-0 flex-1 text-[14px] leading-[1.45] text-[#374151] transition-colors duration-500 group-hover:text-white sm:text-[16px] min-[1181px]:text-[18px]">
                     {benefit.description}
                   </p>
                 </div>
+
+                <span
+                  aria-hidden="true"
+                  className="ml-auto inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-[#3E7FB1] text-white max-[767px]:mt-2"
+                >
+                  <ArrowIcon />
+                </span>
               </article>
             </li>
           ))}
         </ul>
       </Container>
     </Section>
+  );
+}
+
+function ArrowIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true">
+      <path d="M313.941 216H12c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h301.941v46.059c0 21.382 25.851 32.09 40.971 16.971l86.059-86.059c9.373-9.373 9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971 16.971V216z" />
+    </svg>
   );
 }

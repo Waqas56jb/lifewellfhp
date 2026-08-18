@@ -1,90 +1,47 @@
-import Image from 'next/image';
-import { Container } from '@/components/ui/Section';
-import { Button } from '@/components/ui/Button';
 import { hero } from '@/data/marketing';
 import { site } from '@/data/site';
 import { HeroMedia } from './HeroMedia';
+import { OutlineButton, SwapButton } from '@/components/ui/SwapButton';
 
 /**
- * Homepage hero.
- *
- * Matches the original edge-to-edge treatment: a full-bleed photographic band
- * (80-home-bg.webp, 1920x994, center/cover) behind a two-tone Lora heading,
- * with the practice's signature pill + arrow-chip calls to action.
- *
- * Two deliberate departures from the source:
- *
- *  - The heading is a single semantic <h1> with two coloured <span>s. The
- *    original split it across dozens of nested animated spans, which broke
- *    screen-reader output and text extraction.
- *
- *  - The accent half uses --color-brand-primary-on-dark rather than the raw
- *    brand blue. #3E7FB1 over this photograph measures 2.21:1; the tinted
- *    variant reaches 5.9:1 while reading as the same colour.
+ * Homepage hero — tokens from the live Elementor kit:
+ * Lora 400 italic 60px / 1.05, primary #3E7FB1 + secondary #5FAF6B,
+ * Source Sans 18px body, swap-button hover to green, outline hover to blue.
  */
 export function Hero() {
   return (
     <section
       aria-labelledby="hero-heading"
-      className="relative isolate flex min-h-[32rem] items-center overflow-hidden sm:min-h-[36rem] md:min-h-[42rem] lg:min-h-[50rem]"
+      className="relative isolate flex min-h-[700px] items-center overflow-hidden md:min-h-[950px]"
     >
-      {/* Looping background footage, with its poster as the LCP paint */}
       <HeroMedia />
 
-      {/* Soft mist texture the original layers over the footage */}
-      <Image
-        src="/images/sections/home-hero-bg.webp"
-        alt=""
-        fill
-        aria-hidden="true"
-        sizes="100vw"
-        className="-z-10 object-cover object-center opacity-25 mix-blend-soft-light"
-      />
+      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-black/50" />
 
-      {/* Brand tint, carried over from the source's teal overlay */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 -z-10 bg-[#4d9595]/20 mix-blend-multiply"
-      />
-
-      {/* Scrim — guarantees text contrast whatever frame is showing.
-          A light uniform layer covers narrow viewports, where the heading
-          spans the full width; wider ones add a left-weighted gradient so the
-          footage stays visible on the right. Tuned against sampled pixels by
-          scripts/shot-hero.mjs. */}
-      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[#12283a]/45" />
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 -z-10 bg-gradient-to-r from-[#0e2130]/80 via-[#0e2130]/45 to-transparent"
-      />
-
-      <Container className="relative py-16 sm:py-20 md:py-24">
-        <div className="max-w-2xl">
-          <h1 id="hero-heading" className="text-balance">
-            <span className="text-brand-primary-on-dark">Compassionate Telehealth </span>
-            <span className="text-text-inverse">Mental Care You Can Trust</span>
+      <div className="relative w-full px-5 pb-16 pt-[96px] sm:px-[30px] sm:pb-20 sm:pt-[120px] lg:px-[70px] lg:py-[100px] min-[1601px]:px-10 min-[1601px]:pb-[100px] min-[1601px]:pt-[200px]">
+        <div className="w-full max-w-[670px] md:w-1/2 md:max-w-none min-[1181px]:max-w-[670px]">
+          <h1
+            id="hero-heading"
+            className="font-heading text-[35px] font-normal italic leading-[1.05] tracking-normal [text-wrap:wrap] md:text-[50px] min-[1181px]:text-[60px]"
+          >
+            <span className="text-[#3E7FB1]">Compassionate Telehealth </span>
+            <span className="text-[#5FAF6B]">Mental Care You Can Trust</span>
           </h1>
 
-          <p className="mt-6 max-w-[46ch] text-lead text-text-inverse/90 sm:mt-7">{hero.subheading}</p>
+          <p className="mt-6 text-[14px] font-normal leading-[1.45] text-white sm:text-[16px] min-[1181px]:text-[18px]">
+            {hero.subheading}
+          </p>
 
           <div className="mt-8 flex flex-col items-stretch gap-4 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center sm:gap-5">
-            <Button href={site.booking.url} size="lg" chip>
-              {site.booking.label}
-            </Button>
-            <Button href="/our-services" variant="inverse" size="lg" chip>
-              View All Services
-            </Button>
+            <SwapButton href={site.booking.url}>{site.booking.label}</SwapButton>
+            <OutlineButton href="/our-services">View All Services</OutlineButton>
           </div>
 
-          <p className="mt-9 flex items-center gap-2.5 text-sm text-text-inverse/85">
-            <span
-              aria-hidden="true"
-              className="inline-block h-2 w-2 shrink-0 rounded-full bg-brand-accent"
-            />
+          <p className="mt-8 text-[12px] font-light leading-[1.45] text-white sm:mt-10 sm:text-[14px] min-[1181px]:text-[16px]">
             {hero.badge}
           </p>
         </div>
-      </Container>
+      </div>
     </section>
   );
 }

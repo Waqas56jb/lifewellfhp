@@ -1,76 +1,109 @@
 import Image from 'next/image';
 import type { Step } from '@/types/content';
-import { Container, Section, SectionHeading } from '@/components/ui/Section';
-import { Button } from '@/components/ui/Button';
+import { Container, Section } from '@/components/ui/Section';
+import { SwapButton, LongArrow } from '@/components/ui/SwapButton';
 import { howItWorks, steps as defaultSteps } from '@/data/marketing';
 import { site } from '@/data/site';
 
+/**
+ * Homepage “How It Works” — centered Lora heading, photo with the live
+ * frosted “Are You in Danger?” card, numbered step tiles, then CTA.
+ */
 export function HowItWorks({
   steps = defaultSteps,
   heading = howItWorks.heading,
-  tone = 'muted',
+  tone = 'transparent',
 }: {
   steps?: Step[];
   heading?: string;
-  tone?: 'base' | 'muted' | 'raised';
+  tone?: 'base' | 'muted' | 'raised' | 'transparent';
 }) {
+  const lead = heading.replace(/ Process Works$/, '');
+  const accent = heading.endsWith('Process Works') ? 'Process Works' : undefined;
+
   return (
-    <Section tone={tone} aria-labelledby="how-it-works-heading">
+    <Section
+      tone={tone}
+      aria-labelledby="how-it-works-heading"
+      className="bg-[radial-gradient(ellipse_at_50%_30%,#E8F4F1_0%,#F7FAFB_45%,#FFFFFF_100%)]"
+    >
       <Container>
-        <div className="grid gap-12 lg:grid-cols-[1fr_1.15fr] lg:gap-16">
-          <div>
-            <SectionHeading
-              eyebrow={howItWorks.eyebrow}
-              title={heading}
-              description={howItWorks.body}
-              id="how-it-works-heading"
-              align="left"
+        <div className="flex flex-col items-center text-center">
+          <p className="mb-3 text-[11px] font-semibold uppercase tracking-[1px] text-[#5FAF6B] sm:text-[12px] min-[1181px]:text-[13px]">
+            {howItWorks.eyebrow}
+          </p>
+          <h2
+            id="how-it-works-heading"
+            className="max-w-[16ch] font-heading text-[30px] font-normal leading-[1.15] tracking-[-2px] sm:max-w-[22ch] sm:text-[48px] min-[1181px]:max-w-none min-[1181px]:text-[56px]"
+          >
+            {accent ? (
+              <>
+                <span className="font-heading not-italic text-[#3E7FB1]">{lead} </span>
+                <span className="font-heading italic text-[#5FAF6B]">{accent}</span>
+              </>
+            ) : (
+              <span className="font-heading">{heading}</span>
+            )}
+          </h2>
+          <p className="mt-6 max-w-[46ch] font-body text-[16px] leading-[1.45] text-[#374151] sm:max-w-none sm:text-[18px] min-[1181px]:text-[22px] min-[1181px]:leading-[1.35]">
+            {howItWorks.body}
+          </p>
+        </div>
+
+        <div className="mt-12 grid items-center gap-10 lg:mt-16 lg:grid-cols-2 lg:gap-x-[60px] min-[1181px]:gap-x-20">
+          <div className="relative overflow-hidden rounded-[30px]">
+            <Image
+              src={howItWorks.image.src}
+              alt=""
+              width={howItWorks.image.width}
+              height={howItWorks.image.height}
+              loading="lazy"
+              sizes="(min-width: 1024px) 44vw, 92vw"
+              className="w-full object-cover"
             />
-
-            <div className="mt-9 overflow-hidden rounded-md border border-border-subtle bg-surface-raised">
-              <Image
-                src={howItWorks.image.src}
-                alt=""
-                width={howItWorks.image.width}
-                height={howItWorks.image.height}
-                loading="lazy"
-                sizes="(min-width: 1024px) 40vw, 92vw"
-                className="w-full object-cover"
-              />
+            <div className="absolute left-4 top-4 z-10 max-w-[min(100%-2rem,280px)] rounded-[20px] bg-white/20 p-4 shadow-[0_8px_32px_rgb(0_0_0_/_0.18)] ring-1 ring-white/35 backdrop-blur-[18px] sm:left-6 sm:top-6 sm:max-w-[300px] sm:p-5">
+              <p className="font-heading text-[20px] font-normal leading-snug text-white sm:text-[24px]">
+                {site.crisis.heading}
+              </p>
+              <p className="mt-2 font-body text-[13px] leading-[1.45] text-white/95 sm:text-[15px]">
+                {site.crisis.body}
+              </p>
+              <div className="mt-4">
+                <SwapButton href={site.crisis.phoneHref} size="sm">
+                  Request a Call
+                </SwapButton>
+              </div>
             </div>
-
-            <CrisisCallout className="mt-6" />
           </div>
 
-          <ol className="relative list-none space-y-5">
+          <ol className="flex list-none flex-col gap-5">
             {steps.map((step, i) => (
               <li key={step.title}>
-                <article className="relative flex flex-col gap-4 rounded-md border border-border-subtle bg-surface-raised p-5 transition-shadow duration-fast hover:shadow-md xs:flex-row xs:gap-5 sm:p-7">
+                <article className="flex items-start gap-5 rounded-[20px] bg-white px-5 py-6 shadow-[0_4px_24px_rgb(62_127_177_/_0.08)] sm:items-center sm:gap-6 sm:px-7 sm:py-7">
                   <span
                     aria-hidden="true"
-                    className="flex h-12 w-12 shrink-0 items-center justify-center rounded-sm bg-brand-primary-soft font-heading text-h5 font-semibold text-brand-primary-solid"
+                    className="w-10 shrink-0 text-center font-heading text-[36px] font-normal leading-none text-[#5FAF6B] sm:w-12 sm:text-[42px] min-[1181px]:text-[48px]"
                   >
                     {i + 1}
                   </span>
-                  <div>
-                    <h3 className="text-h5">
+                  <div className="min-w-0">
+                    <h3 className="flex flex-wrap items-center gap-2 font-heading text-[20px] font-normal leading-snug tracking-[-1px] text-[#3E7FB1] sm:text-[24px] min-[1181px]:text-[26px]">
                       <span className="sr-only">Step {i + 1}: </span>
                       {step.title}
+                      <LongArrow />
                     </h3>
-                    <p className="mt-2.5 text-sm leading-relaxed text-text-secondary">
+                    <p className="mt-2 text-[14px] leading-[1.45] text-[#374151] sm:text-[16px]">
                       {step.description}
                     </p>
                   </div>
                 </article>
               </li>
             ))}
-
-            <li className="pt-2">
-              <Button href={site.booking.url} size="lg" fullWidth chip>
-                {site.booking.label}
-              </Button>
-            </li>
           </ol>
+        </div>
+
+        <div className="mt-12 flex justify-center min-[1181px]:mt-16">
+          <SwapButton href={site.booking.url}>{howItWorks.cta.label}</SwapButton>
         </div>
       </Container>
     </Section>
@@ -78,10 +111,7 @@ export function HowItWorks({
 }
 
 /**
- * Crisis callout.
- *
- * Given prominence rather than being folded into body copy — someone in
- * distress must be able to find it immediately.
+ * Crisis callout — used on the contact page, not on this homepage section.
  */
 export function CrisisCallout({ className }: { className?: string }) {
   return (

@@ -4,15 +4,22 @@ import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 
 const CONTROL =
-  'w-full rounded-xs border bg-surface-raised px-4 py-3 text-md text-text-primary ' +
+  'w-full border bg-surface-raised px-4 py-3 text-md text-text-primary ' +
+  'placeholder:text-text-secondary/60 transition-colors duration-quick ' +
+  'disabled:cursor-not-allowed disabled:bg-surface-muted disabled:opacity-70';
+
+const CONTROL_COMPACT =
+  'w-full rounded-[20px] border border-[#E6ECF1] bg-white px-5 py-3.5 text-[16px] text-text-primary ' +
   'placeholder:text-text-secondary/60 transition-colors duration-quick ' +
   'disabled:cursor-not-allowed disabled:bg-surface-muted disabled:opacity-70';
 
 /** Input borders carry meaning, so they use the 3:1 border token. */
-const borderFor = (invalid?: boolean) =>
+const borderFor = (invalid?: boolean, compact?: boolean) =>
   invalid
     ? 'border-error focus:border-error'
-    : 'border-border-input hover:border-brand-primary';
+    : compact
+      ? 'border-[#E6ECF1] hover:border-[#3E7FB1] focus:border-[#3E7FB1]'
+      : 'border-border-input hover:border-brand-primary';
 
 interface BaseProps {
   id: string;
@@ -21,6 +28,7 @@ interface BaseProps {
   hint?: string;
   required?: boolean;
   disabled?: boolean;
+  compact?: boolean;
 }
 
 function Wrapper({
@@ -29,21 +37,29 @@ function Wrapper({
   error,
   hint,
   required,
+  compact,
   children,
 }: BaseProps & { children: ReactNode }) {
   return (
     <div>
-      <label htmlFor={id} className="mb-2 block text-sm font-semibold text-text-primary">
+      <label
+        htmlFor={id}
+        className={
+          compact
+            ? 'mb-2.5 block text-[11px] font-bold uppercase tracking-[1.6px] text-[#374151]'
+            : 'mb-2 block text-sm font-semibold text-text-primary'
+        }
+      >
         {label}
-        {required ? (
+        {required && !compact ? (
           <span className="ml-1 text-error" aria-hidden="true">
             *
           </span>
         ) : (
-          <span className="ml-2 font-normal text-text-secondary">(optional)</span>
+          !required && !compact && <span className="ml-2 font-normal text-text-secondary">(optional)</span>
         )}
       </label>
-      {hint && (
+      {hint && !compact && (
         <p id={`${id}-hint`} className="mb-2 text-xs text-text-secondary">
           {hint}
         </p>
@@ -90,7 +106,7 @@ export function TextField({
         placeholder={placeholder}
         aria-invalid={base.error ? true : undefined}
         aria-describedby={describedBy(base.id, base.error, base.hint)}
-        className={cn(CONTROL, borderFor(!!base.error), 'min-h-12')}
+        className={cn(base.compact ? CONTROL_COMPACT : CONTROL, !base.compact && 'rounded-xs', borderFor(!!base.error, base.compact), 'min-h-12')}
       />
     </Wrapper>
   );
@@ -124,7 +140,7 @@ export function TextAreaField({
         maxLength={maxLength}
         aria-invalid={base.error ? true : undefined}
         aria-describedby={describedBy(base.id, base.error, base.hint)}
-        className={cn(CONTROL, borderFor(!!base.error), 'resize-y')}
+        className={cn(base.compact ? CONTROL_COMPACT : CONTROL, !base.compact && 'rounded-xs', borderFor(!!base.error, base.compact), 'min-h-[140px] resize-y')}
       />
     </Wrapper>
   );

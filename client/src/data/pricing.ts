@@ -9,10 +9,23 @@ export const feesIntro = {
   heading: 'Transparent Mental Health Fees and Insurance Plans',
   body: 'Explore our clear and structured mental health fees and insurance options designed to support individuals, couples, families, and teens. We provide transparent pricing and accepted insurance details to help you plan your care with confidence — all while receiving professional support from the comfort of your own home.',
   image: {
+    src: '/images/sections/Fees.avif',
+    width: 1180,
+    height: 990,
+    alt: 'Mental health fees and insurance — reviewing care options with a provider',
+  },
+};
+
+export const feesClosing = {
+  headingLead: 'Start Your Mental Wellness',
+  headingAccent: 'Journey Today',
+  body: 'Getting help shouldn’t be complicated. Book your secure online appointment in just a few clicks.',
+  cta: 'Book Your Session',
+  image: {
     src: '/images/sections/Mental-Health-Fees-and-Insurance.avif',
     width: 633,
-    height: 633,
-    alt: 'Reviewing telehealth mental health fees and insurance options',
+    height: 740,
+    alt: 'Mental Health Fees and Insurance',
   },
 };
 
@@ -116,3 +129,26 @@ export const additionalInfo = {
     'Accepted payment methods include major credit and debit cards, as well as secure online payment options for your convenience and privacy.',
   ],
 };
+
+export const feesFaqs = [
+  {
+    question: 'What insurance plans do you accept?',
+    answer:
+      'I accept select insurance plans for mental health services. Coverage may vary depending on your insurance provider and individual policy. Please contact me directly to confirm whether your plan is accepted and to verify your mental health benefits.',
+  },
+  {
+    question: 'Do you offer self-pay options?',
+    answer:
+      'Yes, I offer self-pay options for individuals who prefer not to use insurance or whose plans are out-of-network. Transparent fees will be discussed before your appointment so you can make an informed and confident decision about your care.',
+  },
+  {
+    question: 'How much does a telehealth therapy session cost?',
+    answer:
+      'My session fees vary depending on the type of service provided, such as individual therapy, couples therapy, or medication management. I provide detailed fee and insurance information during the scheduling process to ensure full transparency and help you make an informed decision.',
+  },
+  {
+    question: 'Do you provide superbills for out-of-network reimbursement?',
+    answer:
+      'Yes, upon request, I can provide a superbill for patients seeking out-of-network reimbursement from their insurance provider. Reimbursement eligibility depends on your individual insurance policy.',
+  },
+];

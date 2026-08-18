@@ -1,15 +1,23 @@
 'use client';
 
 import { useEffect, useId, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type { NavItem, NavLink } from '@/types/content';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/Button';
+import { SwapButton } from '@/components/ui/SwapButton';
 import { MobileMenu } from './MobileMenu';
-import { SiteSearch } from './SiteSearch';
 
-export function NavBar({ items, cta }: { items: NavItem[]; cta: NavLink }) {
+export function NavBar({
+  items,
+  cta,
+  overlay = false,
+}: {
+  items: NavItem[];
+  cta: NavLink;
+  overlay?: boolean;
+}) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -20,7 +28,7 @@ export function NavBar({ items, cta }: { items: NavItem[]; cta: NavLink }) {
 
   // Hide the drawer if the viewport grows into the desktop nav.
   useEffect(() => {
-    const mq = window.matchMedia('(min-width: 1024px)');
+    const mq = window.matchMedia('(min-width: 1180px)');
     const onChange = () => {
       if (mq.matches) setMobileOpen(false);
     };
@@ -29,14 +37,14 @@ export function NavBar({ items, cta }: { items: NavItem[]; cta: NavLink }) {
   }, []);
 
   return (
-    <>
-      <nav aria-label="Main" className="hidden lg:block">
-        <ul className="flex items-center gap-1">
+    <div className="flex min-w-0 flex-1 items-center justify-end gap-3 lg:gap-[30px]">
+      <nav aria-label="Main" className="hidden min-w-0 min-[1180px]:block">
+        <ul className="flex flex-nowrap items-center justify-end gap-[3px]">
           {items.map((item) =>
             item.groups ? (
               <MegaMenuItem key={item.href} item={item} pathname={pathname} />
             ) : (
-              <li key={item.href}>
+              <li key={item.href} className="shrink-0">
                 <TopLevelLink href={item.href} pathname={pathname}>
                   {item.label}
                 </TopLevelLink>
@@ -46,11 +54,8 @@ export function NavBar({ items, cta }: { items: NavItem[]; cta: NavLink }) {
         </ul>
       </nav>
 
-      <div className="hidden shrink-0 items-center gap-3 lg:flex">
-        <SiteSearch />
-        <Button href={cta.href} size="sm">
-          {cta.label}
-        </Button>
+      <div className="hidden shrink-0 min-[1180px]:flex">
+        <SwapCta href={cta.href} label={cta.label} />
       </div>
 
       <button
@@ -59,7 +64,12 @@ export function NavBar({ items, cta }: { items: NavItem[]; cta: NavLink }) {
         aria-expanded={mobileOpen}
         aria-controls="mobile-menu"
         aria-label="Open menu"
-        className="relative z-10 inline-flex min-h-11 min-w-11 shrink-0 touch-manipulation items-center justify-center gap-2 rounded-sm border border-border-subtle px-3 text-sm font-semibold text-text-primary transition-colors duration-quick hover:bg-surface-muted sm:px-4 lg:hidden"
+        className={cn(
+          'relative z-10 inline-flex min-h-11 min-w-11 shrink-0 touch-manipulation items-center justify-center gap-2 rounded-sm border px-3 text-sm font-semibold transition-colors duration-quick sm:px-4 min-[1180px]:hidden',
+          overlay
+            ? 'border-white/50 text-white hover:bg-white/10'
+            : 'border-border-subtle text-text-primary hover:bg-surface-muted'
+        )}
       >
         <BurgerIcon />
         <span>Menu</span>
@@ -73,7 +83,7 @@ export function NavBar({ items, cta }: { items: NavItem[]; cta: NavLink }) {
         cta={cta}
         pathname={pathname}
       />
-    </>
+    </div>
   );
 }
 
@@ -97,19 +107,13 @@ function TopLevelLink({
       href={href}
       aria-current={active ? 'page' : undefined}
       className={cn(
-        'relative inline-flex min-h-11 items-center rounded-xs px-4 text-sm font-semibold no-underline transition-colors duration-quick',
+        'inline-flex min-h-[42px] shrink-0 items-center whitespace-nowrap rounded-[30px] px-[22px] py-[5px] text-[16px] font-semibold no-underline transition-colors duration-300 min-[1601px]:px-[25px]',
         active
-          ? 'text-brand-primary-solid'
-          : 'text-text-primary hover:text-brand-primary-solid'
+          ? 'bg-[#3E7FB1] text-white'
+          : 'text-[#5FAF6B] hover:bg-[#3E7FB1] hover:text-white'
       )}
     >
       {children}
-      {active && (
-        <span
-          aria-hidden="true"
-          className="absolute inset-x-4 -bottom-0.5 h-0.5 rounded-pill bg-brand-primary"
-        />
-      )}
     </Link>
   );
 }
@@ -123,12 +127,36 @@ function TopLevelLink({
  */
 function MegaMenuItem({ item, pathname }: { item: NavItem; pathname: string }) {
   const [open, setOpen] = useState(false);
+  const [top, setTop] = useState(110);
+  const [mounted, setMounted] = useState(false);
   const panelId = useId();
   const wrapperRef = useRef<HTMLLIElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const active = isActive(pathname, item.href) || pathname.startsWith('/services');
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    const place = () => {
+      const trigger = triggerRef.current?.getBoundingClientRect();
+      const header = document.querySelector('header')?.getBoundingClientRect();
+      const fromTrigger = trigger ? trigger.bottom + 45 : 0;
+      const fromHeader = (header?.bottom ?? 110) + 16;
+      setTop(Math.max(fromTrigger, fromHeader));
+    };
+    place();
+    window.addEventListener('resize', place);
+    window.addEventListener('scroll', place, { passive: true });
+    return () => {
+      window.removeEventListener('resize', place);
+      window.removeEventListener('scroll', place);
+    };
+  }, [open]);
 
   useEffect(() => {
     if (!open) return;
@@ -138,8 +166,18 @@ function MegaMenuItem({ item, pathname }: { item: NavItem; pathname: string }) {
         triggerRef.current?.focus();
       }
     };
+    const onDown = (e: MouseEvent) => {
+      const target = e.target as Node;
+      if (wrapperRef.current?.contains(target)) return;
+      if (target instanceof Element && target.closest('.services-mega')) return;
+      setOpen(false);
+    };
     document.addEventListener('keydown', onKeyDown);
-    return () => document.removeEventListener('keydown', onKeyDown);
+    document.addEventListener('mousedown', onDown);
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+      document.removeEventListener('mousedown', onDown);
+    };
   }, [open]);
 
   useEffect(() => () => clearTimeout(closeTimer.current), []);
@@ -148,67 +186,38 @@ function MegaMenuItem({ item, pathname }: { item: NavItem; pathname: string }) {
     clearTimeout(closeTimer.current);
     setOpen(true);
   };
-  // Small delay stops the panel flickering shut when the pointer crosses the
-  // gap between the trigger and the panel.
   const closeSoon = () => {
     clearTimeout(closeTimer.current);
-    closeTimer.current = setTimeout(() => setOpen(false), 120);
+    closeTimer.current = setTimeout(() => setOpen(false), 160);
   };
 
-  return (
-    <li
-      ref={wrapperRef}
-      className="relative"
-      onMouseEnter={openNow}
-      onMouseLeave={closeSoon}
-      onBlur={(e) => {
-        if (!wrapperRef.current?.contains(e.relatedTarget as Node)) setOpen(false);
-      }}
-    >
-      <button
-        ref={triggerRef}
-        type="button"
-        aria-expanded={open}
-        aria-controls={panelId}
-        onClick={() => setOpen((v) => !v)}
-        className={cn(
-          'relative inline-flex min-h-11 items-center gap-2 rounded-xs px-4 text-sm font-semibold transition-colors duration-quick',
-          active ? 'text-brand-primary-solid' : 'text-text-primary hover:text-brand-primary-solid'
-        )}
-      >
-        {item.label}
-        <ChevronIcon className={cn('transition-transform duration-quick', open && 'rotate-180')} />
-        {active && (
-          <span
-            aria-hidden="true"
-            className="absolute inset-x-4 -bottom-0.5 h-0.5 rounded-pill bg-brand-primary"
-          />
-        )}
-      </button>
-
+  const panel =
+    mounted &&
+    open &&
+    createPortal(
       <div
         id={panelId}
-        hidden={!open}
-        className="absolute left-1/2 top-full z-50 w-[min(56rem,calc(100vw-3rem))] -translate-x-1/2 pt-3"
+        className="services-mega fixed left-1/2 z-[70] w-[min(640px,calc(100vw-2rem))] -translate-x-1/2"
+        style={{ top }}
+        onMouseEnter={openNow}
+        onMouseLeave={closeSoon}
       >
-        <div className="grid gap-8 rounded-md border border-border-subtle bg-surface-raised p-8 shadow-lg md:grid-cols-2">
+        <div className="mega-card flex min-h-[390px] overflow-hidden rounded-[30px] shadow-[0_10px_20px_rgba(0,0,0,0.1)]">
           {item.groups?.map((group) => (
-            <div key={group.label}>
-              <p className="mb-4 text-xs font-semibold uppercase tracking-[0.12em] text-brand-primary-solid">
+            <div
+              key={group.label}
+              className="flex min-w-0 w-1/2 flex-col justify-center gap-5 p-10"
+            >
+              <Link href={item.href} className="mega-heading block no-underline">
                 {group.label}
-              </p>
-              <ul className="space-y-1">
+              </Link>
+              <ul className="flex flex-col gap-px">
                 {group.links.map((link) => (
                   <li key={link.href}>
                     <Link
                       href={link.href}
                       aria-current={pathname === link.href ? 'page' : undefined}
-                      className={cn(
-                        'block rounded-xs px-3 py-2.5 text-sm leading-snug no-underline transition-colors duration-quick',
-                        pathname === link.href
-                          ? 'bg-brand-primary-soft font-semibold text-brand-primary-solid'
-                          : 'text-text-secondary hover:bg-surface-muted hover:text-text-primary'
-                      )}
+                      className="mega-link block px-2.5 py-2.5 no-underline"
                     >
                       {link.label}
                     </Link>
@@ -217,22 +226,44 @@ function MegaMenuItem({ item, pathname }: { item: NavItem; pathname: string }) {
               </ul>
             </div>
           ))}
-          <div className="md:col-span-2">
-            <Link
-              href={item.href}
-              className="inline-flex min-h-11 items-center gap-2 rounded-xs text-sm font-semibold text-text-link"
-            >
-              View all services
-              <ArrowIcon />
-            </Link>
-          </div>
         </div>
-      </div>
+      </div>,
+      document.body
+    );
+
+  return (
+    <li
+      ref={wrapperRef}
+      className="relative shrink-0"
+      onMouseEnter={openNow}
+      onMouseLeave={closeSoon}
+    >
+      <button
+        ref={triggerRef}
+        type="button"
+        aria-expanded={open}
+        aria-controls={panelId}
+        onClick={() => setOpen((v) => !v)}
+        className={cn(
+          'inline-flex min-h-[42px] shrink-0 items-center gap-[7px] whitespace-nowrap rounded-[30px] px-[22px] py-[5px] text-[16px] font-semibold transition-colors duration-300 min-[1601px]:px-[25px]',
+          active || open
+            ? 'bg-[#3E7FB1] text-white'
+            : 'text-[#5FAF6B] hover:bg-[#3E7FB1] hover:text-white'
+        )}
+      >
+        {item.label}
+        <ChevronIcon className={cn('transition-transform duration-quick', open && 'rotate-180')} />
+      </button>
+      {panel}
     </li>
   );
 }
 
 /* -------------------------------------------------------------- icons --- */
+
+function SwapCta({ href, label }: { href: string; label: string }) {
+  return <SwapButton href={href}>{label}</SwapButton>;
+}
 
 function ChevronIcon({ className }: { className?: string }) {
   return (
@@ -250,25 +281,6 @@ function ChevronIcon({ className }: { className?: string }) {
       className={className}
     >
       <path d="m3 6 5 5 5-5" />
-    </svg>
-  );
-}
-
-function ArrowIcon() {
-  return (
-    <svg
-      aria-hidden="true"
-      focusable="false"
-      width="14"
-      height="14"
-      viewBox="0 0 16 16"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M2 8h11M9 4l4 4-4 4" />
     </svg>
   );
 }

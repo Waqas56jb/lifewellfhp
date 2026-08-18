@@ -1,17 +1,17 @@
 import type { Metadata } from 'next';
 import { Container, Section, SectionHeading } from '@/components/ui/Section';
-import { Button } from '@/components/ui/Button';
+import { SwapButton } from '@/components/ui/SwapButton';
 import { Hero } from '@/components/sections/Hero';
 import { WelcomeSection } from '@/components/sections/WelcomeSection';
 import { ServicesGrid } from '@/components/sections/ServicesGrid';
 import { BenefitsGrid } from '@/components/sections/BenefitsGrid';
 import { HowItWorks } from '@/components/sections/HowItWorks';
-import { InsuranceGrid } from '@/components/sections/InsuranceGrid';
 import { StatsBand } from '@/components/sections/StatsBand';
+import { InsuranceGrid } from '@/components/sections/InsuranceGrid';
 import { Testimonials } from '@/components/sections/Testimonials';
 import { ContactCTA } from '@/components/sections/CTASection';
 
-import { serviceSummaries } from '@/data/services';
+import { homeServiceSummaries } from '@/data/services';
 import { servicesSection, stats, testimonials } from '@/data/marketing';
 import { site } from '@/data/site';
 import { pageMetadata } from '@/lib/seo';
@@ -27,7 +27,7 @@ export const metadata: Metadata = pageMetadata({
  *
  * Section order mirrors the source site exactly:
  * Hero → Welcome → My Services → Why Patients Choose → How It Works →
- * Insurance → Stats → Testimonials → Contact CTA (→ Newsletter in footer).
+ * Stats → Insurance → Testimonials → Contact CTA (→ Newsletter in footer).
  */
 export default function HomePage() {
   return (
@@ -39,24 +39,25 @@ export default function HomePage() {
         <Container>
           <SectionHeading
             eyebrow={servicesSection.eyebrow}
-            title={servicesSection.heading}
+            eyebrowVariant="badge"
+            title="How I"
+            accent="Help"
             description={servicesSection.body}
+            descriptionClassName="mt-6 max-w-[42ch] text-[18px] leading-[1.35] text-[#374151] sm:text-[20px] min-[1181px]:text-[22px]"
             id="services-heading"
             align="center"
           />
-          <ServicesGrid services={serviceSummaries} className="mt-12" />
-          <div className="mt-11 flex justify-center">
-            <Button href={servicesSection.cta.href} variant="outline" size="lg" chip>
-              {servicesSection.cta.label}
-            </Button>
+          <ServicesGrid services={homeServiceSummaries} columns={4} className="mt-10 md:mt-[60px] min-[1181px]:mt-20" />
+          <div className="mt-10 flex justify-center md:mt-[60px] min-[1181px]:mt-20">
+            <SwapButton href={servicesSection.cta.href}>{servicesSection.cta.label}</SwapButton>
           </div>
         </Container>
       </Section>
 
       <BenefitsGrid />
       <HowItWorks />
-      <InsuranceGrid />
       <StatsBand stats={stats} />
+      <InsuranceGrid showCta={false} showDisclaimer={false} />
       <Testimonials testimonials={testimonials} />
       <ContactCTA />
     </>

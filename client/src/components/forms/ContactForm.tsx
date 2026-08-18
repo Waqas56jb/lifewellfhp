@@ -22,7 +22,7 @@ const EMPTY = {
   consent: false,
 };
 
-export function ContactForm() {
+export function ContactForm({ variant = 'full' }: { variant?: 'full' | 'compact' }) {
   const uid = useId();
   const [values, setValues] = useState(EMPTY);
   const [company, setCompany] = useState('');
@@ -31,6 +31,7 @@ export function ContactForm() {
   const [feedback, setFeedback] = useState('');
   const statusRef = useRef<HTMLDivElement>(null);
 
+  const compact = variant === 'compact';
   const busy = status === 'submitting';
   const set = <K extends keyof typeof EMPTY>(key: K, value: (typeof EMPTY)[K]) => {
     setValues((v) => ({ ...v, [key]: value }));
@@ -59,7 +60,7 @@ export function ContactForm() {
     else if (message.length > MESSAGE_MAX)
       next.message = `Please use ${MESSAGE_MAX} characters or fewer.`;
 
-    if (!values.consent) next.consent = 'Please confirm before sending.';
+    if (!compact && !values.consent) next.consent = 'Please confirm before sending.';
 
     return next;
   }
@@ -87,7 +88,7 @@ export function ContactForm() {
       phone: values.phone.trim(),
       subject: values.subject.trim(),
       message: values.message.trim(),
-      consent: values.consent,
+      consent: compact ? true : values.consent,
       company,
     });
 
@@ -134,26 +135,27 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} noValidate className="space-y-6">
-      {/* Discourage patients from sending clinical detail through an
-          unencrypted web form. */}
-      <div className="rounded-md border border-border-subtle bg-surface-muted px-5 py-4">
-        <p className="text-sm text-text-secondary">
-          <strong className="font-semibold text-text-primary">Please note:</strong> do not include
-          sensitive medical or personal health information in this form. For clinical matters,
-          call{' '}
-          <a href={site.contact.phoneHref} className="font-semibold text-text-link">
-            {site.contact.phone}
-          </a>{' '}
-          or use the secure patient portal.
-        </p>
-      </div>
+    <form onSubmit={onSubmit} noValidate className={compact ? 'space-y-5' : 'space-y-6'}>
+      {!compact && (
+        <div className="rounded-md border border-border-subtle bg-surface-muted px-5 py-4">
+          <p className="text-sm text-text-secondary">
+            <strong className="font-semibold text-text-primary">Please note:</strong> do not include
+            sensitive medical or personal health information in this form. For clinical matters,
+            call{' '}
+            <a href={site.contact.phoneHref} className="font-semibold text-text-link">
+              {site.contact.phone}
+            </a>{' '}
+            or use the secure patient portal.
+          </p>
+        </div>
+      )}
 
-      <div className="grid gap-6 sm:grid-cols-2">
+      <div className={compact ? 'grid gap-5 sm:grid-cols-2' : 'grid gap-6 sm:grid-cols-2'}>
         <TextField
           id={`${uid}-name`}
-          label="Your name"
+          label={compact ? 'Name' : 'Your name'}
           required
+          compact={compact}
           autoComplete="name"
           value={values.name}
           onChange={(v) => set('name', v)}
@@ -162,61 +164,69 @@ export function ContactForm() {
         />
         <TextField
           id={`${uid}-email`}
-          label="Email address"
+          label={compact ? 'E-mail' : 'Email address'}
           type="email"
           required
+          compact={compact}
           autoComplete="email"
           value={values.email}
           onChange={(v) => set('email', v)}
           error={errors.email}
           disabled={busy}
         />
-        <TextField
-          id={`${uid}-phone`}
-          label="Phone number"
-          type="tel"
-          autoComplete="tel"
-          value={values.phone}
-          onChange={(v) => set('phone', v)}
-          error={errors.phone}
-          disabled={busy}
-        />
-        <TextField
-          id={`${uid}-subject`}
-          label="Subject"
-          value={values.subject}
-          onChange={(v) => set('subject', v)}
-          disabled={busy}
-        />
+        {!compact && (
+          <>
+            <TextField
+              id={`${uid}-phone`}
+              label="Phone number"
+              type="tel"
+              autoComplete="tel"
+              value={values.phone}
+              onChange={(v) => set('phone', v)}
+              error={errors.phone}
+              disabled={busy}
+            />
+            <TextField
+              id={`${uid}-subject`}
+              label="Subject"
+              value={values.subject}
+              onChange={(v) => set('subject', v)}
+              disabled={busy}
+            />
+          </>
+        )}
       </div>
 
       <TextAreaField
         id={`${uid}-message`}
-        label="How can we help?"
+        label={compact ? 'Your Message' : 'How can we help?'}
         required
-        rows={6}
+        compact={compact}
+        rows={compact ? 5 : 6}
         maxLength={MESSAGE_MAX}
-        hint="Please keep your message general — avoid clinical details."
+        hint={compact ? undefined : 'Please keep your message general — avoid clinical details.'}
         value={values.message}
         onChange={(v) => set('message', v)}
         error={errors.message}
         disabled={busy}
       />
 
-      <CheckboxField
-        id={`${uid}-consent`}
-        checked={values.consent}
-        onChange={(v) => set('consent', v)}
-        error={errors.consent}
-        disabled={busy}
-      >
-        I understand this form is not for emergencies or clinical advice, and I consent to being
-        contacted about my enquiry. See our{' '}
-        <Link href="/privacy-policy" className="font-semibold text-text-link underline">
-          Privacy Policy
-        </Link>
-        .
-      </CheckboxField>
+      {!compact && (
+        <CheckboxField
+          id={`${uid}-consent`}
+          checked={values.consent}
+          onChange={(v) => set('consent', v)}
+          error={errors.consent}
+          disabled={busy}
+        >
+          I understand this form is not for emergencies or clinical advice, and I consent to being
+          contacted about my enquiry. See our{' '}
+          <Link href="/privacy-policy" className="font-semibold text-text-link underline">
+            Privacy Policy
+          </Link>
+          .
+        </CheckboxField>
+      )}
 
       <Honeypot value={company} onChange={setCompany} />
 
@@ -234,9 +244,19 @@ export function ContactForm() {
         )}
       </div>
 
-      <Button type="submit" size="lg" disabled={busy}>
-        {busy ? 'Sending…' : 'Send Message'}
-      </Button>
+      {compact ? (
+        <button
+          type="submit"
+          disabled={busy}
+          className="inline-flex min-h-[51px] items-center justify-center rounded-[30px] bg-[#3E7FB1] px-[30px] py-[14px] text-[16px] font-semibold text-white transition-colors duration-300 hover:bg-[#5FAF6B] disabled:cursor-not-allowed disabled:opacity-60 min-[1181px]:text-[18px]"
+        >
+          {busy ? 'Sending…' : 'Send Message'}
+        </button>
+      ) : (
+        <Button type="submit" size="lg" disabled={busy}>
+          {busy ? 'Sending…' : 'Send Message'}
+        </Button>
+      )}
     </form>
   );
 }

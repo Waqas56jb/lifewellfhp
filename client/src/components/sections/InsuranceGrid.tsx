@@ -1,58 +1,144 @@
+'use client';
+
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { Container, Section, SectionHeading } from '@/components/ui/Section';
-import { Button } from '@/components/ui/Button';
+import { Container, Section } from '@/components/ui/Section';
+import { SwapButton } from '@/components/ui/SwapButton';
 import { insuranceCarriers, insuranceSection } from '@/data/marketing';
 
 /**
- * Accepted-plans wall.
- *
- * Every logo carries the carrier name as alt text — all fourteen were rendered
- * with empty alt attributes on the source site, making the section invisible to
- * screen readers and to text extraction.
+ * Live homepage insurance band: centered split heading + 6 wordmark logos
+ * per view (Elementor media carousel, autoplay 5s, infinite).
  */
-export function InsuranceGrid({ showCta = true }: { showCta?: boolean }) {
+export function InsuranceGrid({
+  showCta = true,
+  showDisclaimer = true,
+  title = 'Insurance &',
+  accent = 'Self-Pay Options',
+  body = insuranceSection.body,
+}: {
+  showCta?: boolean;
+  showDisclaimer?: boolean;
+  title?: string;
+  accent?: string;
+  body?: string;
+}) {
   return (
-    <Section tone="raised" aria-labelledby="insurance-heading">
+    <Section
+      tone="transparent"
+      aria-labelledby="insurance-heading"
+      className="bg-[#F7FAFC]"
+    >
       <Container>
-        <SectionHeading
-          eyebrow="Insurance"
-          title={insuranceSection.heading}
-          description={insuranceSection.body}
-          id="insurance-heading"
-          align="center"
-        />
+        <div className="mx-auto max-w-[48rem] text-center">
+          <h2
+            id="insurance-heading"
+            className="font-heading text-[30px] font-normal leading-[1.15] tracking-[-3px] sm:text-[48px] min-[1181px]:text-[56px]"
+          >
+            <span className="text-[#5FAF6B]">{title} </span>
+            <span className="italic text-[#3E7FB1]">{accent}</span>
+          </h2>
+          <p className="mx-auto mt-5 max-w-[46rem] text-[16px] leading-[1.45] text-[#374151] min-[1181px]:text-[18px]">
+            {body}
+          </p>
+        </div>
 
-        <ul className="mt-12 grid list-none grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-          {insuranceCarriers.map((carrier) => (
-            <li
-              key={carrier.name}
-              className="flex items-center justify-center rounded-sm border border-border-subtle bg-surface-raised px-3 py-5 sm:px-5 sm:py-6 transition-colors duration-fast hover:border-border-strong"
-            >
-              <Image
-                src={carrier.logo}
-                alt={carrier.name}
-                width={carrier.width}
-                height={carrier.height}
-                loading="lazy"
-                sizes="(min-width: 1024px) 15vw, (min-width: 640px) 28vw, 42vw"
-                className="h-7 w-auto max-w-full object-contain sm:h-8"
-              />
-            </li>
-          ))}
-        </ul>
+        <LogoCarousel />
 
-        <p className="mx-auto mt-8 max-w-[70ch] text-center text-sm text-text-secondary">
-          {insuranceSection.disclaimer}
-        </p>
+        {showDisclaimer && (
+          <p className="mx-auto mt-8 max-w-[70ch] text-center text-sm text-text-secondary">
+            {insuranceSection.disclaimer}
+          </p>
+        )}
 
         {showCta && (
           <div className="mt-9 flex justify-center">
-            <Button href="/fees-insurance" variant="outline">
-              View fees &amp; insurance details
-            </Button>
+            <SwapButton href="/fees-insurance">View fees &amp; insurance details</SwapButton>
           </div>
         )}
       </Container>
     </Section>
+  );
+}
+
+function LogoCarousel() {
+  const count = insuranceCarriers.length;
+  const loop = [...insuranceCarriers, ...insuranceCarriers];
+  const [index, setIndex] = useState(0);
+  const [visible, setVisible] = useState(6);
+  const [paused, setPaused] = useState(false);
+  const [instant, setInstant] = useState(false);
+
+  useEffect(() => {
+    const update = () => {
+      const w = window.innerWidth;
+      setVisible(w >= 1024 ? 6 : w >= 768 ? 5 : w >= 640 ? 3 : 2);
+    };
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
+
+  useEffect(() => {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced || paused) return;
+    const id = window.setInterval(() => setIndex((i) => i + 1), 5000);
+    return () => window.clearInterval(id);
+  }, [paused]);
+
+  useEffect(() => {
+    if (index !== count) return;
+    const timeout = window.setTimeout(() => {
+      setInstant(true);
+      setIndex(0);
+    }, 500);
+    return () => window.clearTimeout(timeout);
+  }, [index, count]);
+
+  useEffect(() => {
+    if (!instant) return;
+    const id = requestAnimationFrame(() => {
+      requestAnimationFrame(() => setInstant(false));
+    });
+    return () => cancelAnimationFrame(id);
+  }, [instant]);
+
+  const slide = Math.min(index, count);
+
+  return (
+    <div
+      className="mt-12 overflow-hidden sm:mt-14"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      <p className="sr-only">
+        Accepted plans: {insuranceCarriers.map((c) => c.name).join(', ')}.
+      </p>
+      <ul
+        aria-hidden="true"
+        className="flex items-center"
+        style={{
+          transform: `translateX(-${(slide * 100) / visible}%)`,
+          transition: instant ? 'none' : 'transform 500ms ease',
+        }}
+      >
+        {loop.map((carrier, i) => (
+          <li
+            key={`${carrier.name}-${i}`}
+            className="flex shrink-0 items-center justify-center px-3 sm:px-5"
+            style={{ width: `${100 / visible}%` }}
+          >
+            <Image
+              src={carrier.logo}
+              alt=""
+              width={carrier.width}
+              height={carrier.height}
+              loading="lazy"
+              className="h-8 w-auto max-h-8 max-w-full object-contain object-center sm:h-9 sm:max-h-9"
+            />
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }

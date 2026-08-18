@@ -7,7 +7,7 @@ import Image from 'next/image';
 import type { NavItem, NavLink } from '@/types/content';
 import { site } from '@/data/site';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/Button';
+import { SwapButton } from '@/components/ui/SwapButton';
 import { SiteSearch } from './SiteSearch';
 
 interface MobileMenuProps {
@@ -87,7 +87,7 @@ export function MobileMenu({ id, open, onClose, items, cta, pathname }: MobileMe
   // header's `backdrop-filter` / sticky ancestors (the usual reason this
   // drawer appears clipped or inert on iOS and Android).
   const drawer = (
-    <div className="fixed inset-0 z-[80] h-[100dvh] lg:hidden">
+    <div className="fixed inset-0 z-[80] h-[100dvh] min-[1180px]:hidden">
       <div
         className="absolute inset-0 bg-text-primary/50"
         onClick={onClose}
@@ -152,9 +152,9 @@ export function MobileMenu({ id, open, onClose, items, cta, pathname }: MobileMe
         </nav>
 
         <div className="space-y-4 border-t border-border-subtle px-4 py-4 sm:px-5 sm:py-5">
-          <Button href={cta.href} fullWidth>
+          <SwapButton href={cta.href} fullWidth>
             {cta.label}
-          </Button>
+          </SwapButton>
           <a
             href={site.contact.phoneHref}
             className="flex min-h-11 items-center justify-center gap-2 text-sm font-semibold text-text-link"
@@ -186,23 +186,26 @@ function Accordion({ item, pathname }: { item: NavItem; pathname: string }) {
         <ChevronIcon className={cn('transition-transform duration-quick', open && 'rotate-180')} />
       </button>
 
-      <div id={panelId} hidden={!open} className="pb-2 pl-2">
+      <div id={panelId} hidden={!open} className="pb-4 pl-2">
         {item.groups?.map((group) => (
-          <div key={group.label} className="mt-3">
-            <p className="px-4 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-brand-primary-solid">
+          <div key={group.label} className="mt-4">
+            <Link
+              href={item.href}
+              className="mb-3 block px-4 font-heading text-[18px] font-medium leading-snug text-[#5FAF6B] no-underline"
+            >
               {group.label}
-            </p>
-            <ul>
+            </Link>
+            <ul className="flex flex-col gap-1">
               {group.links.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
                     aria-current={pathname === link.href ? 'page' : undefined}
                     className={cn(
-                      'flex min-h-11 items-center rounded-sm px-4 py-2 text-sm leading-snug no-underline transition-colors duration-quick',
+                      'flex min-h-11 items-center rounded-sm px-4 py-2 text-[15px] leading-snug no-underline transition-colors duration-quick',
                       pathname === link.href
-                        ? 'font-semibold text-brand-primary-solid'
-                        : 'text-text-secondary hover:bg-surface-muted hover:text-text-primary'
+                        ? 'font-semibold text-[#3E7FB1]'
+                        : 'text-[#5FAF6B] hover:bg-[#F7FAFC] hover:text-[#3E7FB1]'
                     )}
                   >
                     {link.label}
@@ -212,12 +215,6 @@ function Accordion({ item, pathname }: { item: NavItem; pathname: string }) {
             </ul>
           </div>
         ))}
-        <Link
-          href={item.href}
-          className="mt-2 flex min-h-11 items-center px-4 text-sm font-semibold text-text-link"
-        >
-          View all services
-        </Link>
       </div>
     </>
   );

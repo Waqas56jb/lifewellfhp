@@ -2,22 +2,25 @@ import Link from 'next/link';
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 import { cn, isExternal } from '@/lib/utils';
 
-type Variant = 'primary' | 'accent' | 'outline' | 'ghost' | 'inverse';
+type Variant = 'primary' | 'brand' | 'accent' | 'outline' | 'ghost' | 'inverse';
 type Size = 'sm' | 'md' | 'lg';
 
 /* Solid fills use the darker brand tones so label text clears 4.5:1.
    See scripts/check-contrast.mjs for the measured ratios. */
 const VARIANTS: Record<Variant, string> = {
   primary:
-    'bg-brand-primary-solid text-text-inverse hover:bg-brand-primary-hover border border-transparent',
+    'rounded-sm bg-brand-primary-solid text-text-inverse hover:bg-brand-primary-hover border border-transparent',
+  /* Source Elementor fill — used on the header "Get Started" chip pairing. */
+  brand:
+    'rounded-[30px] bg-brand-primary text-text-inverse hover:bg-[#35719d] border border-transparent',
   accent:
-    'bg-brand-accent-strong text-text-inverse hover:bg-brand-accent-hover border border-transparent',
+    'rounded-sm bg-brand-accent-strong text-text-inverse hover:bg-brand-accent-hover border border-transparent',
   outline:
-    'bg-transparent text-text-link border border-border-strong hover:border-brand-primary hover:bg-brand-primary-soft',
+    'rounded-sm bg-transparent text-text-link border border-border-strong hover:border-brand-primary hover:bg-brand-primary-soft',
   ghost:
-    'bg-transparent text-text-link border border-transparent hover:bg-brand-primary-soft',
+    'rounded-sm bg-transparent text-text-link border border-transparent hover:bg-brand-primary-soft',
   inverse:
-    'bg-surface-raised text-text-link border border-transparent hover:bg-brand-primary-soft',
+    'rounded-sm bg-surface-raised text-text-link border border-transparent hover:bg-brand-primary-soft',
 };
 
 /* min-h keeps every control at or above the 44px comfortable touch target. */
@@ -28,7 +31,7 @@ const SIZES: Record<Size, string> = {
 };
 
 const BASE =
-  'inline-flex items-center justify-center rounded-sm font-semibold leading-tight text-center no-underline ' +
+  'inline-flex items-center justify-center font-semibold leading-tight text-center no-underline ' +
   'transition-colors duration-quick ease-out-soft cursor-pointer touch-manipulation ' +
   'disabled:cursor-not-allowed disabled:opacity-60';
 
@@ -78,6 +81,7 @@ function withChip(node: ReactNode, variant: Variant, fullWidth?: boolean) {
         className={cn(
           'inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition-colors duration-quick sm:h-12 sm:w-12',
           variant === 'primary' && 'bg-brand-primary-solid text-text-inverse',
+          variant === 'brand' && 'bg-brand-primary text-text-inverse',
           variant === 'accent' && 'bg-brand-accent-strong text-text-inverse',
           variant === 'inverse' && 'bg-surface-raised text-text-link',
           (variant === 'outline' || variant === 'ghost') &&

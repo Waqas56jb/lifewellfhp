@@ -70,9 +70,9 @@ export const provider: Provider = {
     'My goal is not only symptom relief, but helping you regain confidence, clarity, and emotional balance.',
 
   image: {
-    src: '/images/team/Lourdie-Chachoute.avif',
-    width: 1180,
-    height: 990,
+    src: '/images/team/Lourdie-Chachoute.jpeg',
+    width: 728,
+    height: 900,
     alt: 'Lourdie Chachoute, FNP-C, PMHNP-BC — Psychiatric-Mental Health Nurse Practitioner',
   },
 };
@@ -95,4 +95,19 @@ export const providerPage = {
     body: 'Take the first step toward better mental health with secure and personalized telehealth support tailored to your needs.',
     cta: { label: 'Start Your Care Today', href: '/book-telehealth-mental-health-appointment' },
   },
+  /** As published in the /bio/ credential rows. */
+  educationBlurb:
+    'Bachelor of Science in Nursing (BSN), Master of Science in Nursing (MSN), Post-Master’s Certificate (Psychiatric-Mental Health Nurse Practitioner), Currently pursuing Doctor of Nursing Practice (DNP)',
+  boardBlurb: 'University of Central Florida, South University, Walden University',
+  expertiseBlurb:
+    'Anxiety disorders treatment, Depression treatment, ADHD evaluation and management, Mood disorders (including bipolar disorder), Trauma and PTSD care, Sleep disorder management, Medication management, Women’s health support, Weight management, Chronic disease management, PMHNP telehealth psychiatric care',
+  yearsBlurb: '15+',
+  shifts: [
+    { day: 'Monday', hours: '18:00-22:00' },
+    { day: 'Tuesday', hours: '18:00-22:00' },
+    { day: 'Wednesday', hours: '18:00-22:00' },
+    { day: 'Thursday', hours: '18:00-22:00' },
+    { day: 'Friday', hours: '07:00-22:00' },
+    { day: 'Saturday', hours: '07:00-22:00' },
+  ],
 };

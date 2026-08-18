@@ -32,12 +32,12 @@ export function HeroMedia() {
         priority
         fetchPriority="high"
         sizes="100vw"
-        className="-z-20 object-cover object-center"
+        className="-z-20 object-cover object-[68%_center]"
       />
 
       {allowMotion && (
         <video
-          className="absolute inset-0 -z-20 h-full w-full object-cover object-center"
+          className="absolute inset-0 -z-20 h-full w-full object-cover object-[68%_center]"
           poster="/images/sections/home-hero-poster.jpg"
           autoPlay
           muted

@@ -15,7 +15,7 @@ export function Container({
   return (
     <div
       className={cn(
-        'mx-auto w-full px-4 sm:px-6 lg:px-10',
+        'mx-auto w-full px-5 sm:px-[30px] lg:px-10 min-[1601px]:px-[80px]',
         size === 'page' && 'max-w-page',
         size === 'narrow' && 'max-w-narrow',
         size === 'prose' && 'max-w-prose',
@@ -88,12 +88,27 @@ export function Section({
 export function Eyebrow({
   children,
   tone = 'primary',
+  variant = 'line',
   className,
 }: {
   children: ReactNode;
   tone?: 'primary' | 'accent' | 'inverse';
+  variant?: 'line' | 'badge';
   className?: string;
 }) {
+  if (variant === 'badge') {
+    return (
+      <p
+        className={cn(
+          'mb-2.5 w-fit rounded-[7px] bg-[#EEF3F7] px-[15px] pb-1 pt-1.5 text-[11px] font-semibold uppercase tracking-[1px] text-[#5FAF6B] sm:text-[12px] min-[1181px]:text-[13px]',
+          className
+        )}
+      >
+        {children}
+      </p>
+    );
+  }
+
   return (
     <p
       className={cn(
@@ -122,8 +137,11 @@ export function Eyebrow({
 
 export function SectionHeading({
   eyebrow,
+  eyebrowVariant = 'line',
   title,
+  accent,
   description,
+  descriptionClassName,
   align = 'center',
   tone = 'default',
   as = 'h2',
@@ -132,8 +150,12 @@ export function SectionHeading({
   children,
 }: {
   eyebrow?: string;
+  eyebrowVariant?: 'line' | 'badge';
   title: string;
+  /** Second half of the live split heading — Lora italic in primary blue. */
+  accent?: string;
   description?: string;
+  descriptionClassName?: string;
   align?: 'left' | 'center';
   tone?: 'default' | 'inverse';
   as?: 'h1' | 'h2' | 'h3';
@@ -151,16 +173,48 @@ export function SectionHeading({
         className
       )}
     >
-      {eyebrow && <Eyebrow tone={tone === 'inverse' ? 'inverse' : 'primary'}>{eyebrow}</Eyebrow>}
-      <Tag id={id} className={cn('max-w-[22ch] sm:max-w-[28ch]', tone === 'inverse' && 'text-text-inverse')}>
-        {title}
+      {eyebrow && (
+        <Eyebrow
+          tone={tone === 'inverse' ? 'inverse' : 'primary'}
+          variant={eyebrowVariant}
+        >
+          {eyebrow}
+        </Eyebrow>
+      )}
+      <Tag
+        id={id}
+        className={cn(
+          'max-w-[36ch] text-[30px] font-normal leading-[1.15] tracking-[-3px] [text-wrap:wrap] sm:text-[48px] min-[1181px]:text-[56px]',
+          tone === 'inverse' && 'text-text-inverse'
+        )}
+      >
+        {accent ? (
+          <>
+            <span className={cn('not-italic', tone === 'inverse' ? 'text-white' : 'text-[#5FAF6B]')}>
+              {title}{' '}
+            </span>
+            <span
+              className={cn(
+                'italic tracking-normal sm:text-[38px] min-[1181px]:text-[56px]',
+                tone === 'inverse' ? 'text-white' : 'text-[#3E7FB1]'
+              )}
+            >
+              {accent}
+            </span>
+          </>
+        ) : (
+          title
+        )}
       </Tag>
       {description && (
         <p
-          className={cn(
-            'mt-6 max-w-[62ch] text-lead',
-            tone === 'inverse' ? 'text-text-inverse/85' : 'text-text-secondary'
-          )}
+          className={
+            descriptionClassName ??
+            cn(
+              'mt-6 max-w-[62ch] text-[16px] leading-[1.45] min-[1181px]:text-[18px]',
+              tone === 'inverse' ? 'text-text-inverse/85' : 'text-text-secondary'
+            )
+          }
         >
           {description}
         </p>

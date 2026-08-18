@@ -25,10 +25,10 @@ export const welcome = {
   ],
   cta: { label: 'Learn More About the Provider', href: '/bio' },
   image: {
-    src: '/images/team/Lourdie-Chachoute.avif',
-    width: 1180,
-    height: 990,
-    alt: 'Lourdie Chachoute, dual-certified Family and Psychiatric-Mental Health Nurse Practitioner',
+    src: '/images/sections/lifewell.avif',
+    width: 1000,
+    height: 667,
+    alt: 'Telehealth mental health care',
   },
 };
 
@@ -103,6 +103,7 @@ export const howItWorks = {
   eyebrow: 'How It Works',
   heading: 'How My Simple Telehealth Process Works',
   body: 'Getting started is simple. Follow these three easy steps to begin your mental wellness journey.',
+  cta: { label: 'Start Your Journey' },
   image: { src: '/images/sections/How-It-Works.avif', width: 633, height: 570 },
 };
 
@@ -196,12 +197,11 @@ export const insuranceCarriers: InsuranceCarrier[] = [
  * cannot be verified from any public source; they are carried over from the
  * client's own configuration and flagged for confirmation — see README.
  *
- * The source labelled the provider count "Licensed Therapists" (plural), which
- * misdescribes a solo practice; relabelled "Licensed Provider".
+ * The source labelled the provider count "Licensed Therapists".
  */
 export const stats: Stat[] = [
   { value: 5000, suffix: '+', label: 'Online Sessions Completed', requiresVerification: true },
-  { value: 1, suffix: '', label: 'Licensed Provider', requiresVerification: false },
+  { value: 1, suffix: '+', label: 'Licensed Therapists', requiresVerification: false },
   { value: 15, suffix: '+', label: 'Years of Experience', requiresVerification: false },
   { value: 98, suffix: '%', label: 'Client Satisfaction Rate', requiresVerification: true },
   { value: 24, suffix: '/7', label: 'Secure Online Access', requiresVerification: false },

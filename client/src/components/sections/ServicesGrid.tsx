@@ -1,63 +1,66 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import type { ServiceSummary } from '@/types/content';
 import { cn } from '@/lib/utils';
 
 /**
- * Service card.
- *
- * The whole card is one link — a stretched anchor over the heading keeps a
- * single tab stop and one accessible name, rather than nesting a "Learn more"
- * link inside a clickable container.
+ * Pastel content-box colours as they appear on the live Elementor cards
+ * (cream, pale yellow, mint, peach), cycling across the grid.
+ */
+const CARD_TONES = ['#FBF7F4', '#F8F1DC', '#E8F4EC', '#F8EBE6'] as const;
+
+/**
+ * Service card — photo on top, overlapping pastel text box, matching
+ * Elementor template 65 on lifewellfhp.com.
  */
 export function ServiceCard({
   service,
+  tone = CARD_TONES[0],
   className,
 }: {
   service: ServiceSummary;
+  tone?: string;
   className?: string;
 }) {
   return (
-    <article
-      className={cn(
-        'group relative flex h-full flex-col rounded-md border border-border-subtle bg-surface-raised p-5 sm:p-7',
-        'transition-[border-color,box-shadow,transform] duration-fast ease-out-soft',
-        'hover:-translate-y-0.5 hover:border-brand-primary/40 hover:shadow-md',
-        'focus-within:border-brand-primary/40 focus-within:shadow-md',
-        className
-      )}
-    >
-      <span
-        aria-hidden="true"
-        className={cn(
-          'mb-5 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-sm',
-          service.category === 'psychiatric'
-            ? 'bg-brand-primary-soft text-brand-primary-solid'
-            : 'bg-brand-accent-soft text-brand-accent-strong'
-        )}
-      >
-        <ServiceIcon category={service.category} />
-      </span>
+    <article className={cn('group relative flex h-full flex-col', className)}>
+      <div className="relative overflow-hidden rounded-[20px]">
+        <Image
+          src={service.image.src}
+          alt={service.image.alt}
+          width={service.image.width}
+          height={service.image.height}
+          loading="lazy"
+          sizes="(min-width: 1181px) 22vw, (min-width: 768px) 45vw, 92vw"
+          className="aspect-[4/3] w-full object-cover transition-transform duration-300 group-hover:scale-110"
+        />
+      </div>
 
-      <h3 className="text-h5">
-        <Link
-          href={service.href}
-          className="rounded-xs text-text-primary no-underline transition-colors duration-quick after:absolute after:inset-0 after:content-[''] group-hover:text-brand-primary-solid"
+      <div
+        className="relative z-10 -mt-10 flex flex-1 flex-col gap-5 rounded-[20px] px-5 py-[30px] sm:px-[30px]"
+        style={{ backgroundColor: tone }}
+      >
+        <h3 className="text-[20px] font-medium italic leading-[1.3] tracking-[-1px] text-[#5FAF6B] sm:text-[24px] min-[1181px]:text-[26px]">
+          <Link
+            href={service.href}
+            className="rounded-xs text-inherit no-underline transition-colors duration-300 after:absolute after:inset-0 after:content-[''] group-hover:text-[#3E7FB1]"
+          >
+            {service.title}
+          </Link>
+        </h3>
+
+        <p className="line-clamp-3 text-[12px] leading-[1.5] text-[#374151] sm:text-[14px] min-[1181px]:text-[16px]">
+          {service.description}
+        </p>
+
+        <span
+          aria-hidden="true"
+          className="mt-auto inline-flex items-center gap-[7px] text-[11px] font-semibold uppercase tracking-[1px] text-[#5FAF6B] transition-colors duration-300 group-hover:text-[#3E7FB1] sm:text-[12px] min-[1181px]:text-[13px]"
         >
-          {service.title}
-        </Link>
-      </h3>
-
-      <p className="mt-3 flex-1 text-sm leading-relaxed text-text-secondary">
-        {service.description}
-      </p>
-
-      <span
-        aria-hidden="true"
-        className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-text-link"
-      >
-        Learn more
-        <ArrowIcon className="transition-transform duration-quick group-hover:translate-x-1" />
-      </span>
+          Learn More
+          <ArrowIcon className="transition-transform duration-300 group-hover:translate-x-[5px]" />
+        </span>
+      </div>
     </article>
   );
 }
@@ -68,51 +71,28 @@ export function ServicesGrid({
   className,
 }: {
   services: ServiceSummary[];
-  columns?: 2 | 3;
+  columns?: 2 | 3 | 4;
   className?: string;
 }) {
   return (
     <ul
       className={cn(
-        'grid list-none gap-6 sm:grid-cols-2',
+        'grid list-none gap-5 sm:grid-cols-2 sm:gap-[30px]',
         columns === 3 && 'lg:grid-cols-3',
+        columns === 4 && 'lg:grid-cols-4',
         className
       )}
     >
-      {services.map((service) => (
+      {services.map((service, index) => (
         <li key={service.slug} className="flex">
-          <ServiceCard service={service} className="w-full" />
+          <ServiceCard
+            service={service}
+            tone={CARD_TONES[index % CARD_TONES.length]}
+            className="w-full"
+          />
         </li>
       ))}
     </ul>
-  );
-}
-
-function ServiceIcon({ category }: { category: ServiceSummary['category'] }) {
-  const common = {
-    width: 22,
-    height: 22,
-    viewBox: '0 0 24 24',
-    fill: 'none',
-    stroke: 'currentColor',
-    strokeWidth: 1.7,
-    strokeLinecap: 'round' as const,
-    strokeLinejoin: 'round' as const,
-  };
-
-  // Mind/brain mark for psychiatric care; heart-in-hand for primary care.
-  return category === 'psychiatric' ? (
-    <svg {...common}>
-      <path d="M12 5a3.2 3.2 0 0 0-3.2 3.2A2.9 2.9 0 0 0 6 11a2.9 2.9 0 0 0 1.5 2.5A2.8 2.8 0 0 0 10 18h2V5Z" />
-      <path d="M12 5a3.2 3.2 0 0 1 3.2 3.2A2.9 2.9 0 0 1 18 11a2.9 2.9 0 0 1-1.5 2.5A2.8 2.8 0 0 1 14 18h-2" />
-      <path d="M12 18v3" />
-    </svg>
-  ) : (
-    <svg {...common}>
-      <path d="M3 13.5a10 10 0 0 0 6 3.2l3.3.4a3 3 0 0 0 2.4-.8L20 12" />
-      <path d="M12.5 8.6a2 2 0 0 1 2.9-2.7l.6.6.6-.6a2 2 0 0 1 2.9 2.7L16 11.9l-3.5-3.3Z" />
-      <path d="M3 11v7" />
-    </svg>
   );
 }
 
@@ -121,17 +101,13 @@ function ArrowIcon({ className }: { className?: string }) {
     <svg
       aria-hidden="true"
       focusable="false"
-      width="15"
-      height="15"
-      viewBox="0 0 16 16"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
+      width="11"
+      height="11"
+      viewBox="0 0 448 512"
+      fill="currentColor"
       className={className}
     >
-      <path d="M2 8h11M9 4l4 4-4 4" />
+      <path d="M313.941 216H12c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h301.941v46.059c0 21.382 25.851 32.09 40.971 16.971l86.059-86.059c9.373-9.373 9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971 16.971V216z" />
     </svg>
   );
 }

@@ -24,7 +24,7 @@ export const headerNav: NavItem[] = [
       },
     ],
   },
-  { label: 'Meet Your Provider', href: '/bio' },
+  { label: 'Psychiatric Mental Health Nurse Practitioner', href: '/bio' },
   { label: 'Fees & Insurance', href: '/fees-insurance' },
   { label: 'Contact Us', href: '/contact-telehealth-mental-health-provider' },
 ];
@@ -37,7 +37,7 @@ export const headerCta: NavLink = {
 /** Footer columns, matching the source site's four-column layout. */
 export const footerColumns: { heading: string; links: NavLink[] }[] = [
   {
-    heading: serviceCategories.psychiatric.shortLabel,
+    heading: 'Psychiatric & Mental Health Services',
     links: summariesByCategory('psychiatric').map((s) => ({ label: s.title, href: s.href })),
   },
   {
@@ -48,13 +48,14 @@ export const footerColumns: { heading: string; links: NavLink[] }[] = [
     heading: 'Important Links',
     links: [
       { label: 'Home', href: '/' },
-      { label: 'Meet Your Provider', href: '/bio' },
-      { label: 'Our Services', href: '/our-services' },
+      { label: 'Bio', href: '/bio' },
       { label: 'Fees & Insurance', href: '/fees-insurance' },
       { label: 'Testimonials', href: '/telehealth-mental-health-testimonials' },
       { label: 'FAQs', href: '/faqs' },
-      { label: 'Blog', href: '/blog' },
-      { label: 'Book Appointment', href: '/book-telehealth-mental-health-appointment' },
+      { label: 'Privacy Policy', href: '/privacy-policy' },
+      { label: 'Terms & Conditions', href: '/terms-conditions' },
+      { label: 'Accessibility Statement', href: '/accessibility-statement' },
+      { label: 'SMS Consent / Communication Policy', href: '/sms-consent-communication-policy' },
       { label: 'Contact Us', href: '/contact-telehealth-mental-health-provider' },
     ],
   },

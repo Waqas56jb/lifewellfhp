@@ -1,59 +1,59 @@
 import Image from 'next/image';
-import { Container, Section, Eyebrow } from '@/components/ui/Section';
-import { Button } from '@/components/ui/Button';
+import { Container, Section } from '@/components/ui/Section';
+import { SwapButton } from '@/components/ui/SwapButton';
 import { welcome } from '@/data/marketing';
-import { provider } from '@/data/provider';
 
-/** Homepage "Welcome" / about-the-provider band. */
+/**
+ * Welcome band — live split title:
+ *   Welcome to (green, roman) LifeWell (blue, italic)
+ *   Family Health & / Psychiatry (blue, italic)
+ */
 export function WelcomeSection() {
   return (
     <Section tone="base" aria-labelledby="welcome-heading">
       <Container>
-        <div className="grid items-center gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
-          <div className="relative">
-            <div className="overflow-hidden rounded-md border border-border-subtle bg-surface-muted">
-              <Image
-                src={welcome.image.src}
-                alt={welcome.image.alt}
-                width={welcome.image.width}
-                height={welcome.image.height}
-                loading="lazy"
-                sizes="(min-width: 1024px) 38vw, 92vw"
-                className="w-full object-cover"
-              />
-            </div>
-            <p className="mt-4 rounded-md border border-border-subtle bg-surface-raised px-5 py-4 text-sm shadow-sm">
-              <span className="block font-heading text-md font-semibold text-text-primary">
-                {provider.name}
-              </span>
-              <span className="mt-0.5 block text-text-secondary">{provider.credentials}</span>
-            </p>
+        <div className="grid items-start gap-10 lg:grid-cols-2 lg:gap-x-[80px] lg:gap-y-12">
+          <div className="overflow-hidden rounded-[12px]">
+            <Image
+              src={welcome.image.src}
+              alt={welcome.image.alt}
+              width={welcome.image.width}
+              height={welcome.image.height}
+              loading="lazy"
+              sizes="(min-width: 1024px) 46vw, 92vw"
+              className="w-full object-cover"
+            />
           </div>
 
           <div>
-            <Eyebrow>About the practice</Eyebrow>
-            <h2 id="welcome-heading" className="max-w-[20ch]">
-              {welcome.heading}
+            <h2
+              id="welcome-heading"
+              className="font-heading text-[28px] font-normal leading-[1.2] tracking-normal sm:text-[38px] min-[1181px]:text-[56px]"
+            >
+              <span className="whitespace-nowrap">
+                <span className="text-[#5FAF6B] not-italic">Welcome to </span>
+                <span className="italic text-[#3E7FB1]">LifeWell</span>
+              </span>
+              <span className="block italic text-[#3E7FB1]">
+                Family Health &amp;
+                <br />
+                Psychiatry
+              </span>
             </h2>
 
-            <div className="mt-6 space-y-5">
+            <div className="mt-6 space-y-4 sm:mt-8 sm:space-y-5">
               {welcome.body.map((paragraph) => (
-                <p key={paragraph.slice(0, 40)} className="text-md leading-relaxed text-text-secondary">
+                <p
+                  key={paragraph.slice(0, 40)}
+                  className="text-[14px] font-normal leading-[1.45] text-[#374151] sm:text-[16px] min-[1181px]:text-[18px]"
+                >
                   {paragraph}
                 </p>
               ))}
             </div>
 
-            <blockquote className="mt-8 border-l-2 border-brand-accent-strong pl-5">
-              <p className="font-heading text-lead italic text-text-primary">
-                “{provider.philosophy}”
-              </p>
-            </blockquote>
-
-            <div className="mt-9">
-              <Button href={welcome.cta.href} variant="outline" size="lg" chip>
-                {welcome.cta.label}
-              </Button>
+            <div className="mt-8 sm:mt-10">
+              <SwapButton href={welcome.cta.href}>{welcome.cta.label}</SwapButton>
             </div>
           </div>
         </div>
