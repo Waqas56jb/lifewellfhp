@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 import { Container, Section } from '@/components/ui/Section';
 import { Button } from '@/components/ui/Button';
-import { PageHero } from '@/components/sections/PageHero';
+import { InnerPageHero } from '@/components/sections/InnerPageHero';
 import { CTASection } from '@/components/sections/CTASection';
 import { JsonLd } from '@/components/seo/JsonLd';
 
@@ -47,14 +47,11 @@ export default function BlogIndexPage() {
         id="blog-schema"
       />
 
-      <PageHero
-        eyebrow="Blog"
-        title="Mental Health & Wellness Insights"
+      <InnerPageHero
+        title="Mental Health & Wellness"
+        accent="Insights"
         lead="Practical, evidence-informed guidance on mental health, written by a board-certified psychiatric nurse practitioner."
-        breadcrumbs={[
-          { name: 'Home', href: '/' },
-          { name: 'Blog', href: '/blog' },
-        ]}
+        leadSize="subhead"
       />
 
       <Section tone="base">

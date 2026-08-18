@@ -66,7 +66,13 @@ export function FAQAccordion({
                   onClick={() => toggle(i)}
                   className="flex w-full items-center justify-between gap-5 text-left"
                 >
-                  <span className="font-heading text-[22px] font-normal leading-[1.25] tracking-[-1px] text-[#5FAF6B] sm:text-[24px] min-[1181px]:text-[30px]">
+                  <span
+                    className={cn(
+                      'font-heading text-[22px] font-normal leading-[1.25] tracking-[-1px] text-[#5FAF6B] transition-colors duration-300 sm:text-[24px] min-[1181px]:text-[30px]',
+                      'group-hover:text-white',
+                      expanded && 'text-white'
+                    )}
+                  >
                     {faq.question}
                   </span>
                   <span

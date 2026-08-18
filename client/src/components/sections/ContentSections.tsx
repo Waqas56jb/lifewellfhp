@@ -12,18 +12,29 @@ export function ContentSections({
   sections,
   headingLevel = 2,
   className,
+  variant = 'default',
 }: {
   sections: ContentSection[];
   headingLevel?: 2 | 3;
   className?: string;
+  variant?: 'default' | 'live';
 }) {
   const Heading = (headingLevel === 2 ? 'h2' : 'h3') as 'h2' | 'h3';
+  const live = variant === 'live';
 
   return (
-    <div className={cn('space-y-12', className)}>
+    <div className={cn(live ? 'space-y-10' : 'space-y-12', className)}>
       {sections.map((section) => (
         <section key={section.heading} className="scroll-mt-28">
-          <Heading className={headingLevel === 2 ? 'text-h3' : 'text-h4'}>
+          <Heading
+            className={
+              live
+                ? 'font-heading text-[22px] font-normal leading-[1.25] tracking-[-1px] text-[#5FAF6B] sm:text-[28px] min-[1181px]:text-[32px]'
+                : headingLevel === 2
+                  ? 'text-h3'
+                  : 'text-h4'
+            }
+          >
             {section.heading}
           </Heading>
 
@@ -32,14 +43,28 @@ export function ContentSections({
               block.type === 'list' ? (
                 <ul key={i} className="space-y-2.5">
                   {block.items.map((item, j) => (
-                    <li key={j} className="flex gap-3 text-md leading-relaxed text-text-secondary">
+                    <li
+                      key={j}
+                      className={
+                        live
+                          ? 'flex gap-3 text-[16px] leading-[1.45] text-[#374151] min-[1181px]:text-[18px]'
+                          : 'flex gap-3 text-md leading-relaxed text-text-secondary'
+                      }
+                    >
                       <CheckIcon />
                       <span>{item}</span>
                     </li>
                   ))}
                 </ul>
               ) : (
-                <p key={i} className="text-md leading-relaxed text-text-secondary">
+                <p
+                  key={i}
+                  className={
+                    live
+                      ? 'text-[16px] leading-[1.45] text-[#374151] min-[1181px]:text-[18px]'
+                      : 'text-md leading-relaxed text-text-secondary'
+                  }
+                >
                   {block.text}
                 </p>
               )

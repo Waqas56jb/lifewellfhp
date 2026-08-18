@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 
 import { Container, Section } from '@/components/ui/Section';
-import { PageHero } from '@/components/sections/PageHero';
+import { InnerPageHero } from '@/components/sections/InnerPageHero';
 import { LegalSections } from '@/components/sections/ContentSections';
 import { JsonLd } from '@/components/seo/JsonLd';
 
@@ -31,15 +31,7 @@ export function LegalPageTemplate({ slug, label }: { slug: string; label: string
         id={`${slug}-schema`}
       />
 
-      <PageHero
-        eyebrow="Legal"
-        title={page.heading}
-        lead={page.intro[0]}
-        breadcrumbs={[
-          { name: 'Home', href: '/' },
-          { name: label, href: `/${slug}` },
-        ]}
-      />
+      <InnerPageHero title={page.heading} lead={page.intro[0]} leadSize="subhead" />
 
       <Section tone="base">
         <Container>

@@ -1,0 +1,61 @@
+import { InnerPageHero } from '@/components/sections/InnerPageHero';
+import { JourneyCta } from '@/components/sections/JourneyCta';
+import { ServicesGrid } from '@/components/sections/ServicesGrid';
+import { serviceSummaries } from '@/data/services';
+
+/** Live /our-services listing order (page 1 then remaining cards). */
+const LIVE_ORDER = [
+  'psychiatric-evaluations',
+  'medication-management',
+  'psychiatric-follow-up-visits-telehealth',
+  'treatment-for-depression-anxiety-adhd-bipolar-disorder-ptsd',
+  'lab-testing-coordination-telehealth',
+  'wellness-and-lifestyle-counseling-telehealth',
+  'weight-management-telehealth',
+  'telehealth-sick-visits-primary-care',
+  'preventive-care-telehealth',
+  'annual-physical-exam-telehealth',
+  'chronic-disease-management-telehealth',
+] as const;
+
+/**
+ * /our-services — Elementor post 50789: hero card, 3-column service cards,
+ * closing journey CTA.
+ */
+export function OurServicesPageContent() {
+  const ordered = LIVE_ORDER.map((slug) => serviceSummaries.find((s) => s.slug === slug)!).filter(
+    Boolean
+  );
+
+  return (
+    <div className="bg-white">
+      <InnerPageHero
+        image={{
+          src: '/images/sections/SERVIES-IMG.avif',
+          alt: 'Comprehensive online mental health services',
+        }}
+        imageSide="left"
+        title="Comprehensive Online"
+        accent="Mental Health Services"
+        lead="Personalized, evidence-based psychiatric care delivered through secure and convenient telehealth sessions as part of our comprehensive online mental health services, designed to support your long-term emotional wellness."
+        leadSize="subhead"
+      />
+
+      <section className="px-5 pb-16 sm:px-[30px] sm:pb-24 lg:px-10 lg:pb-[150px] min-[1601px]:px-[80px]">
+        <div className="mx-auto max-w-[1840px]">
+          <ServicesGrid services={ordered} columns={3} className="lg:gap-10" />
+        </div>
+      </section>
+
+      <JourneyCta
+        image={{
+          src: '/images/sections/Online-Mental-Health-Services.avif',
+          alt: 'Online Mental Health Services',
+          width: 1180,
+          height: 990,
+        }}
+        imageSide="left"
+      />
+    </div>
+  );
+}

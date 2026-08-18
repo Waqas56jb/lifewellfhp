@@ -16,9 +16,9 @@ export function BenefitsGrid({
   heading?: string;
   tone?: 'base' | 'muted' | 'raised';
 }) {
-  const parts = heading.split(' My ');
-  const lead = parts[0] ?? heading;
-  const accent = parts.length > 1 ? `My ${parts.slice(1).join(' My ')}` : undefined;
+  const match = heading.match(/^(.*?)\s+((?:My|Our)\s+.*)$/);
+  const lead = match?.[1] ?? heading;
+  const accent = match?.[2];
 
   return (
     <Section tone={tone} aria-labelledby="benefits-heading">
