@@ -9,7 +9,7 @@ const CONTROL =
   'disabled:cursor-not-allowed disabled:bg-surface-muted disabled:opacity-70';
 
 const CONTROL_COMPACT =
-  'w-full rounded-[20px] border border-[#E6ECF1] bg-white px-5 py-3.5 text-[16px] text-text-primary ' +
+  'w-full rounded-[20px] border border-[#E6ECF1] bg-[#F4F7FA] px-5 py-3.5 text-[16px] text-text-primary ' +
   'placeholder:text-text-secondary/60 transition-colors duration-quick ' +
   'disabled:cursor-not-allowed disabled:bg-surface-muted disabled:opacity-70';
 
@@ -46,7 +46,7 @@ function Wrapper({
         htmlFor={id}
         className={
           compact
-            ? 'mb-2.5 block text-[11px] font-bold uppercase tracking-[1.6px] text-[#374151]'
+            ? 'mb-2.5 block text-[11px] font-bold uppercase tracking-[1.6px] text-[#5FAF6B]'
             : 'mb-2 block text-sm font-semibold text-text-primary'
         }
       >

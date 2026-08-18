@@ -71,19 +71,7 @@ export function ContactPageContent() {
       </section>
 
       <section className="px-5 pb-16 sm:px-[30px] sm:pb-24 lg:px-10 lg:pb-[150px] min-[1601px]:px-[80px]">
-        <div className="mx-auto grid max-w-[1280px] items-center gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-x-10">
-          <div>
-            <h2 className="font-heading text-[30px] font-normal leading-[1.15] tracking-[-3px] sm:text-[48px] min-[1181px]:text-[56px]">
-              <span className="text-[#5FAF6B]">{contactPage.formHeading} </span>
-              <span className="italic tracking-normal text-[#3E7FB1]">{contactPage.formAccent}</span>
-            </h2>
-            <p className="mt-6 text-[14px] leading-[1.45] text-[#374151] sm:text-[16px] min-[1181px]:text-[18px]">
-              {contactPage.formBody}
-            </p>
-            <div className="mt-8">
-              <ContactForm variant="compact" />
-            </div>
-          </div>
+        <div className="mx-auto grid max-w-[1280px] items-center gap-10 lg:grid-cols-2 lg:gap-x-12">
           <div>
             <Image
               src={contactPage.formImage.src}
@@ -94,6 +82,17 @@ export function ContactPageContent() {
               sizes="(min-width: 1024px) 50vw, 92vw"
               className="h-[400px] w-full rounded-[20px] object-cover object-center sm:h-[600px] lg:h-[700px] lg:rounded-[30px]"
             />
+          </div>
+          <div>
+            <h2 className="font-heading text-[30px] font-normal leading-[1.15] tracking-[-3px] text-[#5FAF6B] sm:text-[48px] min-[1181px]:text-[56px]">
+              {contactPage.formHeading} {contactPage.formAccent}
+            </h2>
+            <p className="mt-6 text-[14px] leading-[1.45] text-[#374151] sm:text-[16px] min-[1181px]:text-[18px]">
+              {contactPage.formBody}
+            </p>
+            <div className="mt-8">
+              <ContactForm variant="compact" />
+            </div>
           </div>
         </div>
       </section>
