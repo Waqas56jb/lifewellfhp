@@ -1,8 +1,10 @@
 import type { Request, Response } from 'express';
 import { newsletterSchema, fieldErrors } from '../validation/schemas.js';
 import { subscribe } from '../services/newsletter.service.js';
+import { storeLead } from './leads.controller.js';
 import { badRequest } from '../utils/errors.js';
 import { logger } from '../utils/logger.js';
+import { supabaseConfigured } from '../lib/supabase.js';
 
 export async function handleNewsletter(req: Request, res: Response): Promise<void> {
   const parsed = newsletterSchema.safeParse(req.body);
@@ -17,6 +19,20 @@ export async function handleNewsletter(req: Request, res: Response): Promise<voi
     }
 
     throw badRequest(errors.email ?? 'Please enter a valid email address.', errors);
+  }
+
+  if (supabaseConfigured()) {
+    try {
+      await storeLead({
+        type: 'newsletter',
+        email: parsed.data.email,
+        subject: 'Newsletter signup',
+      });
+    } catch (err) {
+      logger.error('newsletter lead persist failed', {
+        reason: err instanceof Error ? err.message : 'unknown',
+      });
+    }
   }
 
   const result = await subscribe(parsed.data.email);

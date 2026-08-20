@@ -11,8 +11,8 @@ const schema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
   PORT: z.coerce.number().int().positive().default(4000),
 
-  /** Comma-separated list of origins permitted to call the API. */
-  CORS_ORIGINS: z.string().default('http://localhost:3000'),
+  /** Comma-separated list of origins permitted to call this API. */
+  CORS_ORIGINS: z.string().default('http://localhost:3000,http://localhost:3001'),
 
   /** Destination for contact-form notifications. */
   CONTACT_EMAIL: z.string().email().default('contact@lifewellfhp.com'),
@@ -38,6 +38,17 @@ const schema = z.object({
   /** Rate limits, per IP per hour. */
   RATE_LIMIT_CONTACT: z.coerce.number().int().positive().default(5),
   RATE_LIMIT_NEWSLETTER: z.coerce.number().int().positive().default(3),
+
+  /* Supabase — admin CMS + leads persistence. */
+  SUPABASE_URL: z.string().url().optional(),
+  SUPABASE_SERVICE_ROLE_KEY: z.string().optional(),
+  SUPABASE_ANON_KEY: z.string().optional(),
+
+  /** JWT secret for admin sessions. */
+  ADMIN_JWT_SECRET: z.string().min(16).default('dev-only-change-me-admin-jwt'),
+
+  GA4_MEASUREMENT_ID: z.string().optional(),
+  GOOGLE_SEARCH_CONSOLE_SITE: z.string().optional(),
 });
 
 const parsed = schema.safeParse(process.env);

@@ -43,8 +43,8 @@ export function createApp(): Express {
         // response, and non-browser callers get a clean 403 below.
         return callback(null, false);
       },
-      methods: ['GET', 'POST', 'OPTIONS'],
-      allowedHeaders: ['Content-Type'],
+      methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
+      allowedHeaders: ['Content-Type', 'Authorization'],
       maxAge: 86400,
     })
   );
@@ -52,8 +52,8 @@ export function createApp(): Express {
   // Refuse cross-origin requests from origins that are not on the allowlist.
   app.use(disallowedOrigin);
 
-  // Small ceiling — these endpoints only ever receive short JSON payloads.
-  app.use(express.json({ limit: '16kb' }));
+  // Public forms stay small; admin CMS payloads (blog/body) need more room.
+  app.use(express.json({ limit: '1mb' }));
 
   // Malformed or oversized JSON is a client error, not a server fault.
   app.use(jsonErrorHandler);

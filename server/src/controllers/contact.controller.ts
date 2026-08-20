@@ -2,8 +2,10 @@ import type { Request, Response } from 'express';
 import { randomUUID } from 'node:crypto';
 import { contactSchema, fieldErrors } from '../validation/schemas.js';
 import { sendContactNotification } from '../services/email.service.js';
+import { storeLead } from './leads.controller.js';
 import { badRequest } from '../utils/errors.js';
 import { logger } from '../utils/logger.js';
+import { supabaseConfigured } from '../lib/supabase.js';
 
 export async function handleContact(req: Request, res: Response): Promise<void> {
   const parsed = contactSchema.safeParse(req.body);
@@ -26,6 +28,25 @@ export async function handleContact(req: Request, res: Response): Promise<void> 
   }
 
   const referenceId = randomUUID().slice(0, 8).toUpperCase();
+
+  if (supabaseConfigured()) {
+    try {
+      await storeLead({
+        type: 'contact',
+        name: parsed.data.name,
+        email: parsed.data.email,
+        phone: parsed.data.phone,
+        subject: parsed.data.subject,
+        message: parsed.data.message,
+        reference_id: referenceId,
+      });
+    } catch (err) {
+      logger.error('lead persist failed', {
+        reason: err instanceof Error ? err.message : 'unknown',
+      });
+    }
+  }
+
   const result = await sendContactNotification(parsed.data, referenceId);
 
   res.status(201).json({

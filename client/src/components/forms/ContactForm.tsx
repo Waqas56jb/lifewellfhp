@@ -3,6 +3,7 @@
 import { useId, useRef, useState } from 'react';
 import Link from 'next/link';
 import { submitContact } from '@/lib/api';
+import { trackConversion } from '@/lib/cms';
 import type { FormStatus } from '@/types/content';
 import { site } from '@/data/site';
 import { Button } from '@/components/ui/Button';
@@ -96,6 +97,7 @@ export function ContactForm({ variant = 'full' }: { variant?: 'full' | 'compact'
       setStatus('success');
       setFeedback(res.message);
       setValues(EMPTY);
+      void trackConversion('contact', typeof window !== 'undefined' ? window.location.pathname : undefined);
     } else {
       setStatus('error');
       setFeedback(res.message);

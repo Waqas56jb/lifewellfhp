@@ -1,18 +1,21 @@
 import { Router } from 'express';
 import { handleContact } from '../controllers/contact.controller.js';
 import { handleNewsletter } from '../controllers/newsletter.controller.js';
+import {
+  getPublicContent,
+  getPublicBlogPost,
+} from '../controllers/publicContent.controller.js';
+import {
+  handleAnalyticsIngest,
+  handleConversionIngest,
+} from '../controllers/analytics.controller.js';
 import { asyncHandler, contactLimiter, newsletterLimiter } from '../middleware/index.js';
 import { mailConfigured, env } from '../config/env.js';
+import { adminRouter } from './admin.routes.js';
+import { supabaseConfigured } from '../lib/supabase.js';
 
 export const router: Router = Router();
 
-/**
- * Liveness / readiness probe.
- *
- * Reports whether the integrations are actually wired up, so a deployment that
- * silently lost its SMTP credentials is visible rather than discovered when a
- * patient's message vanishes.
- */
 router.get('/health', (_req, res) => {
   res.json({
     status: 'ok',
@@ -20,9 +23,19 @@ router.get('/health', (_req, res) => {
     integrations: {
       mail: mailConfigured ? 'configured' : 'log-only',
       newsletter: env.NEWSLETTER_PROVIDER,
+      supabase: supabaseConfigured() ? 'configured' : 'missing',
     },
   });
 });
 
 router.post('/api/contact', contactLimiter, asyncHandler(handleContact));
 router.post('/api/newsletter', newsletterLimiter, asyncHandler(handleNewsletter));
+
+// Public CMS + privacy-focused telemetry for the marketing site
+router.get('/api/public/content', asyncHandler(getPublicContent));
+router.get('/api/public/blog/:slug', asyncHandler(getPublicBlogPost));
+router.post('/api/public/analytics', asyncHandler(handleAnalyticsIngest));
+router.post('/api/public/conversions', asyncHandler(handleConversionIngest));
+
+// Admin CMS API
+router.use('/api/admin', adminRouter);

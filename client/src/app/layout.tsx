@@ -7,6 +7,7 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { SkipLink } from '@/components/layout/SkipLink';
 import { JsonLd } from '@/components/seo/JsonLd';
+import { AnalyticsBeacon } from '@/components/seo/AnalyticsBeacon';
 import { homeGraph } from '@/lib/schema';
 import { DEFAULT_OG_IMAGE } from '@/lib/seo';
 
@@ -76,6 +77,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
         </main>
         <Footer />
+        <AnalyticsBeacon />
       </body>
     </html>
   );
