@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Container, Section } from '@/components/ui/Section';
 import { SwapButton } from '@/components/ui/SwapButton';
-import { insuranceCarriers, insuranceSection } from '@/data/marketing';
+import { insuranceCarriers as staticCarriers, insuranceSection } from '@/data/marketing';
+import type { InsuranceCarrier } from '@/types/content';
 
 /**
  * Live homepage insurance band: centered split heading + 6 wordmark logos
@@ -16,12 +17,14 @@ export function InsuranceGrid({
   title = 'Insurance &',
   accent = 'Self-Pay Options',
   body = insuranceSection.body,
+  carriers = staticCarriers,
 }: {
   showCta?: boolean;
   showDisclaimer?: boolean;
   title?: string;
   accent?: string;
   body?: string;
+  carriers?: InsuranceCarrier[];
 }) {
   return (
     <Section
@@ -43,7 +46,7 @@ export function InsuranceGrid({
           </p>
         </div>
 
-        <LogoCarousel />
+        <LogoCarousel carriers={carriers} />
 
         {showDisclaimer && (
           <p className="mx-auto mt-8 max-w-[70ch] text-center text-sm text-text-secondary">
@@ -61,9 +64,9 @@ export function InsuranceGrid({
   );
 }
 
-function LogoCarousel() {
-  const count = insuranceCarriers.length;
-  const loop = [...insuranceCarriers, ...insuranceCarriers];
+function LogoCarousel({ carriers }: { carriers: InsuranceCarrier[] }) {
+  const count = carriers.length;
+  const loop = [...carriers, ...carriers];
   const [index, setIndex] = useState(0);
   const [visible, setVisible] = useState(6);
   const [paused, setPaused] = useState(false);
@@ -112,7 +115,7 @@ function LogoCarousel() {
       onMouseLeave={() => setPaused(false)}
     >
       <p className="sr-only">
-        Accepted plans: {insuranceCarriers.map((c) => c.name).join(', ')}.
+        Accepted plans: {carriers.map((c) => c.name).join(', ')}.
       </p>
       <ul
         aria-hidden="true"

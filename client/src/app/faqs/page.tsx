@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 
 import { FaqsPageContent } from '@/components/sections/FaqsPageContent';
 import { JsonLd } from '@/components/seo/JsonLd';
-import { faqs } from '@/data/marketing';
 import { pageMetadata } from '@/lib/seo';
 import { faqGraph } from '@/lib/schema';
+import { getResolvedContent } from '@/lib/cms-resolve';
 
 /**
  * The source site published this page with the Privacy Policy's <title> and
@@ -19,11 +19,13 @@ export const metadata: Metadata = pageMetadata({
   path: '/faqs',
 });
 
-export default function FaqsPage() {
+export default async function FaqsPage() {
+  const cms = await getResolvedContent();
+
   return (
     <>
-      <JsonLd data={faqGraph(faqs, DESCRIPTION)} id="faq-schema" />
-      <FaqsPageContent />
+      <JsonLd data={faqGraph(cms.faqs, DESCRIPTION)} id="faq-schema" />
+      <FaqsPageContent faqs={cms.faqs} />
     </>
   );
 }

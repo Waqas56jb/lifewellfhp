@@ -4,6 +4,7 @@ import { TestimonialsPageContent } from '@/components/sections/TestimonialsPageC
 import { JsonLd } from '@/components/seo/JsonLd';
 import { pageMetadata } from '@/lib/seo';
 import { pageGraph } from '@/lib/schema';
+import { getResolvedContent } from '@/lib/cms-resolve';
 
 const DESCRIPTION =
   'Read authentic telehealth mental health testimonials from individuals who have experienced compassionate, professional, and confidential online mental health support.';
@@ -20,18 +21,9 @@ export const metadata: Metadata = pageMetadata({
   },
 });
 
-/**
- * Testimonials page.
- *
- * Only the genuine testimonials are rendered. The source page also published
- * four Lorem-ipsum placeholders attributed to "John Doe" / "Jane Doe"; those are
- * omitted rather than reproduced.
- *
- * No Review or AggregateRating schema is emitted. Review markup on a medical
- * practice needs verified, consented, first-party reviews, and consent status
- * for these quotes is unconfirmed — see README.
- */
-export default function TestimonialsPage() {
+export default async function TestimonialsPage() {
+  const cms = await getResolvedContent();
+
   return (
     <>
       <JsonLd
@@ -46,7 +38,7 @@ export default function TestimonialsPage() {
         )}
         id="testimonials-schema"
       />
-      <TestimonialsPageContent />
+      <TestimonialsPageContent testimonials={cms.testimonials} />
     </>
   );
 }

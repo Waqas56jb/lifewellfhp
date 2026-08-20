@@ -1,14 +1,14 @@
 import Image from 'next/image';
 import { Container, Section } from '@/components/ui/Section';
 import { SwapButton } from '@/components/ui/SwapButton';
-import { welcome } from '@/data/marketing';
+import { welcome as staticWelcome } from '@/data/marketing';
 
 /**
  * Welcome band — live split title:
  *   Welcome to (green, roman) LifeWell (blue, italic)
  *   Family Health & / Psychiatry (blue, italic)
  */
-export function WelcomeSection() {
+export function WelcomeSection({ welcome = staticWelcome }: { welcome?: typeof staticWelcome }) {
   return (
     <Section tone="base" aria-labelledby="welcome-heading">
       <Container>

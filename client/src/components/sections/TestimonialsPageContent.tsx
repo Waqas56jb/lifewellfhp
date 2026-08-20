@@ -1,8 +1,11 @@
 import { InnerPageHero } from '@/components/sections/InnerPageHero';
 import { JourneyCta } from '@/components/sections/JourneyCta';
-import { testimonials, testimonialsCta, testimonialsSection } from '@/data/marketing';
-
-const PAGE_QUOTES = testimonials.slice(1);
+import {
+  testimonials as staticTestimonials,
+  testimonialsCta,
+  testimonialsSection,
+} from '@/data/marketing';
+import type { Testimonial } from '@/types/content';
 
 const DISPLAY_NAME: Record<string, string> = {
   'Elisa Smith': 'Elisa M.',
@@ -14,7 +17,12 @@ const DISPLAY_NAME: Record<string, string> = {
  * /telehealth-mental-health-testimonials — Elementor post 50982.
  * Lorem / John Doe placeholders from the live page are omitted.
  */
-export function TestimonialsPageContent() {
+export function TestimonialsPageContent({
+  testimonials = staticTestimonials,
+}: {
+  testimonials?: Testimonial[];
+}) {
+  const PAGE_QUOTES = testimonials.length > 1 ? testimonials.slice(1) : testimonials;
   return (
     <div className="bg-white">
       <InnerPageHero

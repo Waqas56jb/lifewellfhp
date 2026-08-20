@@ -1,12 +1,13 @@
 import { InnerPageHero } from '@/components/sections/InnerPageHero';
 import { FAQAccordion } from '@/components/sections/FAQAccordion';
-import { faqs } from '@/data/marketing';
+import { faqs as staticFaqs } from '@/data/marketing';
+import type { Faq } from '@/types/content';
 
 /**
  * /faqs — Elementor post 51032: rounded hero card, then cmsmasters toggles.
  * Live page has no extra “still have a question” box or closing CTA.
  */
-export function FaqsPageContent() {
+export function FaqsPageContent({ faqs = staticFaqs }: { faqs?: Faq[] }) {
   return (
     <div className="bg-white">
       <InnerPageHero

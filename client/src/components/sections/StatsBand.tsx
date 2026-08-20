@@ -13,7 +13,8 @@ import { site } from '@/data/site';
  * Live “Start Your Mental Wellness Journey” band: rounded photo with
  * left-aligned split heading + booking button, then a 5-column stats row.
  */
-export function StatsBand({ stats }: { stats: Stat[] }) {
+export function StatsBand({ stats, bookingUrl }: { stats: Stat[]; bookingUrl?: string }) {
+  const bookHref = bookingUrl ?? site.booking.url;
   return (
     <section aria-labelledby="stats-heading" className="bg-white py-14 md:py-24">
       <Container>
@@ -45,7 +46,7 @@ export function StatsBand({ stats }: { stats: Stat[] }) {
                 {primaryCta.body}
               </p>
               <div className="mt-8">
-                <SwapButton href={site.booking.url}>Book Your Session</SwapButton>
+                <SwapButton href={bookHref}>Book Your Session</SwapButton>
               </div>
             </div>
           </div>

@@ -53,7 +53,16 @@ export function CTASection({
 }
 
 /** Split "reach out" band with imagery + form, matching the live homepage. */
-export function ContactCTA() {
+export function ContactCTA({
+  bookingUrl,
+  bookingLabel,
+}: {
+  bookingUrl?: string;
+  bookingLabel?: string;
+} = {}) {
+  // booking props reserved for future CTA variant; contact form is primary here.
+  void bookingUrl;
+  void bookingLabel;
   return (
     <Section tone="transparent" aria-labelledby="contact-cta-heading" className="bg-[#F4F7FA]">
       <Container>

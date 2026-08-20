@@ -22,10 +22,15 @@ const LIVE_ORDER = [
  * /our-services — Elementor post 50789: hero card, 3-column service cards,
  * closing journey CTA.
  */
-export function OurServicesPageContent() {
-  const ordered = LIVE_ORDER.map((slug) => serviceSummaries.find((s) => s.slug === slug)!).filter(
-    Boolean
-  );
+export function OurServicesPageContent({
+  services = serviceSummaries,
+}: {
+  services?: typeof serviceSummaries;
+}) {
+  const bySlug = new Map(services.map((s) => [s.slug, s]));
+  const ordered = LIVE_ORDER.map((slug) => bySlug.get(slug)).filter(Boolean) as typeof serviceSummaries;
+  const extras = services.filter((s) => !LIVE_ORDER.includes(s.slug as (typeof LIVE_ORDER)[number]));
+  const list = [...ordered, ...extras];
 
   return (
     <div className="bg-white">
@@ -43,7 +48,7 @@ export function OurServicesPageContent() {
 
       <section className="px-5 pb-16 sm:px-[30px] sm:pb-24 lg:px-10 lg:pb-[150px] min-[1601px]:px-[80px]">
         <div className="mx-auto max-w-[1840px]">
-          <ServicesGrid services={ordered} columns={3} className="lg:gap-10" />
+          <ServicesGrid services={list} columns={3} className="lg:gap-10" />
         </div>
       </section>
 

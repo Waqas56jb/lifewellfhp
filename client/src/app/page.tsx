@@ -10,11 +10,12 @@ import { StatsBand } from '@/components/sections/StatsBand';
 import { InsuranceGrid } from '@/components/sections/InsuranceGrid';
 import { Testimonials } from '@/components/sections/Testimonials';
 import { ContactCTA } from '@/components/sections/CTASection';
+import { SiteNotice } from '@/components/sections/SiteNotice';
 
-import { homeServiceSummaries } from '@/data/services';
-import { servicesSection, stats, testimonials } from '@/data/marketing';
+import { servicesSection, stats } from '@/data/marketing';
 import { site } from '@/data/site';
 import { pageMetadata } from '@/lib/seo';
+import { getResolvedContent } from '@/lib/cms-resolve';
 
 export const metadata: Metadata = pageMetadata({
   title: 'Telehealth Mental Health Care | PMHNP Online Therapy & Medication Management',
@@ -25,15 +26,16 @@ export const metadata: Metadata = pageMetadata({
 /**
  * Homepage.
  *
- * Section order mirrors the source site exactly:
- * Hero → Welcome → My Services → Why Patients Choose → How It Works →
- * Stats → Insurance → Testimonials → Contact CTA (→ Newsletter in footer).
+ * Content prefers live CMS values when present, otherwise the static rebuild data.
  */
-export default function HomePage() {
+export default async function HomePage() {
+  const cms = await getResolvedContent();
+
   return (
     <>
-      <Hero />
-      <WelcomeSection />
+      <SiteNotice announcements={cms.announcements} />
+      <Hero hero={cms.hero} bookingUrl={cms.booking.url} bookingLabel={cms.booking.label} />
+      <WelcomeSection welcome={cms.welcome} />
 
       <Section tone="raised" aria-labelledby="services-heading">
         <Container>
@@ -47,7 +49,11 @@ export default function HomePage() {
             id="services-heading"
             align="center"
           />
-          <ServicesGrid services={homeServiceSummaries} columns={4} className="mt-10 md:mt-[60px] min-[1181px]:mt-20" />
+          <ServicesGrid
+            services={cms.homeServices.slice(0, 4)}
+            columns={4}
+            className="mt-10 md:mt-[60px] min-[1181px]:mt-20"
+          />
           <div className="mt-10 flex justify-center md:mt-[60px] min-[1181px]:mt-20">
             <SwapButton href={servicesSection.cta.href}>{servicesSection.cta.label}</SwapButton>
           </div>
@@ -55,11 +61,11 @@ export default function HomePage() {
       </Section>
 
       <BenefitsGrid />
-      <HowItWorks />
-      <StatsBand stats={stats} />
-      <InsuranceGrid showCta={false} showDisclaimer={false} />
-      <Testimonials testimonials={testimonials} />
-      <ContactCTA />
+      <HowItWorks bookingUrl={cms.booking.url} />
+      <StatsBand stats={stats} bookingUrl={cms.booking.url} />
+      <InsuranceGrid showCta={false} showDisclaimer={false} carriers={cms.insurance} />
+      <Testimonials testimonials={cms.testimonials} />
+      <ContactCTA bookingUrl={cms.booking.url} bookingLabel={cms.booking.label} />
     </>
   );
 }

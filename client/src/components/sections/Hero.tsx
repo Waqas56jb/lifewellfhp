@@ -1,5 +1,6 @@
 import { hero } from '@/data/marketing';
 import { site } from '@/data/site';
+import type { ResolvedHero } from '@/lib/cms-resolve';
 import { HeroMedia } from './HeroMedia';
 import { OutlineButton, SwapButton } from '@/components/ui/SwapButton';
 
@@ -8,7 +9,21 @@ import { OutlineButton, SwapButton } from '@/components/ui/SwapButton';
  * Lora 400 italic 60px / 1.05, primary #3E7FB1 + secondary #5FAF6B,
  * Source Sans 18px body, swap-button hover to green, outline hover to blue.
  */
-export function Hero() {
+export function Hero({
+  hero: heroProp,
+  bookingUrl,
+  bookingLabel,
+}: {
+  hero?: ResolvedHero;
+  bookingUrl?: string;
+  bookingLabel?: string;
+} = {}) {
+  const data: ResolvedHero = heroProp ?? { ...hero };
+  const primary = data.headingPrimary ?? 'Compassionate Telehealth';
+  const accent = data.headingAccent ?? 'Mental Care You Can Trust';
+  const bookHref = bookingUrl ?? site.booking.url;
+  const bookLabel = bookingLabel ?? site.booking.label;
+
   return (
     <section
       aria-labelledby="hero-heading"
@@ -24,21 +39,21 @@ export function Hero() {
             id="hero-heading"
             className="font-heading text-[35px] font-normal italic leading-[1.05] tracking-normal [text-wrap:wrap] md:text-[50px] min-[1181px]:text-[60px]"
           >
-            <span className="text-[#3E7FB1]">Compassionate Telehealth </span>
-            <span className="text-[#5FAF6B]">Mental Care You Can Trust</span>
+            <span className="text-[#3E7FB1]">{primary}{accent ? ' ' : ''}</span>
+            {accent ? <span className="text-[#5FAF6B]">{accent}</span> : null}
           </h1>
 
           <p className="mt-6 text-[14px] font-normal leading-[1.45] text-white sm:text-[16px] min-[1181px]:text-[18px]">
-            {hero.subheading}
+            {data.subheading}
           </p>
 
           <div className="mt-8 flex flex-col items-stretch gap-4 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center sm:gap-5">
-            <SwapButton href={site.booking.url}>{site.booking.label}</SwapButton>
+            <SwapButton href={bookHref}>{bookLabel}</SwapButton>
             <OutlineButton href="/our-services">View All Services</OutlineButton>
           </div>
 
           <p className="mt-8 text-[12px] font-light leading-[1.45] text-white sm:mt-10 sm:text-[14px] min-[1181px]:text-[16px]">
-            {hero.badge}
+            {data.badge}
           </p>
         </div>
       </div>

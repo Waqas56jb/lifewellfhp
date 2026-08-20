@@ -52,8 +52,8 @@ export function createApp(): Express {
   // Refuse cross-origin requests from origins that are not on the allowlist.
   app.use(disallowedOrigin);
 
-  // Public forms stay small; admin CMS payloads (blog/body) need more room.
-  app.use(express.json({ limit: '1mb' }));
+  // Public forms stay small; admin CMS + image uploads need more room.
+  app.use(express.json({ limit: '8mb' }));
 
   // Malformed or oversized JSON is a client error, not a server fault.
   app.use(jsonErrorHandler);

@@ -14,14 +14,17 @@ export function HowItWorks({
   heading = howItWorks.heading,
   tone = 'transparent',
   showCta = true,
+  bookingUrl,
 }: {
   steps?: Step[];
   heading?: string;
   tone?: 'base' | 'muted' | 'raised' | 'transparent';
   showCta?: boolean;
+  bookingUrl?: string;
 }) {
   const lead = heading.replace(/ Process Works$/, '');
   const accent = heading.endsWith('Process Works') ? 'Process Works' : undefined;
+  const bookHref = bookingUrl ?? site.booking.url;
 
   return (
     <Section
@@ -106,7 +109,7 @@ export function HowItWorks({
 
         {showCta && (
           <div className="mt-12 flex justify-center min-[1181px]:mt-16">
-            <SwapButton href={site.booking.url}>{howItWorks.cta.label}</SwapButton>
+            <SwapButton href={bookHref}>{howItWorks.cta.label}</SwapButton>
           </div>
         )}
       </Container>

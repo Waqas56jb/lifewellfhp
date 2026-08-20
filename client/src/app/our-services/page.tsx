@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 
 import { OurServicesPageContent } from '@/components/sections/OurServicesPageContent';
 import { JsonLd } from '@/components/seo/JsonLd';
-import { serviceSummaries } from '@/data/services';
 import { pageMetadata } from '@/lib/seo';
 import { serviceListGraph } from '@/lib/schema';
+import { getResolvedContent } from '@/lib/cms-resolve';
 
 const DESCRIPTION =
   'Personalized, evidence-based psychiatric care delivered through secure and convenient telehealth sessions as part of our comprehensive online mental health services.';
@@ -21,11 +21,13 @@ export const metadata: Metadata = pageMetadata({
   },
 });
 
-export default function OurServicesPage() {
+export default async function OurServicesPage() {
+  const cms = await getResolvedContent();
+
   return (
     <>
-      <JsonLd data={serviceListGraph(serviceSummaries, DESCRIPTION)} id="services-schema" />
-      <OurServicesPageContent />
+      <JsonLd data={serviceListGraph(cms.serviceSummaries, DESCRIPTION)} id="services-schema" />
+      <OurServicesPageContent services={cms.serviceSummaries} />
     </>
   );
 }

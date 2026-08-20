@@ -23,6 +23,7 @@ import {
 import {
   getAnalyticsSummary,
 } from '../controllers/analytics.controller.js';
+import { handleMediaUpload } from '../controllers/media.controller.js';
 import { getSupabase } from '../lib/supabase.js';
 import {
   announcementCreate,
@@ -177,6 +178,13 @@ adminRouter.use(
     updateSchema: blogUpdate,
     orderBy: { column: 'updated_at', ascending: false },
   })
+);
+
+adminRouter.post(
+  '/media/upload',
+  requireAdmin,
+  requirePermission('media'),
+  asyncHandler(handleMediaUpload)
 );
 
 adminRouter.use(
