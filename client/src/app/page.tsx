@@ -11,6 +11,7 @@ import { InsuranceGrid } from '@/components/sections/InsuranceGrid';
 import { Testimonials } from '@/components/sections/Testimonials';
 import { ContactCTA } from '@/components/sections/CTASection';
 import { SiteNotice } from '@/components/sections/SiteNotice';
+import { VideosSection } from '@/components/sections/VideosSection';
 
 import { servicesSection, stats } from '@/data/marketing';
 import { site } from '@/data/site';
@@ -65,6 +66,7 @@ export default async function HomePage() {
       <StatsBand stats={stats} bookingUrl={cms.booking.url} />
       <InsuranceGrid showCta={false} showDisclaimer={false} carriers={cms.insurance} />
       <Testimonials testimonials={cms.testimonials} />
+      <VideosSection videos={cms.videos} />
       <ContactCTA bookingUrl={cms.booking.url} bookingLabel={cms.booking.label} />
     </>
   );

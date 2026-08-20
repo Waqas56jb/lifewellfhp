@@ -34,20 +34,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
     try {
       setUser(JSON.parse(raw) as AdminUser);
+      setLoading(false);
     } catch {
       setUser(null);
-    }
-    void api<AdminUser>('/api/admin/auth/me').then((res) => {
-      if (res.success && res.data) {
-        setUser(res.data);
-        localStorage.setItem('lw_admin_user', JSON.stringify(res.data));
-      } else {
-        setUser(null);
-        setToken(null);
-        localStorage.removeItem('lw_admin_user');
-      }
       setLoading(false);
-    });
+      return;
+    }
+    void api<AdminUser>('/api/admin/auth/me')
+      .then((res) => {
+        if (res.success && res.data) {
+          setUser(res.data);
+          localStorage.setItem('lw_admin_user', JSON.stringify(res.data));
+          return;
+        }
+        const expired = (res.message || '').toLowerCase().includes('expired');
+        if (expired) {
+          setUser(null);
+          setToken(null);
+          localStorage.removeItem('lw_admin_user');
+        }
+      })
+      .catch(() => {
+        // Keep the restored session if the API is briefly unreachable.
+      });
   }, []);
 
   const value = useMemo<AuthState>(
@@ -70,7 +79,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(null);
         setToken(null);
         localStorage.removeItem('lw_admin_user');
-        window.location.href = '/login';
       },
       can(module) {
         if (!user) return false;

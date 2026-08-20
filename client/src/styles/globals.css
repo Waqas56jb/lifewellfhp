@@ -350,13 +350,21 @@
   }
 }
 
-@keyframes insurance-marquee {
-  from {
-    transform: translateX(0);
+@keyframes nav-progress {
+  0% {
+    transform: scaleX(0.08);
   }
-  to {
-    transform: translateX(-50%);
+  50% {
+    transform: scaleX(0.65);
   }
+  100% {
+    transform: scaleX(0.92);
+  }
+}
+
+.nav-progress-bar {
+  animation: nav-progress 0.9s ease-in-out infinite alternate;
+  transform-origin: left center;
 }
 
 /* ==========================================================================

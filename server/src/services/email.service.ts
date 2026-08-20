@@ -3,6 +3,7 @@ import { env, mailConfigured, isProduction } from '../config/env.js';
 import { logger } from '../utils/logger.js';
 import { serverError } from '../utils/errors.js';
 import type { ContactInput } from '../validation/schemas.js';
+import { getSupabase, supabaseConfigured } from '../lib/supabase.js';
 
 let transporter: Transporter | null = null;
 
@@ -32,6 +33,25 @@ const escapeHtml = (value: string) =>
 export interface DeliveryResult {
   delivered: boolean;
   referenceId: string;
+  inbox: string;
+}
+
+/** Practice inbox for website enquiries. SMTP password stays in env only. */
+export async function resolveInboxEmail(): Promise<string> {
+  if (supabaseConfigured()) {
+    try {
+      const { data } = await getSupabase()
+        .from('site_settings')
+        .select('inbox_email, practice_email')
+        .eq('id', 'default')
+        .maybeSingle();
+      const inbox = data?.inbox_email || data?.practice_email;
+      if (typeof inbox === 'string' && inbox.includes('@')) return inbox;
+    } catch {
+      // Use env fallback.
+    }
+  }
+  return env.CONTACT_EMAIL;
 }
 
 /**
@@ -79,6 +99,7 @@ export async function sendContactNotification(
     </div>
   `;
 
+  const inbox = await resolveInboxEmail();
   const mail = getTransporter();
 
   if (!mail) {
@@ -91,13 +112,13 @@ export async function sendContactNotification(
     if (isProduction) {
       throw serverError('Mail transport is not configured');
     }
-    return { delivered: false, referenceId };
+    return { delivered: false, referenceId, inbox };
   }
 
   try {
     await mail.sendMail({
       from: env.MAIL_FROM,
-      to: env.CONTACT_EMAIL,
+      to: inbox,
       // Lets the practice reply straight to the patient without exposing the
       // address as the envelope sender.
       replyTo: `${input.name} <${input.email}>`,
@@ -107,13 +128,62 @@ export async function sendContactNotification(
     });
 
     logger.info('Contact notification delivered', { referenceId });
-    return { delivered: true, referenceId };
+    return { delivered: true, referenceId, inbox };
   } catch (error) {
     logger.error('Contact notification failed', {
       referenceId,
       reason: error instanceof Error ? error.message : 'unknown',
     });
     throw serverError('Unable to deliver the message');
+  }
+}
+
+export type OutboundMail = {
+  to: string;
+  toName?: string;
+  subject: string;
+  body: string;
+  html?: string;
+  replyTo?: string;
+};
+
+export type OutboundResult = {
+  delivered: boolean;
+  error?: string;
+};
+
+/** Admin-composed or lead follow-up mail. Does not throw — caller logs status. */
+export async function sendOutboundMail(input: OutboundMail): Promise<OutboundResult> {
+  const text = input.body;
+  const html = `
+    <div style="font-family:system-ui,-apple-system,'Segoe UI',sans-serif;color:#374151;line-height:1.6">
+      <div style="white-space:pre-wrap">${escapeHtml(input.body)}</div>
+      <p style="margin-top:24px;font-size:12px;color:#5b6675">Sent from the LifeWell website control center.</p>
+    </div>
+  `;
+
+  const mail = getTransporter();
+  if (!mail) {
+    const error = 'SMTP is not configured';
+    logger.warn('Outbound mail skipped', { to: input.to, reason: error });
+    if (isProduction) return { delivered: false, error };
+    return { delivered: false, error };
+  }
+
+  try {
+    await mail.sendMail({
+      from: env.MAIL_FROM,
+      to: input.toName ? `${input.toName} <${input.to}>` : input.to,
+      replyTo: input.replyTo,
+      subject: input.subject,
+      text,
+      html: input.html || html,
+    });
+    return { delivered: true };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'unknown';
+    logger.error('Outbound mail failed', { to: input.to, reason: message });
+    return { delivered: false, error: message };
   }
 }
 

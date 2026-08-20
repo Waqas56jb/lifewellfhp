@@ -5,8 +5,8 @@ import { ResourceManager } from '@/components/ResourceManager';
 export default function Page() {
   return (
     <ResourceManager
-      title="Appointment / booking links"
-      subtitle="External booking URLs (CharmHealth, etc.) used by CTAs."
+      title="Booking"
+      subtitle="The CharmHealth appointment URL used by Book a Session buttons across the site."
       endpoint="/api/admin/booking"
       createDefaults={{ label: 'Book appointment', provider: 'charmhealth', active: true }}
       columns={[

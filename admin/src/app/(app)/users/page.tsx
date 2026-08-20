@@ -1,9 +1,11 @@
 'use client';
 
 import { FormEvent, useEffect, useState } from 'react';
+import { Eye, KeyRound, LoaderCircle, Mail, Plus, ShieldBan, ShieldCheck, Trash2, X } from 'lucide-react';
 import { api } from '@/lib/api';
 import { useAuth } from '@/lib/auth';
-import { NAV_ITEMS } from '@/lib/nav';
+import { STAFF_ACCESS, STAFF_MODULES } from '@/lib/nav';
+import { NAV_ICONS } from '@/lib/icons';
 
 type UserRow = {
   id: string;
@@ -12,23 +14,28 @@ type UserRow = {
   role: 'super_admin' | 'staff';
   permissions: string[];
   active: boolean;
+  last_login_at?: string | null;
+  created_at?: string;
 };
 
-const MODULES = Array.from(new Set(NAV_ITEMS.map((n) => n.module)));
+const emptyForm: { name: string; email: string; password: string; permissions: string[] } = {
+  name: '',
+  email: '',
+  password: '',
+  permissions: [...STAFF_MODULES],
+};
 
 export default function UsersPage() {
   const { user } = useAuth();
   const [rows, setRows] = useState<UserRow[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [open, setOpen] = useState(false);
-  const [form, setForm] = useState({
-    name: '',
-    email: '',
-    password: '',
-    role: 'staff' as 'super_admin' | 'staff',
-    permissions: [] as string[],
-    active: true,
-  });
+  const [mode, setMode] = useState<'create' | 'view' | 'reset' | null>(null);
+  const [selected, setSelected] = useState<UserRow | null>(null);
+  const [form, setForm] = useState(emptyForm);
+  const [newPassword, setNewPassword] = useState('');
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
+  const [sendInvite, setSendInvite] = useState(true);
 
   async function load() {
     const res = await api<UserRow[]>('/api/admin/users');
@@ -37,160 +44,430 @@ export default function UsersPage() {
   }
 
   useEffect(() => {
-    void load();
-  }, []);
+    if (user?.role === 'super_admin') void load();
+  }, [user?.role]);
+
+  useEffect(() => {
+    document.body.style.overflow = mode ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mode]);
 
   if (user?.role !== 'super_admin') {
     return (
       <div className="card card-pad">
-        <h1 className="page-title">Staff & access</h1>
-        <p className="muted">Only Super Admins can manage staff accounts.</p>
+        <h1 className="page-title">Staff</h1>
+        <p className="muted">Only the Super Admin can view accounts and create sub-admins.</p>
       </div>
     );
   }
 
-  async function onSubmit(e: FormEvent) {
+  function closeModal() {
+    if (saving) return;
+    setMode(null);
+    setSelected(null);
+    setNewPassword('');
+  }
+
+  function togglePermission(module: string) {
+    setForm((current) => ({
+      ...current,
+      permissions: current.permissions.includes(module)
+        ? current.permissions.filter((item) => item !== module)
+        : [...current.permissions, module],
+    }));
+  }
+
+  function generatePassword() {
+    const slice = crypto.getRandomValues(new Uint32Array(2));
+    return `Lw-${slice[0].toString(16)}${slice[1].toString(16).slice(0, 4)}!`;
+  }
+
+  async function onCreate(e: FormEvent) {
     e.preventDefault();
+    setSaving(true);
+    setError(null);
     const res = await api('/api/admin/users', {
       method: 'POST',
-      body: JSON.stringify(form),
+      body: JSON.stringify({
+        ...form,
+        role: 'staff',
+        active: true,
+        send_invite: sendInvite,
+        admin_url: `${window.location.origin}/login`,
+      }),
     });
+    setSaving(false);
     if (!res.success) setError(res.message || 'Create failed');
     else {
-      setOpen(false);
-      setForm({ name: '', email: '', password: '', role: 'staff', permissions: [], active: true });
+      setMode(null);
+      setForm(emptyForm);
+      setMessage(
+        sendInvite
+          ? `Account created. Login details were sent to ${form.email}.`
+          : `Account created for ${form.email}. Use Email login to forward credentials.`
+      );
       await load();
     }
   }
 
-  async function toggleActive(row: UserRow) {
+  async function onReset(e: FormEvent) {
+    e.preventDefault();
+    if (!selected) return;
+    setSaving(true);
+    setError(null);
+    const res = await api(`/api/admin/users/${selected.id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ password: newPassword }),
+    });
+    setSaving(false);
+    if (!res.success) setError(res.message || 'Reset failed');
+    else {
+      setMode(null);
+      setNewPassword('');
+      await load();
+    }
+  }
+
+  async function onDelete(row: UserRow) {
+    if (row.role === 'super_admin') return;
+    if (!confirm(`Delete ${row.name}'s account? They will lose access immediately.`)) return;
+    const res = await api(`/api/admin/users/${row.id}`, { method: 'DELETE' });
+    if (!res.success) setError(res.message || 'Delete failed');
+    else {
+      setMessage(`${row.name}'s account was deleted.`);
+      await load();
+    }
+  }
+
+  async function onBlock(row: UserRow, active: boolean) {
+    if (row.role === 'super_admin') return;
     const res = await api(`/api/admin/users/${row.id}`, {
       method: 'PATCH',
-      body: JSON.stringify({ active: !row.active }),
+      body: JSON.stringify({ active }),
     });
     if (!res.success) setError(res.message || 'Update failed');
-    else await load();
+    else {
+      setMessage(active ? `${row.name} can sign in again.` : `${row.name} is blocked from signing in.`);
+      await load();
+    }
   }
+
+  async function onEmailCredentials(row: UserRow) {
+    if (row.role === 'super_admin') return;
+    if (!confirm(`Email a new temporary password to ${row.email}? Their current password will stop working.`)) return;
+    setError(null);
+    const res = await api(`/api/admin/users/${row.id}/invite`, {
+      method: 'POST',
+      body: JSON.stringify({ admin_url: `${window.location.origin}/login` }),
+    });
+    if (!res.success) setError(res.message || 'Invite email failed');
+    else setMessage(res.message || `Login details were emailed to ${row.email}.`);
+  }
+
+  const allSelected = STAFF_MODULES.every((module) => form.permissions.includes(module));
 
   return (
     <div>
       <div className="toolbar">
         <div>
-          <h1 className="page-title">Staff & access</h1>
-          <p className="page-sub">Super Admin and staff accounts with module permissions.</p>
+          <h1 className="page-title">Staff</h1>
+          <p className="page-sub">Only Super Admin can view accounts, reset passwords, block access, or email login details.</p>
         </div>
-        <button type="button" className="btn btn-primary" onClick={() => setOpen(true)}>
-          Add staff
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={() => {
+            setForm(emptyForm);
+            setError(null);
+            setMode('create');
+          }}
+        >
+          <Plus size={16} />
+          Add sub-admin
         </button>
       </div>
 
-      {error ? <div className="error-banner">{error}</div> : null}
+      {error && !mode ? <div className="error-banner">{error}</div> : null}
+      {message && !mode ? <div className="ok-banner">{message}</div> : null}
 
-      <div className="card">
-        <div className="table-wrap">
-          <table className="data">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Status</th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((row) => (
-                <tr key={row.id}>
-                  <td>{row.name}</td>
-                  <td>{row.email}</td>
-                  <td>{row.role}</td>
-                  <td>
-                    <span className={`badge ${row.active ? 'ok' : 'danger'}`}>
-                      {row.active ? 'Active' : 'Disabled'}
-                    </span>
-                  </td>
-                  <td>
-                    <button type="button" className="btn btn-ghost" onClick={() => toggleActive(row)}>
-                      {row.active ? 'Disable' : 'Enable'}
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+      <div className="account-grid">
+        {rows.map((row) => (
+          <article key={row.id} className="card card-pad account-card">
+            <div className="account-card-head">
+              <div className="sidebar-avatar">{row.name.slice(0, 1).toUpperCase()}</div>
+              <div>
+                <strong>{row.name}</strong>
+                <span className="muted">{row.email}</span>
+              </div>
+              <span className={`badge ${row.role === 'super_admin' ? 'ok' : row.active ? '' : 'warn'}`}>
+                {row.role === 'super_admin' ? 'Super Admin' : row.active ? 'Sub-admin' : 'Blocked'}
+              </span>
+            </div>
+            <p className="muted account-meta">
+              Last sign-in: {row.last_login_at ? new Date(row.last_login_at).toLocaleString() : 'Never'}
+            </p>
+            <div className="row-actions">
+              <button
+                type="button"
+                className="btn btn-ghost"
+                onClick={() => {
+                  setSelected(row);
+                  setMode('view');
+                }}
+              >
+                <Eye size={15} />
+                View
+              </button>
+              {row.role !== 'super_admin' ? (
+                <>
+                  <button
+                    type="button"
+                    className="btn btn-ghost"
+                    onClick={() => {
+                      setSelected(row);
+                      setNewPassword('');
+                      setMode('reset');
+                    }}
+                  >
+                    <KeyRound size={15} />
+                    Reset
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-ghost"
+                    onClick={() => void onEmailCredentials(row)}
+                  >
+                    <Mail size={15} />
+                    Email login
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-ghost"
+                    onClick={() => void onBlock(row, !row.active)}
+                  >
+                    {row.active ? <ShieldBan size={15} /> : <ShieldCheck size={15} />}
+                    {row.active ? 'Block' : 'Unblock'}
+                  </button>
+                  <button type="button" className="btn btn-danger" onClick={() => onDelete(row)}>
+                    <Trash2 size={15} />
+                    Delete
+                  </button>
+                </>
+              ) : null}
+            </div>
+          </article>
+        ))}
       </div>
 
-      {open ? (
-        <div className="overlay" style={{ display: 'grid', placeItems: 'center', padding: '1rem' }}>
-          <form className="card card-pad" style={{ width: 'min(640px, 100%)' }} onSubmit={onSubmit}>
-            <h2 style={{ marginTop: 0 }}>New staff account</h2>
-            <div className="field">
-              <label>Name</label>
-              <input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+      {mode === 'create' ? (
+        <div className="overlay modal-overlay">
+          <form className="card card-pad modal-card staff-modal" onSubmit={onCreate}>
+            <div className="modal-head">
+              <div>
+                <p className="modal-kicker">Access</p>
+                <h2>New sub-admin</h2>
+              </div>
+              <button type="button" className="icon-btn" onClick={closeModal} aria-label="Close">
+                <X size={18} />
+              </button>
             </div>
-            <div className="field">
-              <label>Email</label>
-              <input
-                type="email"
-                required
-                value={form.email}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
-              />
-            </div>
-            <div className="field">
-              <label>Temporary password</label>
-              <input
-                type="password"
-                required
-                minLength={10}
-                value={form.password}
-                onChange={(e) => setForm({ ...form, password: e.target.value })}
-              />
-            </div>
-            <div className="field">
-              <label>Role</label>
-              <select
-                value={form.role}
-                onChange={(e) => setForm({ ...form, role: e.target.value as 'super_admin' | 'staff' })}
-              >
-                <option value="staff">Staff</option>
-                <option value="super_admin">Super Admin</option>
-              </select>
-            </div>
-            {form.role === 'staff' ? (
+            <p className="page-sub">They can edit the public website — never clinical charts, staff accounts, or the audit log.</p>
+            {error ? <div className="error-banner">{error}</div> : null}
+
+            <div className="staff-form-grid">
               <div className="field">
-                <label>Module permissions</label>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.35rem' }}>
-                  {MODULES.map((m) => {
-                    const checked = form.permissions.includes(m);
+                <label htmlFor="staff-name">Full name</label>
+                <input
+                  id="staff-name"
+                  required
+                  placeholder="e.g. Lourdie Chachoute"
+                  value={form.name}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                />
+              </div>
+              <div className="field">
+                <label htmlFor="staff-email">Email</label>
+                <input
+                  id="staff-email"
+                  type="email"
+                  required
+                  placeholder="name@lifewellfhp.com"
+                  value={form.email}
+                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                />
+              </div>
+              <div className="field full">
+                <label htmlFor="staff-password">Temporary password</label>
+                <div className="password-row">
+                  <input
+                    id="staff-password"
+                    type="text"
+                    required
+                    minLength={10}
+                    placeholder="At least 10 characters"
+                    value={form.password}
+                    onChange={(e) => setForm({ ...form, password: e.target.value })}
+                  />
+                  <button type="button" className="btn btn-ghost" onClick={() => setForm({ ...form, password: generatePassword() })}>
+                    Generate
+                  </button>
+                </div>
+              </div>
+              <label className="access-tile full" style={{ marginTop: '0.2rem' }}>
+                <input
+                  type="checkbox"
+                  checked={sendInvite}
+                  onChange={(e) => setSendInvite(e.target.checked)}
+                />
+                <span className="access-ico" aria-hidden>
+                  <Mail size={16} />
+                </span>
+                <span>Email these login details to the sub-admin now</span>
+              </label>
+              <div className="field full">
+                <div className="access-head">
+                  <div>
+                    <label>Website access</label>
+                    <p>Choose the pages this person may manage.</p>
+                  </div>
+                  <button
+                    type="button"
+                    className="btn btn-ghost"
+                    onClick={() => setForm({ ...form, permissions: allSelected ? [] : [...STAFF_MODULES] })}
+                  >
+                    {allSelected ? 'Clear all' : 'Select all'}
+                  </button>
+                </div>
+                <div className="perm-grid">
+                  {STAFF_ACCESS.map((item) => {
+                    const checked = form.permissions.includes(item.module);
+                    const Icon = NAV_ICONS[item.icon];
                     return (
-                      <label key={m} style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
+                    <label key={`${item.module}-${item.label}`} className={`access-tile ${checked ? 'is-on' : ''}`}>
                         <input
                           type="checkbox"
                           checked={checked}
-                          onChange={(e) => {
-                            setForm({
-                              ...form,
-                              permissions: e.target.checked
-                                ? [...form.permissions, m]
-                                : form.permissions.filter((p) => p !== m),
-                            });
-                          }}
+                          onChange={() => togglePermission(item.module)}
                         />
-                        {m}
+                        <span className="access-ico" aria-hidden>
+                          <Icon size={16} />
+                        </span>
+                        <span>{item.label}</span>
                       </label>
                     );
                   })}
                 </div>
               </div>
-            ) : null}
-            <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
-              <button type="button" className="btn btn-ghost" onClick={() => setOpen(false)}>
+            </div>
+
+            <div className="modal-actions">
+              <button type="button" className="btn btn-ghost" onClick={closeModal} disabled={saving}>
                 Cancel
               </button>
-              <button type="submit" className="btn btn-primary">
-                Create
+              <button type="submit" className="btn btn-primary" disabled={saving || form.permissions.length === 0}>
+                {saving ? <LoaderCircle className="nav-spinner" size={16} /> : <Plus size={16} />}
+                {saving ? 'Creating…' : 'Create account'}
+              </button>
+            </div>
+          </form>
+        </div>
+      ) : null}
+
+      {mode === 'view' && selected ? (
+        <div className="overlay modal-overlay">
+          <div className="card card-pad modal-card">
+            <div className="modal-head">
+              <div>
+                <p className="modal-kicker">Account</p>
+                <h2>{selected.name}</h2>
+              </div>
+              <button type="button" className="icon-btn" onClick={closeModal} aria-label="Close">
+                <X size={18} />
+              </button>
+            </div>
+            <div className="detail-grid">
+              <p>
+                <span>Email</span>
+                <strong>{selected.email}</strong>
+              </p>
+              <p>
+                <span>Role</span>
+                <strong>{selected.role === 'super_admin' ? 'Super Admin' : 'Sub-admin'}</strong>
+              </p>
+              <p>
+                <span>Password</span>
+                <strong>••••••••••</strong>
+              </p>
+              <p>
+                <span>Last sign-in</span>
+                <strong>{selected.last_login_at ? new Date(selected.last_login_at).toLocaleString() : 'Never'}</strong>
+              </p>
+            </div>
+            {selected.role !== 'super_admin' ? (
+              <div className="perm-grid" style={{ marginBottom: '1rem' }}>
+                {STAFF_ACCESS.map((item) => {
+                  const on = selected.permissions.includes(item.module) || selected.permissions.includes('*');
+                  const Icon = NAV_ICONS[item.icon];
+                  return (
+                    <div key={`${item.module}-${item.label}`} className={`access-tile ${on ? 'is-on' : ''}`}>
+                      <span className="access-ico" aria-hidden>
+                        <Icon size={16} />
+                      </span>
+                      <span>{item.label}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <p className="muted">Super Admin can open every module.</p>
+            )}
+            <p className="muted">Passwords are hashed and cannot be revealed. Use Reset to issue a new one.</p>
+            <div className="modal-actions">
+              <button type="button" className="btn btn-ghost" onClick={closeModal}>
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      {mode === 'reset' && selected ? (
+        <div className="overlay modal-overlay">
+          <form className="card card-pad modal-card" onSubmit={onReset}>
+            <div className="modal-head">
+              <div>
+                <p className="modal-kicker">Security</p>
+                <h2>Reset password</h2>
+              </div>
+              <button type="button" className="icon-btn" onClick={closeModal} aria-label="Close">
+                <X size={18} />
+              </button>
+            </div>
+            {error ? <div className="error-banner">{error}</div> : null}
+            <p className="muted">
+              New password for <strong>{selected.name}</strong> · {selected.email}
+            </p>
+            <div className="field">
+              <label htmlFor="new-password">New password</label>
+              <input
+                id="new-password"
+                type="text"
+                required
+                minLength={10}
+                placeholder="At least 10 characters"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+              />
+            </div>
+            <div className="modal-actions">
+              <button type="button" className="btn btn-ghost" onClick={closeModal} disabled={saving}>
+                Cancel
+              </button>
+              <button type="submit" className="btn btn-primary" disabled={saving}>
+                {saving ? <LoaderCircle className="nav-spinner" size={16} /> : <KeyRound size={16} />}
+                {saving ? 'Saving…' : 'Save password'}
               </button>
             </div>
           </form>

@@ -5,22 +5,26 @@ import { ResourceManager } from '@/components/ResourceManager';
 export default function Page() {
   return (
     <ResourceManager
-      title="Provider profiles"
-      subtitle="Credentials, bio, education, and certifications."
+      title="Providers"
+      subtitle="Clinician profiles shown on Meet Your Provider. Save to update the public bio."
       endpoint="/api/admin/providers"
       createDefaults={{ published: true, sort_order: 0, education: [], certifications: [] }}
       columns={[
         { key: 'name', label: 'Name' },
         { key: 'credentials', label: 'Credentials' },
-        { key: 'title', label: 'Title' },
+        {
+          key: 'published',
+          label: 'Published',
+          render: (r) => (r.published ? <span className="badge ok">Live</span> : 'Draft'),
+        },
       ]}
       fields={[
         { key: 'name', label: 'Name' },
-        { key: 'slug', label: 'Slug' },
+        { key: 'slug', label: 'URL slug' },
         { key: 'credentials', label: 'Credentials' },
-        { key: 'title', label: 'Role / title' },
-        { key: 'bio', label: 'Bio', type: 'textarea', full: true },
-        { key: 'photo_url', label: 'Photo URL', type: 'url' },
+        { key: 'title', label: 'Title / role' },
+        { key: 'photo_url', label: 'Photo URL', type: 'url', full: true },
+        { key: 'bio', label: 'Biography', type: 'textarea', full: true },
         { key: 'sort_order', label: 'Sort order', type: 'number' },
         { key: 'published', label: 'Published', type: 'checkbox' },
       ]}

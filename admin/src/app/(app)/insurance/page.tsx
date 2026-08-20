@@ -5,8 +5,8 @@ import { ResourceManager } from '@/components/ResourceManager';
 export default function Page() {
   return (
     <ResourceManager
-      title="Insurance & self-pay"
-      subtitle="Plans and fee notes shown on the fees/insurance page."
+      title="Insurance"
+      subtitle="Plans shown on the Fees & Insurance page."
       endpoint="/api/admin/insurance"
       createDefaults={{ published: true, self_pay: false, sort_order: 0 }}
       columns={[

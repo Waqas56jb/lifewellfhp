@@ -3,7 +3,9 @@ import { asyncHandler } from '../middleware/index.js';
 import {
   requireAdmin,
   requirePermission,
+  requireAnyPermission,
   requireSuperAdmin,
+  type AuthedRequest,
 } from '../middleware/adminAuth.js';
 import { createCrudRouter } from './crudFactory.js';
 import {
@@ -13,6 +15,8 @@ import {
   createAdminUser,
   updateAdminUser,
   deleteAdminUser,
+  sendStaffCredentials,
+  listAuditLogs,
 } from '../controllers/adminAuth.controller.js';
 import {
   listLeads,
@@ -24,7 +28,12 @@ import {
   getAnalyticsSummary,
 } from '../controllers/analytics.controller.js';
 import { handleMediaUpload } from '../controllers/media.controller.js';
+import { listNotifications, markNotificationsRead } from '../controllers/notifications.controller.js';
+import { listEmails, sendAdminEmails, getMailConfig } from '../controllers/emails.controller.js';
+import { getSiteSettings, updateSiteSettings } from '../controllers/settings.controller.js';
+import { importLiveWebsiteContent } from '../controllers/importLive.controller.js';
 import { getSupabase } from '../lib/supabase.js';
+import { badRequest } from '../utils/errors.js';
 import {
   announcementCreate,
   announcementUpdate,
@@ -53,7 +62,6 @@ import {
   seoCreate,
   seoUpdate,
 } from '../validation/adminSchemas.js';
-import { badRequest } from '../utils/errors.js';
 
 export const adminRouter: Router = Router();
 
@@ -63,25 +71,63 @@ adminRouter.get('/auth/me', requireAdmin, asyncHandler(handleAdminMe));
 adminRouter.get(
   '/dashboard',
   requireAdmin,
-  asyncHandler(async (_req, res) => {
+  asyncHandler(async (req, res) => {
     const sb = getSupabase();
-    const [leads, services, posts, testimonials, faqs, media] = await Promise.all([
+    const since7 = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+    const [
+      leads,
+      services,
+      testimonials,
+      faqs,
+      insurance,
+      views,
+      conversions,
+      recentLeads,
+    ] = await Promise.all([
       sb.from('leads').select('id', { count: 'exact', head: true }).eq('status', 'new'),
       sb.from('services').select('id', { count: 'exact', head: true }),
-      sb.from('blog_posts').select('id', { count: 'exact', head: true }),
       sb.from('testimonials').select('id', { count: 'exact', head: true }).eq('published', true),
       sb.from('faqs').select('id', { count: 'exact', head: true }),
-      sb.from('media_assets').select('id', { count: 'exact', head: true }),
+      sb.from('insurance_plans').select('id', { count: 'exact', head: true }),
+      sb.from('analytics_events').select('id, created_at').eq('event_type', 'page_view').gte('created_at', since7),
+      sb.from('conversions').select('id', { count: 'exact', head: true }).gte('created_at', since7),
+      sb.from('leads').select('id, type, name, email, status, created_at').order('created_at', { ascending: false }).limit(6),
     ]);
+
+    const byDay: Record<string, number> = {};
+    for (let i = 6; i >= 0; i -= 1) {
+      const d = new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+      byDay[d] = 0;
+    }
+    for (const row of views.data ?? []) {
+      const day = String(row.created_at).slice(0, 10);
+      if (day in byDay) byDay[day] = (byDay[day] ?? 0) + 1;
+    }
+
+    const actor = (req as AuthedRequest).admin;
+    let recentLogs: unknown[] = [];
+    if (actor?.role === 'super_admin') {
+      const logs = await sb
+        .from('admin_audit_logs')
+        .select('id, actor_name, actor_email, action, summary, created_at')
+        .order('created_at', { ascending: false })
+        .limit(8);
+      recentLogs = logs.data ?? [];
+    }
+
     res.json({
       success: true,
       data: {
         newLeads: leads.count ?? 0,
         services: services.count ?? 0,
-        posts: posts.count ?? 0,
         testimonials: testimonials.count ?? 0,
         faqs: faqs.count ?? 0,
-        media: media.count ?? 0,
+        insurance: insurance.count ?? 0,
+        views7d: (views.data ?? []).length,
+        conversions7d: conversions.count ?? 0,
+        trend: Object.entries(byDay).map(([date, viewsCount]) => ({ date, views: viewsCount })),
+        recentLeads: recentLeads.data ?? [],
+        recentLogs,
       },
     });
   })
@@ -91,6 +137,14 @@ adminRouter.get('/leads', requireAdmin, requirePermission('leads'), asyncHandler
 adminRouter.get('/leads/:id', requireAdmin, requirePermission('leads'), asyncHandler(getLead));
 adminRouter.patch('/leads/:id', requireAdmin, requirePermission('leads'), asyncHandler(updateLead));
 adminRouter.delete('/leads/:id', requireAdmin, requirePermission('leads'), asyncHandler(deleteLead));
+
+adminRouter.get('/notifications', requireAdmin, asyncHandler(listNotifications));
+adminRouter.patch('/notifications/read', requireAdmin, asyncHandler(markNotificationsRead));
+adminRouter.get('/emails/config', requireAdmin, requireAnyPermission(['emails', 'leads']), asyncHandler(getMailConfig));
+adminRouter.get('/emails', requireAdmin, requirePermission('emails'), asyncHandler(listEmails));
+adminRouter.post('/emails/send', requireAdmin, requireAnyPermission(['emails', 'leads']), asyncHandler(sendAdminEmails));
+adminRouter.get('/settings', requireAdmin, requirePermission('settings'), asyncHandler(getSiteSettings));
+adminRouter.patch('/settings', requireAdmin, requirePermission('settings'), asyncHandler(updateSiteSettings));
 
 adminRouter.use(
   '/announcements',
@@ -253,6 +307,9 @@ adminRouter.get('/users', requireAdmin, requireSuperAdmin, asyncHandler(listAdmi
 adminRouter.post('/users', requireAdmin, requireSuperAdmin, asyncHandler(createAdminUser));
 adminRouter.patch('/users/:id', requireAdmin, requireSuperAdmin, asyncHandler(updateAdminUser));
 adminRouter.delete('/users/:id', requireAdmin, requireSuperAdmin, asyncHandler(deleteAdminUser));
+adminRouter.post('/users/:id/invite', requireAdmin, requireSuperAdmin, asyncHandler(sendStaffCredentials));
+adminRouter.post('/content/import-live', requireAdmin, requireSuperAdmin, asyncHandler(importLiveWebsiteContent));
+adminRouter.get('/audit-logs', requireAdmin, requireSuperAdmin, asyncHandler(listAuditLogs));
 
 // Health of admin stack
 adminRouter.get(

@@ -31,7 +31,24 @@ const password_hash = await bcrypt.hash(password, 12);
 const { data: existing } = await sb.from('admin_users').select('id').eq('email', email).maybeSingle();
 
 if (existing) {
-  console.log(`Admin already exists: ${email}`);
+  const { error } = await sb
+    .from('admin_users')
+    .update({
+      name,
+      role: 'super_admin',
+      permissions: ['*'],
+      active: true,
+      password_hash,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('email', email);
+
+  if (error) {
+    console.error('Update failed:', error.message);
+    process.exit(1);
+  }
+
+  console.log(`Admin updated: ${email}`);
   process.exit(0);
 }
 

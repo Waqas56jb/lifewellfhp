@@ -5,8 +5,8 @@ import { ResourceManager } from '@/components/ResourceManager';
 export default function Page() {
   return (
     <ResourceManager
-      title="Reviews & testimonials"
-      subtitle="Only publish with confirmed patient consent. Unpublished by default."
+      title="Reviews"
+      subtitle="Testimonials on the homepage and reviews page. Publish only with confirmed consent."
       endpoint="/api/admin/testimonials"
       createDefaults={{ published: false, consent_confirmed: false, sort_order: 0 }}
       columns={[

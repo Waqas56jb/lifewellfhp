@@ -10,7 +10,7 @@ import { CTASection } from '@/components/sections/CTASection';
 import { JsonLd } from '@/components/seo/JsonLd';
 
 import { getPost, postSlugs } from '@/data/blog';
-import { serviceSummaries } from '@/data/services';
+import { serviceSummaries } from '@/data/service-catalog';
 import { provider } from '@/data/provider';
 import { formatDate, isoDate } from '@/lib/utils';
 import { pageMetadata } from '@/lib/seo';

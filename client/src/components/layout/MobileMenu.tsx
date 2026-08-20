@@ -2,13 +2,18 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { NavItem, NavLink } from '@/types/content';
 import { site } from '@/data/site';
 import { cn } from '@/lib/utils';
 import { SwapButton } from '@/components/ui/SwapButton';
-import { SiteSearch } from './SiteSearch';
+
+const SiteSearch = dynamic(() => import('./SiteSearch').then((mod) => mod.SiteSearch), {
+  ssr: false,
+  loading: () => <div className="h-11 rounded-sm bg-surface-muted" aria-hidden="true" />,
+});
 
 interface MobileMenuProps {
   id: string;
@@ -135,6 +140,7 @@ export function MobileMenu({ id, open, onClose, items, cta, pathname }: MobileMe
                 <li key={item.href}>
                   <Link
                     href={item.href}
+                    prefetch
                     aria-current={pathname === item.href ? 'page' : undefined}
                     className={cn(
                       'flex min-h-12 items-center rounded-sm px-4 text-md font-semibold no-underline transition-colors duration-quick',
@@ -191,6 +197,7 @@ function Accordion({ item, pathname }: { item: NavItem; pathname: string }) {
           <div key={group.label} className="mt-4">
             <Link
               href={item.href}
+              prefetch
               className="mb-3 block px-4 font-heading text-[18px] font-medium leading-snug text-[#5FAF6B] no-underline"
             >
               {group.label}
@@ -200,6 +207,7 @@ function Accordion({ item, pathname }: { item: NavItem; pathname: string }) {
                 <li key={link.href}>
                   <Link
                     href={link.href}
+                    prefetch
                     aria-current={pathname === link.href ? 'page' : undefined}
                     className={cn(
                       'flex min-h-11 items-center rounded-sm px-4 py-2 text-[15px] leading-snug no-underline transition-colors duration-quick',

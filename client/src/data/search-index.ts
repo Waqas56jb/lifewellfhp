@@ -1,4 +1,4 @@
-import { services, serviceSummaries, serviceCategories } from './services';
+import { serviceSummaries, serviceCategories } from './service-catalog';
 import { generatedLegalPages } from './generated/legal';
 import { publishedPosts } from './blog';
 import { faqs, benefits } from './marketing';
@@ -97,24 +97,14 @@ function build(): SearchEntry[] {
     }
   );
 
-  /* Services — the substantive pages, indexed on their full body text */
+  /* Services — indexed on title and card description, not full page bodies */
   for (const summary of serviceSummaries) {
-    const full = services.find((s) => s.slug === summary.slug);
-    const body = full
-      ? [
-          ...full.intro,
-          ...full.sections.flatMap((sec) => [
-            sec.heading,
-            ...sec.blocks.map((b) => (b.type === 'list' ? b.items.join(' ') : b.text)),
-          ]),
-        ].join(' ')
-      : '';
     entries.push({
       title: summary.title,
       href: summary.href,
       section: serviceCategories[summary.category].shortLabel,
       summary: clip(summary.description),
-      keywords: `${summary.title} ${summary.description} ${body}`,
+      keywords: `${summary.title} ${summary.description}`,
     });
   }
 

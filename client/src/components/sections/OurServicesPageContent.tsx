@@ -1,7 +1,7 @@
 import { InnerPageHero } from '@/components/sections/InnerPageHero';
 import { JourneyCta } from '@/components/sections/JourneyCta';
 import { ServicesGrid } from '@/components/sections/ServicesGrid';
-import { serviceSummaries } from '@/data/services';
+import { serviceSummaries } from '@/data/service-catalog';
 
 /** Live /our-services listing order (page 1 then remaining cards). */
 const LIVE_ORDER = [

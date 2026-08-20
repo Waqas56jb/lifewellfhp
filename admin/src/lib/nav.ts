@@ -1,19 +1,56 @@
 export const NAV_ITEMS = [
-  { href: '/', label: 'Dashboard', module: 'analytics', icon: '▣' },
-  { href: '/leads', label: 'Leads & Inquiries', module: 'leads', icon: '✉' },
-  { href: '/announcements', label: 'Announcements', module: 'announcements', icon: '⚑' },
-  { href: '/services', label: 'Services', module: 'services', icon: '✚' },
-  { href: '/providers', label: 'Providers', module: 'providers', icon: '♟' },
-  { href: '/insurance', label: 'Insurance & Fees', module: 'insurance', icon: '$' },
-  { href: '/testimonials', label: 'Reviews', module: 'testimonials', icon: '★' },
-  { href: '/faqs', label: 'FAQs', module: 'faqs', icon: '?' },
-  { href: '/locations', label: 'Locations & Hours', module: 'locations', icon: '⌂' },
-  { href: '/blog', label: 'Blog & Resources', module: 'blog', icon: '✎' },
-  { href: '/media', label: 'Photos & Media', module: 'media', icon: '🖼' },
-  { href: '/videos', label: 'Videos', module: 'videos', icon: '▶' },
-  { href: '/sections', label: 'Page Sections', module: 'sections', icon: '▤' },
-  { href: '/booking', label: 'Booking Links', module: 'booking', icon: '📅' },
-  { href: '/seo', label: 'SEO & Sharing', module: 'seo', icon: '🔍' },
-  { href: '/analytics', label: 'Analytics', module: 'analytics', icon: '📈' },
-  { href: '/users', label: 'Staff & Access', module: 'users', icon: '👤' },
+  { href: '/', label: 'Dashboard', module: 'analytics', icon: 'LayoutDashboard' },
+  { href: '/leads', label: 'Leads', module: 'leads', icon: 'Inbox' },
+  { href: '/emails', label: 'Emails', module: 'emails', icon: 'Mail' },
+  { href: '/announcements', label: 'Notices', module: 'announcements', icon: 'Megaphone' },
+  { href: '/appearance', label: 'Appearance', module: 'settings', icon: 'Palette' },
+  { href: '/sections', label: 'Homepage', module: 'sections', icon: 'House' },
+  { href: '/services', label: 'Services', module: 'services', icon: 'HeartPulse' },
+  { href: '/providers', label: 'Providers', module: 'providers', icon: 'Stethoscope' },
+  { href: '/insurance', label: 'Insurance', module: 'insurance', icon: 'Shield' },
+  { href: '/testimonials', label: 'Reviews', module: 'testimonials', icon: 'Star' },
+  { href: '/faqs', label: 'FAQs', module: 'faqs', icon: 'CircleHelp' },
+  { href: '/locations', label: 'Locations', module: 'locations', icon: 'MapPin' },
+  { href: '/booking', label: 'Booking', module: 'booking', icon: 'CalendarDays' },
+  { href: '/media', label: 'Media', module: 'media', icon: 'Image' },
+  { href: '/videos', label: 'Videos', module: 'videos', icon: 'Video' },
+  { href: '/blog', label: 'Blog', module: 'blog', icon: 'Newspaper' },
+  { href: '/seo', label: 'SEO', module: 'seo', icon: 'Search' },
+  { href: '/analytics', label: 'Analytics', module: 'analytics', icon: 'BarChart3' },
+  { href: '/logs', label: 'Audit log', module: 'users', icon: 'ScrollText', superAdminOnly: true },
+  { href: '/users', label: 'Staff', module: 'users', icon: 'Users', superAdminOnly: true },
 ] as const;
+
+export const NAV_GROUPS = [
+  { label: null, hrefs: ['/'] },
+  { label: 'Inbox', hrefs: ['/leads', '/emails', '/announcements'] },
+  {
+    label: 'Website',
+    hrefs: [
+      '/appearance',
+      '/sections',
+      '/services',
+      '/providers',
+      '/insurance',
+      '/testimonials',
+      '/faqs',
+      '/locations',
+      '/booking',
+    ],
+  },
+  { label: 'Library', hrefs: ['/media', '/videos', '/blog'] },
+  { label: 'Growth', hrefs: ['/seo', '/analytics'] },
+  { label: 'System', hrefs: ['/logs', '/users'] },
+] as const;
+
+export type NavIconName = (typeof NAV_ITEMS)[number]['icon'];
+
+export const STAFF_ACCESS = NAV_ITEMS.filter(
+  (item) => !('superAdminOnly' in item && item.superAdminOnly) && item.href !== '/'
+).map((item) => ({
+  module: item.module,
+  label: item.label,
+  icon: item.icon,
+}));
+
+export const STAFF_MODULES = Array.from(new Set(STAFF_ACCESS.map((item) => item.module)));

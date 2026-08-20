@@ -118,7 +118,7 @@ export function Button(props: ButtonProps) {
     }
 
     const link = (
-      <Link {...anchorRest} href={href} className={classes}>
+      <Link {...anchorRest} href={href} prefetch className={classes}>
         {children}
       </Link>
     );

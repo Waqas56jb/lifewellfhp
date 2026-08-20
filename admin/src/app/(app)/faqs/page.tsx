@@ -6,7 +6,7 @@ export default function Page() {
   return (
     <ResourceManager
       title="FAQs"
-      subtitle="Common questions about telehealth, appointments, and care."
+      subtitle="Questions currently published on the public FAQs page. Add, edit, or delete any item."
       endpoint="/api/admin/faqs"
       createDefaults={{ published: true, sort_order: 0 }}
       columns={[

@@ -105,6 +105,7 @@ function TopLevelLink({
   return (
     <Link
       href={href}
+      prefetch
       aria-current={active ? 'page' : undefined}
       className={cn(
         'inline-flex min-h-[42px] shrink-0 items-center whitespace-nowrap rounded-[30px] px-[22px] py-[5px] text-[16px] font-semibold no-underline transition-colors duration-300 min-[1601px]:px-[25px]',
@@ -208,7 +209,7 @@ function MegaMenuItem({ item, pathname }: { item: NavItem; pathname: string }) {
               key={group.label}
               className="flex min-w-0 w-1/2 flex-col justify-center gap-5 p-10"
             >
-              <Link href={item.href} className="mega-heading block no-underline">
+              <Link href={item.href} prefetch className="mega-heading block no-underline">
                 {group.label}
               </Link>
               <ul className="flex flex-col gap-px">
@@ -216,6 +217,7 @@ function MegaMenuItem({ item, pathname }: { item: NavItem; pathname: string }) {
                   <li key={link.href}>
                     <Link
                       href={link.href}
+                      prefetch
                       aria-current={pathname === link.href ? 'page' : undefined}
                       className="mega-link block px-2.5 py-2.5 no-underline"
                     >

@@ -13,7 +13,13 @@ import { NavBar } from './NavBar';
  * Live header is absolutely positioned over the hero (transparent), then
  * fills white once the visitor starts scrolling — Headroom `not-top`.
  */
-export function Header() {
+export function Header({
+  cta,
+  logoUrl,
+}: {
+  cta?: { label: string; href: string };
+  logoUrl?: string | null;
+} = {}) {
   const pathname = usePathname();
   const isHome = pathname === '/';
   const [scrolled, setScrolled] = useState(false);
@@ -30,6 +36,9 @@ export function Header() {
   }, [isHome]);
 
   const overlay = isHome && !scrolled;
+  const button = cta ?? headerCta;
+  const logo = logoUrl || '/images/brand/logo.avif';
+  const remoteLogo = logo.startsWith('http');
 
   return (
     <header
@@ -44,20 +53,26 @@ export function Header() {
       <div className="flex min-h-[72px] w-full items-center justify-between gap-4 px-5 py-[20px] sm:min-h-[90px] sm:px-[30px] sm:py-[30px] lg:min-h-[110px] lg:gap-[30px] lg:px-[70px]">
         <Link
           href="/"
+          prefetch
           className="shrink-0 no-underline"
           aria-label={`${site.name} — home`}
         >
-          <Image
-            src="/images/brand/logo.avif"
-            alt={site.name}
-            width={354}
-            height={63}
-            priority
-            className="h-9 w-auto sm:h-11 lg:h-[50px]"
-          />
+          {remoteLogo ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={logo} alt={site.name} className="h-9 w-auto sm:h-11 lg:h-[50px]" />
+          ) : (
+            <Image
+              src={logo}
+              alt={site.name}
+              width={354}
+              height={63}
+              priority
+              className="h-9 w-auto sm:h-11 lg:h-[50px]"
+            />
+          )}
         </Link>
 
-        <NavBar items={headerNav} cta={headerCta} overlay={overlay} />
+        <NavBar items={headerNav} cta={button} overlay={overlay} />
       </div>
     </header>
   );

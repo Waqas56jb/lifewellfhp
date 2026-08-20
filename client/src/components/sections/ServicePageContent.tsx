@@ -6,12 +6,12 @@ import { BenefitsGrid } from '@/components/sections/BenefitsGrid';
 import { ServicesGrid } from '@/components/sections/ServicesGrid';
 import { SwapButton } from '@/components/ui/SwapButton';
 import {
-  getService,
   getServiceSummary,
   relatedServices,
   summariesByCategory,
   serviceCategories,
-} from '@/data/services';
+} from '@/data/service-catalog';
+import { getService } from '@/data/services';
 import { site } from '@/data/site';
 
 /**

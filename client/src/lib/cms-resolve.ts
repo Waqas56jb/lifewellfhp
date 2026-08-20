@@ -9,7 +9,11 @@ import {
   welcome as staticWelcome,
 } from '@/data/marketing';
 import { site as staticSite } from '@/data/site';
-import { homeServiceSummaries as staticHomeServices, serviceSummaries as staticServiceSummaries, serviceHref } from '@/data/services';
+import {
+  homeServiceSummaries as staticHomeServices,
+  serviceSummaries as staticServiceSummaries,
+  serviceHref,
+} from '@/data/service-catalog';
 import type { ServiceSummary } from '@/types/content';
 
 export type ResolvedHero = typeof staticHero & {
@@ -28,7 +32,41 @@ export type ResolvedContent = {
   serviceSummaries: ServiceSummary[];
   booking: { url: string; label: string };
   announcements: { title: string; body: string; tone: string }[];
-  videos: { title: string; url: string; provider: string; description?: string | null }[];
+  videos: { title: string; url: string; provider: string; description?: string | null; embedHtml?: string | null }[];
+  settings: {
+    primaryColor: string;
+    accentColor: string;
+    headingFont: string;
+    bodyFont: string;
+    headerCtaLabel: string;
+    headerCtaUrl: string;
+    logoUrl: string | null;
+    practicePhone: string | null;
+    practiceEmail: string | null;
+  };
+  provider: {
+    name: string;
+    credentials: string;
+    title?: string | null;
+    bio?: string | null;
+    photoUrl?: string | null;
+  } | null;
+  locations: {
+    name: string;
+    phone?: string | null;
+    email?: string | null;
+    address?: string | null;
+    isPrimary: boolean;
+  }[];
+  posts: {
+    slug: string;
+    title: string;
+    excerpt?: string | null;
+    coverImageUrl?: string | null;
+    authorName?: string | null;
+    publishedAt?: string | null;
+    body?: string | null;
+  }[];
 };
 
 type CmsService = {
@@ -215,15 +253,111 @@ function mapVideos(cms: PublicCmsPayload | null) {
     url?: string;
     provider?: string;
     description?: string | null;
+    embed_html?: string | null;
     published?: boolean;
   }[];
   return rows
-    .filter((r) => r.published !== false && r.title && r.url)
+    .filter((r) => r.published !== false && r.title && (r.url || r.embed_html))
     .map((r) => ({
       title: String(r.title),
-      url: String(r.url),
+      url: String(r.url || ''),
       provider: String(r.provider || 'youtube'),
       description: r.description ?? null,
+      embedHtml: r.embed_html ?? null,
+    }));
+}
+
+const DEFAULT_SETTINGS = {
+  primaryColor: '#3E7FB1',
+  accentColor: '#5FAF6B',
+  headingFont: 'Lora',
+  bodyFont: 'Source Sans 3',
+  headerCtaLabel: 'Get Started',
+  headerCtaUrl: '/book-telehealth-mental-health-appointment',
+  logoUrl: null as string | null,
+  practicePhone: null as string | null,
+  practiceEmail: null as string | null,
+};
+
+function mapSettings(cms: PublicCmsPayload | null) {
+  const row = (cms?.settings ?? null) as Record<string, unknown> | null;
+  if (!row) return DEFAULT_SETTINGS;
+  return {
+    primaryColor: typeof row.primary_color === 'string' ? row.primary_color : DEFAULT_SETTINGS.primaryColor,
+    accentColor: typeof row.accent_color === 'string' ? row.accent_color : DEFAULT_SETTINGS.accentColor,
+    headingFont: typeof row.heading_font === 'string' ? row.heading_font : DEFAULT_SETTINGS.headingFont,
+    bodyFont: typeof row.body_font === 'string' ? row.body_font : DEFAULT_SETTINGS.bodyFont,
+    headerCtaLabel: typeof row.header_cta_label === 'string' ? row.header_cta_label : DEFAULT_SETTINGS.headerCtaLabel,
+    headerCtaUrl: typeof row.header_cta_url === 'string' ? row.header_cta_url : DEFAULT_SETTINGS.headerCtaUrl,
+    logoUrl: typeof row.logo_url === 'string' && row.logo_url ? row.logo_url : null,
+    practicePhone: typeof row.practice_phone === 'string' && row.practice_phone ? row.practice_phone : null,
+    practiceEmail: typeof row.practice_email === 'string' && row.practice_email ? row.practice_email : null,
+  };
+}
+
+function mapProvider(cms: PublicCmsPayload | null) {
+  const rows = (cms?.providers ?? []) as {
+    name?: string;
+    credentials?: string | null;
+    title?: string | null;
+    bio?: string | null;
+    photo_url?: string | null;
+    published?: boolean;
+  }[];
+  const row = rows.find((r) => r.published !== false && r.name);
+  if (!row?.name) return null;
+  return {
+    name: String(row.name),
+    credentials: String(row.credentials || ''),
+    title: row.title ?? null,
+    bio: row.bio ?? null,
+    photoUrl: row.photo_url ?? null,
+  };
+}
+
+function mapLocations(cms: PublicCmsPayload | null) {
+  const rows = (cms?.locations ?? []) as {
+    name?: string;
+    phone?: string | null;
+    email?: string | null;
+    address_line1?: string | null;
+    city?: string | null;
+    state?: string | null;
+    postal_code?: string | null;
+    is_primary?: boolean;
+    published?: boolean;
+  }[];
+  return rows
+    .filter((r) => r.published !== false && r.name)
+    .map((r) => ({
+      name: String(r.name),
+      phone: r.phone ?? null,
+      email: r.email ?? null,
+      address: [r.address_line1, r.city, r.state, r.postal_code].filter(Boolean).join(', ') || null,
+      isPrimary: Boolean(r.is_primary),
+    }));
+}
+
+function mapPosts(cms: PublicCmsPayload | null) {
+  const rows = (cms?.posts ?? []) as {
+    slug?: string;
+    title?: string;
+    excerpt?: string | null;
+    cover_image_url?: string | null;
+    author_name?: string | null;
+    published_at?: string | null;
+    body?: string | null;
+  }[];
+  return rows
+    .filter((r) => r.slug && r.title)
+    .map((r) => ({
+      slug: String(r.slug),
+      title: String(r.title),
+      excerpt: r.excerpt ?? null,
+      coverImageUrl: r.cover_image_url ?? null,
+      authorName: r.author_name ?? null,
+      publishedAt: r.published_at ?? null,
+      body: r.body ?? null,
     }));
 }
 
@@ -244,5 +378,9 @@ export const getResolvedContent = cache(async (): Promise<ResolvedContent> => {
     booking: mapBooking(cms),
     announcements: mapAnnouncements(cms),
     videos: mapVideos(cms),
+    settings: mapSettings(cms),
+    provider: mapProvider(cms),
+    locations: mapLocations(cms),
+    posts: mapPosts(cms),
   };
 });

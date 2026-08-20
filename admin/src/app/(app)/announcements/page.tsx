@@ -5,8 +5,8 @@ import { ResourceManager } from '@/components/ResourceManager';
 export default function Page() {
   return (
     <ResourceManager
-      title="Announcements"
-      subtitle="Website notices shown to visitors (office closures, telehealth updates, etc.)."
+      title="Site notices"
+      subtitle="Banners on the public homepage — closures, telehealth updates, holiday hours."
       endpoint="/api/admin/announcements"
       createDefaults={{ tone: 'info', active: true, sort_order: 0 }}
       columns={[

@@ -1,7 +1,9 @@
 'use client';
 
 import { FormEvent, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { Pencil, Plus, Trash2, X } from 'lucide-react';
 import { api } from '@/lib/api';
+import { PageLoader } from '@/components/PageLoader';
 
 type Field = {
   key: string;
@@ -42,6 +44,13 @@ export function ResourceManager({ title, subtitle, endpoint, columns, fields, cr
   useEffect(() => {
     void load();
   }, [endpoint]);
+
+  useEffect(() => {
+    document.body.style.overflow = editing ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [editing]);
 
   const isEdit = Boolean(editing?.id);
 
@@ -113,6 +122,7 @@ export function ResourceManager({ title, subtitle, endpoint, columns, fields, cr
           <p className="page-sub">{subtitle}</p>
         </div>
         <button type="button" className="btn btn-primary" onClick={openCreate}>
+          <Plus size={16} />
           Add new
         </button>
       </div>
@@ -120,9 +130,9 @@ export function ResourceManager({ title, subtitle, endpoint, columns, fields, cr
       {error ? <div className="error-banner">{error}</div> : null}
 
       <div className="card">
-        <div className="table-wrap">
+        <div className="table-wrap desktop-only">
           {loading ? (
-            <div className="empty">Loading…</div>
+            <PageLoader />
           ) : empty ? (
             <div className="empty">No items yet. Add the first one.</div>
           ) : (
@@ -141,11 +151,13 @@ export function ResourceManager({ title, subtitle, endpoint, columns, fields, cr
                     {columns.map((c) => (
                       <td key={c.key}>{c.render ? c.render(row) : String(row[c.key] ?? '—')}</td>
                     ))}
-                    <td style={{ whiteSpace: 'nowrap' }}>
+                    <td className="row-actions">
                       <button type="button" className="btn btn-ghost" onClick={() => openEdit(row)}>
+                        <Pencil size={15} />
                         Edit
-                      </button>{' '}
+                      </button>
                       <button type="button" className="btn btn-danger" onClick={() => onDelete(String(row.id))}>
+                        <Trash2 size={15} />
                         Delete
                       </button>
                     </td>
@@ -155,12 +167,46 @@ export function ResourceManager({ title, subtitle, endpoint, columns, fields, cr
             </table>
           )}
         </div>
+
+        <div className="mobile-cards">
+          {loading ? (
+            <PageLoader />
+          ) : empty ? (
+            <div className="empty">No items yet. Add the first one.</div>
+          ) : (
+            rows.map((row) => (
+              <article key={String(row.id)} className="mobile-card">
+                {columns.slice(0, 4).map((c) => (
+                  <div key={c.key} className="mobile-card-row">
+                    <span>{c.label}</span>
+                    <strong>{c.render ? c.render(row) : String(row[c.key] ?? '—')}</strong>
+                  </div>
+                ))}
+                <div className="row-actions">
+                  <button type="button" className="btn btn-ghost" onClick={() => openEdit(row)}>
+                    <Pencil size={15} />
+                    Edit
+                  </button>
+                  <button type="button" className="btn btn-danger" onClick={() => onDelete(String(row.id))}>
+                    <Trash2 size={15} />
+                    Delete
+                  </button>
+                </div>
+              </article>
+            ))
+          )}
+        </div>
       </div>
 
       {editing ? (
-        <div className="overlay" style={{ display: 'grid', placeItems: 'center', padding: '1rem' }}>
-          <form className="card card-pad" style={{ width: 'min(720px, 100%)', maxHeight: '90dvh', overflow: 'auto' }} onSubmit={onSubmit}>
-            <h2 style={{ marginTop: 0 }}>{isEdit ? 'Edit item' : 'Create item'}</h2>
+        <div className="overlay modal-overlay">
+          <form className="card card-pad modal-card" onSubmit={onSubmit}>
+            <div className="modal-head">
+              <h2>{isEdit ? 'Edit item' : 'Create item'}</h2>
+              <button type="button" className="icon-btn" onClick={() => setEditing(null)} aria-label="Close">
+                <X size={18} />
+              </button>
+            </div>
             <div className="form-grid two">
               {fields.map((field) => (
                 <div className="field" key={field.key} style={field.full ? { gridColumn: '1 / -1' } : undefined}>
@@ -172,7 +218,7 @@ export function ResourceManager({ title, subtitle, endpoint, columns, fields, cr
                       onChange={(e) => setForm((f) => ({ ...f, [field.key]: e.target.value }))}
                     />
                   ) : field.type === 'checkbox' ? (
-                    <label style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', fontWeight: 500 }}>
+                    <label className="check-label">
                       <input
                         id={field.key}
                         type="checkbox"
@@ -204,7 +250,7 @@ export function ResourceManager({ title, subtitle, endpoint, columns, fields, cr
                 </div>
               ))}
             </div>
-            <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
+            <div className="modal-actions">
               <button type="button" className="btn btn-ghost" onClick={() => setEditing(null)}>
                 Cancel
               </button>

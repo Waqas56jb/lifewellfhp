@@ -1,14 +1,17 @@
 'use client';
 
 import { FormEvent, useState } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { ArrowRight, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '@/lib/auth';
 
 export default function LoginPage() {
   const { login, user, loading } = useAuth();
   const router = useRouter();
-  const [email, setEmail] = useState('admin@lifewellfhp.com');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -27,39 +30,102 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="login-wrap">
-      <form className="card card-pad login-card" onSubmit={onSubmit}>
-        <h1 style={{ marginTop: 0, marginBottom: '0.25rem' }}>LifeWell Admin</h1>
-        <p className="muted" style={{ marginTop: 0 }}>
-          Secure staff access for website content and leads. Do not enter clinical notes here.
-        </p>
-        {error ? <div className="error-banner">{error}</div> : null}
-        <div className="field">
-          <label htmlFor="email">Email</label>
-          <input
-            id="email"
-            type="email"
-            autoComplete="username"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+    <div className="login-shell">
+      <aside className="login-visual" aria-hidden="true">
+        <Image
+          src="/images/brand/login-bg.avif"
+          alt=""
+          fill
+          priority
+          sizes="(min-width: 960px) 48vw, 100vw"
+          className="login-visual-photo"
+        />
+        <div className="login-visual-scrim" />
+        <div className="login-visual-copy">
+          <p className="login-visual-kicker">LifeWell Family Health &amp; Psychiatry</p>
+          <h2>
+            Compassionate care.
+            <em> Calm control.</em>
+          </h2>
+          <p>
+            A private workspace for website content, insurance, reviews, and patient inquiries —
+            never clinical charts.
+          </p>
         </div>
-        <div className="field">
-          <label htmlFor="password">Password</label>
-          <input
-            id="password"
-            type="password"
-            autoComplete="current-password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+      </aside>
+
+      <main className="login-panel">
+        <form className="login-form" onSubmit={onSubmit} noValidate>
+          <Image
+            src="/images/brand/logo.avif"
+            alt="LifeWell Family Health & Psychiatry"
+            width={354}
+            height={63}
+            priority
+            className="login-logo"
           />
-        </div>
-        <button type="submit" className="btn btn-primary" style={{ width: '100%' }} disabled={busy}>
-          {busy ? 'Signing in…' : 'Sign in'}
-        </button>
-      </form>
+
+          <p className="login-kicker">Staff portal</p>
+          <h1 className="login-title">
+            <span>Welcome </span>
+            <em>back</em>
+          </h1>
+          <p className="login-lead">Sign in to manage the LifeWell website with care and privacy.</p>
+
+          {error ? (
+            <div className="error-banner" role="alert">
+              {error}
+            </div>
+          ) : null}
+
+          <div className="field">
+            <label htmlFor="email">Email address</label>
+            <input
+              id="email"
+              type="email"
+              autoComplete="username"
+              required
+              placeholder="you@lifewellfhp.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+
+          <div className="field">
+            <label htmlFor="password">Password</label>
+            <div className="password-wrap">
+              <input
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                autoComplete="current-password"
+                required
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={() => setShowPassword((v) => !v)}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                aria-pressed={showPassword}
+                title={showPassword ? 'Hide password' : 'Show password'}
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" className="login-submit" disabled={busy}>
+            <span className="login-submit-label">{busy ? 'Signing in…' : 'Sign in'}</span>
+            <span className="login-submit-chip" aria-hidden="true">
+              <ArrowRight size={18} />
+            </span>
+          </button>
+
+          <p className="login-footnote">Authorized staff only. Sessions expire automatically.</p>
+        </form>
+      </main>
     </div>
   );
 }

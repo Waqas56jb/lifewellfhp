@@ -26,6 +26,7 @@ export async function getPublicContent(_req: Request, res: Response): Promise<vo
     sections,
     booking,
     seo,
+    settings,
   ] = await Promise.all([
     sb.from('announcements').select('*').eq('active', true).order('sort_order'),
     sb.from('services').select('*').eq('published', true).order('sort_order'),
@@ -39,6 +40,7 @@ export async function getPublicContent(_req: Request, res: Response): Promise<vo
     sb.from('site_sections').select('*').eq('published', true),
     sb.from('booking_settings').select('*').eq('active', true),
     sb.from('seo_meta').select('*'),
+    sb.from('site_settings').select('*').eq('id', 'default'),
   ]);
 
   const firstError = [
@@ -47,6 +49,12 @@ export async function getPublicContent(_req: Request, res: Response): Promise<vo
   ].find((r) => r.error)?.error;
 
   if (firstError) throw badRequest(firstError.message);
+
+  const settingsRow = settings.error
+    ? null
+    : Array.isArray(settings.data)
+      ? settings.data[0] ?? null
+      : settings.data ?? null;
 
   res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
   res.json({
@@ -65,6 +73,7 @@ export async function getPublicContent(_req: Request, res: Response): Promise<vo
       sections: sections.data ?? [],
       booking: booking.data ?? [],
       seo: seo.data ?? [],
+      settings: settingsRow,
     },
   });
 }

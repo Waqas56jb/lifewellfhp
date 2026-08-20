@@ -2,11 +2,16 @@ import type { Request, Response } from 'express';
 import { getSupabase } from '../lib/supabase.js';
 import { badRequest, notFound } from '../utils/errors.js';
 import { leadUpdate } from '../validation/adminSchemas.js';
+import { writeAuditLog } from '../lib/audit.js';
+import { writeNotification } from '../lib/notify.js';
+import type { AuthedRequest } from '../middleware/adminAuth.js';
 
 export async function listLeads(req: Request, res: Response): Promise<void> {
   const status = typeof req.query.status === 'string' ? req.query.status : undefined;
+  const type = typeof req.query.type === 'string' ? req.query.type : undefined;
   let query = getSupabase().from('leads').select('*').order('created_at', { ascending: false });
   if (status) query = query.eq('status', status);
+  if (type) query = query.eq('type', type);
   const { data, error } = await query;
   if (error) throw badRequest(error.message);
   res.json({ success: true, data });
@@ -36,6 +41,14 @@ export async function updateLead(req: Request, res: Response): Promise<void> {
 
   if (error) throw badRequest(error.message);
   if (!data) throw notFound('Lead not found.');
+  const actor = (req as AuthedRequest).admin;
+  await writeAuditLog({
+    actor,
+    action: 'update',
+    resource: 'leads',
+    resourceId: data.id,
+    summary: `Updated lead ${data.reference_id || data.email || data.id} → ${data.status}`,
+  });
   res.json({ success: true, data });
 }
 
@@ -71,4 +84,11 @@ export async function storeLead(input: {
     // Soft-fail so form delivery is not blocked if DB is down.
     throw new Error(error.message);
   }
+  await writeNotification({
+    type: 'lead',
+    audience: 'all',
+    title: input.type === 'newsletter' ? 'New newsletter signup' : 'New website inquiry',
+    body: [input.name, input.email, input.subject].filter(Boolean).join(' · ') || 'Website visitor',
+    href: '/leads',
+  });
 }

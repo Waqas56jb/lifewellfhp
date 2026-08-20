@@ -3,8 +3,14 @@ import { Router as createRouter } from 'express';
 import { z } from 'zod';
 import { getSupabase } from '../lib/supabase.js';
 import { asyncHandler } from '../middleware/index.js';
-import { requireAdmin, requirePermission, type AdminModule } from '../middleware/adminAuth.js';
+import {
+  requireAdmin,
+  requirePermission,
+  type AdminModule,
+  type AuthedRequest,
+} from '../middleware/adminAuth.js';
 import { badRequest, notFound } from '../utils/errors.js';
+import { recordLabel, writeAuditLog } from '../lib/audit.js';
 
 type CrudOptions = {
   table: string;
@@ -72,6 +78,14 @@ export function createCrudRouter(options: CrudOptions): Router {
       if (beforeCreate) payload = beforeCreate(payload);
       const { data, error } = await getSupabase().from(table).insert(payload).select('*').single();
       if (error) throw badRequest(error.message);
+      const actor = (req as AuthedRequest).admin;
+      await writeAuditLog({
+        actor,
+        action: 'create',
+        resource: module,
+        resourceId: data?.id ? String(data.id) : null,
+        summary: `Created ${module}: ${recordLabel(data as Record<string, unknown>)}`,
+      });
       res.status(201).json({ success: true, data });
     })
   );
@@ -99,6 +113,14 @@ export function createCrudRouter(options: CrudOptions): Router {
         .maybeSingle();
       if (error) throw badRequest(error.message);
       if (!data) throw notFound('Record not found.');
+      const actor = (req as AuthedRequest).admin;
+      await writeAuditLog({
+        actor,
+        action: 'update',
+        resource: module,
+        resourceId: String(req.params.id),
+        summary: `Updated ${module}: ${recordLabel(data as Record<string, unknown>)}`,
+      });
       res.json({ success: true, data });
     })
   );
@@ -109,6 +131,14 @@ export function createCrudRouter(options: CrudOptions): Router {
     asyncHandler(async (req, res) => {
       const { error } = await getSupabase().from(table).delete().eq('id', req.params.id);
       if (error) throw badRequest(error.message);
+      const actor = (req as AuthedRequest).admin;
+      await writeAuditLog({
+        actor,
+        action: 'delete',
+        resource: module,
+        resourceId: String(req.params.id),
+        summary: `Deleted ${module} record`,
+      });
       res.json({ success: true });
     })
   );

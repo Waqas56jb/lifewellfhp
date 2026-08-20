@@ -33,12 +33,14 @@ const ALL_MODULES = [
   'seo',
   'analytics',
   'users',
+  'emails',
+  'settings',
 ] as const;
 
 export type AdminModule = (typeof ALL_MODULES)[number];
 
 export function signAdminToken(payload: AdminTokenPayload): string {
-  return jwt.sign(payload, env.ADMIN_JWT_SECRET, { expiresIn: '12h' });
+  return jwt.sign(payload, env.ADMIN_JWT_SECRET, { expiresIn: '30d' });
 }
 
 export function verifyAdminToken(token: string): AdminTokenPayload {
@@ -61,6 +63,10 @@ export const requireAdmin: RequestHandler = (req, _res, next) => {
 };
 
 export function requirePermission(module: AdminModule): RequestHandler {
+  return requireAnyPermission([module]);
+}
+
+export function requireAnyPermission(modules: AdminModule[]): RequestHandler {
   return (req, _res, next) => {
     const admin = (req as AuthedRequest).admin;
     if (!admin) {
@@ -71,11 +77,11 @@ export function requirePermission(module: AdminModule): RequestHandler {
       next();
       return;
     }
-    if (!admin.permissions.includes(module) && !admin.permissions.includes('*')) {
-      next(forbidden('You do not have permission for this module.'));
+    if (admin.permissions.includes('*') || modules.some((module) => admin.permissions.includes(module))) {
+      next();
       return;
     }
-    next();
+    next(forbidden('You do not have permission for this module.'));
   };
 }
 

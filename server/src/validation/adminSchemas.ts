@@ -155,7 +155,7 @@ export const leadUpdate = z.object({
 export const adminUserCreate = z.object({
   email: z.string().email(),
   name: z.string().min(1).max(120),
-  role: z.enum(['super_admin', 'staff']),
+  role: z.enum(['staff']).default('staff'),
   password: z.string().min(10).max(128),
   permissions: z.array(z.string()).default([]),
   active: z.boolean().default(true),
@@ -164,7 +164,6 @@ export const adminUserCreate = z.object({
 export const adminUserUpdate = z.object({
   email: z.string().email().optional(),
   name: z.string().min(1).max(120).optional(),
-  role: z.enum(['super_admin', 'staff']).optional(),
   password: z.string().min(10).max(128).optional(),
   permissions: z.array(z.string()).optional(),
   active: z.boolean().optional(),
@@ -173,6 +172,11 @@ export const adminUserUpdate = z.object({
 export const loginSchema = z.object({
   email: z.string().email(),
   password: z.string().min(1),
+});
+
+export const sendCredentialsSchema = z.object({
+  password: z.string().min(10).max(128).optional(),
+  admin_url: z.string().url().optional(),
 });
 
 export const analyticsIngestSchema = z.object({
@@ -190,3 +194,45 @@ export const conversionIngestSchema = z.object({
   path: z.string().max(500).optional().nullable(),
   meta: z.record(z.unknown()).default({}),
 });
+
+export const emailSendSchema = z.object({
+  to: z
+    .array(
+      z.object({
+        email: z.string().email(),
+        name: z.string().max(120).optional(),
+        lead_id: z.string().uuid().optional(),
+      })
+    )
+    .min(1)
+    .max(50),
+  subject: z.string().min(1).max(200),
+  body: z.string().min(1).max(20000),
+});
+
+export const settingsUpdate = z.object({
+  primary_color: z.string().regex(/^#[0-9A-Fa-f]{6}$/).optional(),
+  accent_color: z.string().regex(/^#[0-9A-Fa-f]{6}$/).optional(),
+  heading_font: z.enum(['Lora', 'Georgia', 'Playfair Display']).optional(),
+  body_font: z.enum(['Source Sans 3', 'Inter', 'system-ui']).optional(),
+  header_cta_label: z.string().min(1).max(80).optional(),
+  header_cta_url: z.string().min(1).max(500).optional(),
+  logo_url: z.string().max(1000).optional().nullable(),
+  practice_phone: z.string().max(40).optional().nullable(),
+  practice_email: z.string().email().optional().nullable().or(z.literal('')),
+  inbox_email: z.string().email().optional().nullable().or(z.literal('')),
+});
+
+export const DEFAULT_SITE_SETTINGS = {
+  id: 'default',
+  primary_color: '#3E7FB1',
+  accent_color: '#5FAF6B',
+  heading_font: 'Lora',
+  body_font: 'Source Sans 3',
+  header_cta_label: 'Get Started',
+  header_cta_url: '/book-telehealth-mental-health-appointment',
+  logo_url: null as string | null,
+  practice_phone: null as string | null,
+  practice_email: null as string | null,
+  inbox_email: null as string | null,
+};

@@ -5,13 +5,19 @@ import { footerColumns } from '@/data/navigation';
 import { Container } from '@/components/ui/Section';
 import { FooterNewsletter } from '@/components/forms/NewsletterForm';
 import { newsletter } from '@/data/marketing';
+import { getResolvedContent } from '@/lib/cms-resolve';
 
-export function Footer() {
-  const year = new Date().getFullYear();
-
+export async function Footer() {
+  const cms = await getResolvedContent();
+  const primary = cms.locations.find((row) => row.isPrimary) ?? cms.locations[0];
+  const phone = cms.settings.practicePhone || primary?.phone || site.contact.phone;
+  const email = cms.settings.practiceEmail || primary?.email || site.contact.email;
+  const phoneHref = phone.replace(/[^\d+]/g, '').length ? `tel:+1${phone.replace(/\D/g, '').replace(/^1/, '')}` : site.contact.phoneHref;
+  const logo = cms.settings.logoUrl || '/images/brand/logo.avif';
+  const remoteLogo = logo.startsWith('http');
   return (
     <footer className="bg-[#F4F7FA]">
-      <div className="footer-band rounded-t-[30px] bg-[#3E7FB1] text-white sm:rounded-t-[40px]">
+      <div className="footer-band rounded-t-[30px] bg-[var(--lw-primary,#3E7FB1)] text-white sm:rounded-t-[40px]">
         <Container>
           <div className="flex flex-col gap-5 border-b border-white/30 py-10 sm:flex-row sm:items-start sm:justify-between sm:gap-8 sm:py-12 lg:py-14">
             <h2 className="max-w-[16ch] font-heading text-[28px] font-normal leading-[1.2] text-white sm:text-[34px] lg:max-w-[18ch] min-[1181px]:text-[42px]">
@@ -27,13 +33,18 @@ export function Footer() {
                 className="inline-flex rounded-[12px] bg-white px-3 py-2.5 sm:px-4 sm:py-3"
                 aria-label={`${site.name} — home`}
               >
-                <Image
-                  src="/images/brand/logo.avif"
-                  alt={site.name}
-                  width={354}
-                  height={63}
-                  className="h-8 w-auto sm:h-10"
-                />
+                {remoteLogo ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={logo} alt={site.name} className="h-8 w-auto sm:h-10" />
+                ) : (
+                  <Image
+                    src={logo}
+                    alt={site.name}
+                    width={354}
+                    height={63}
+                    className="h-8 w-auto sm:h-10"
+                  />
+                )}
               </Link>
               <p className="mt-6 max-w-[38ch] font-body text-[15px] font-normal leading-[1.6] text-white sm:text-[16px]">
                 {site.footerBlurb}
@@ -42,15 +53,15 @@ export function Footer() {
               <address className="mt-5 space-y-1.5 font-body text-[15px] font-normal not-italic leading-relaxed text-white sm:text-[16px]">
                 <p>
                   Phone:-{' '}
-                  <a href={site.contact.phoneHref} className="text-white no-underline hover:underline">
-                    (407) 603 - 1717
+                  <a href={phoneHref} className="text-white no-underline hover:underline">
+                    {phone}
                   </a>
                 </p>
                 <p>Fax:- {site.contact.fax}</p>
                 <p>
                   Email:-{' '}
-                  <a href={site.contact.emailHref} className="text-white no-underline hover:underline">
-                    {site.contact.email}
+                  <a href={`mailto:${email}`} className="text-white no-underline hover:underline">
+                    {email}
                   </a>
                 </p>
               </address>
@@ -62,7 +73,7 @@ export function Footer() {
                       href={s.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex size-10 items-center justify-center rounded-full bg-[#5FAF6B] text-white transition-colors duration-300 hover:bg-white hover:text-[#5FAF6B]"
+                      className="inline-flex size-10 items-center justify-center rounded-full bg-[var(--lw-accent,#5FAF6B)] text-white transition-colors duration-300 hover:bg-white hover:text-[var(--lw-accent,#5FAF6B)]"
                     >
                       <span className="sr-only">
                         {site.name} on {s.name}
@@ -84,6 +95,7 @@ export function Footer() {
                     <li key={link.href}>
                       <Link
                         href={link.href}
+                        prefetch
                         className="font-body text-[15px] font-normal leading-snug text-white no-underline transition-opacity duration-300 hover:opacity-80 sm:text-[16px]"
                       >
                         {link.label}
@@ -97,7 +109,7 @@ export function Footer() {
 
           <div className="border-t border-white/30 py-5 text-center sm:py-6">
             <p className="font-body text-[13px] font-normal leading-relaxed text-white sm:text-[14px]">
-              © {year} {site.name}. All Rights Reserved. | Design By
+              © 2026 {site.name}. All Rights Reserved. | Design By
             </p>
           </div>
         </Container>

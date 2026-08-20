@@ -11,12 +11,29 @@ import { StatsBand } from '@/components/sections/StatsBand';
  * (post 50772). Hidden duplicate widgets and lorem-ipsum “Jon Doe” cards
  * are omitted; real patient quotes fill the three testimonial tiles.
  */
-export function BioPageContent() {
+export function BioPageContent({
+  overlay,
+}: {
+  overlay?: {
+    name?: string;
+    credentials?: string;
+    bio?: string | null;
+    photoUrl?: string | null;
+  };
+} = {}) {
   const featured = testimonials.slice(0, 3);
+  const display = {
+    name: overlay?.name || provider.name,
+    credentials: overlay?.credentials || provider.credentials,
+    bio: overlay?.bio
+      ? overlay.bio.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean)
+      : provider.bio,
+    photo: overlay?.photoUrl || provider.image.src,
+  };
 
   return (
     <div className="bg-white">
-      <BioHero />
+      <BioHero overlay={display} />
 
       <section className="pb-16 sm:pb-24 lg:pb-[150px]">
         <Container>
@@ -38,7 +55,7 @@ export function BioPageContent() {
                 Short Biography
               </h2>
               <div className="mt-6 space-y-5">
-                {provider.bio.map((paragraph) => (
+                {display.bio.map((paragraph) => (
                   <p key={paragraph.slice(0, 40)} className="text-[16px] leading-[1.45] text-[#374151] min-[1181px]:text-[18px]">
                     {paragraph}
                   </p>
@@ -162,7 +179,12 @@ export function BioPageContent() {
   );
 }
 
-function BioHero() {
+function BioHero({
+  overlay,
+}: {
+  overlay: { name: string; credentials: string; photo: string };
+}) {
+  const remotePhoto = overlay.photo.startsWith('http');
   return (
     <section className="px-5 pb-16 pt-4 sm:px-[30px] sm:pb-24 lg:px-10 lg:pb-[150px] min-[1601px]:px-[80px]">
       <div className="mx-auto flex max-w-[1840px] flex-col-reverse overflow-hidden rounded-[20px] sm:rounded-[30px] lg:min-h-[570px] lg:flex-row">
@@ -171,7 +193,7 @@ function BioHero() {
             About Me
           </p>
           <h1 className="max-w-[16ch] font-heading text-[32px] font-normal leading-[1.1] tracking-[-2px] text-[#5FAF6B] sm:text-[44px] min-[1181px]:text-[56px] min-[1601px]:text-[62px]">
-            {provider.name}, {provider.credentials}
+            {overlay.name}, {overlay.credentials}
           </h1>
 
           <ul className="w-full max-w-[28rem]">
@@ -222,14 +244,19 @@ function BioHero() {
         </div>
 
         <div className="relative min-h-[340px] sm:min-h-[500px] lg:min-h-[570px] lg:w-1/2">
-          <Image
-            src={provider.image.src}
-            alt={provider.image.alt}
-            fill
-            priority
-            sizes="(min-width: 1024px) 50vw, 100vw"
-            className="object-cover object-center"
-          />
+          {remotePhoto ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={overlay.photo} alt={overlay.name} className="absolute inset-0 h-full w-full object-cover object-center" />
+          ) : (
+            <Image
+              src={overlay.photo}
+              alt={overlay.name}
+              fill
+              priority
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              className="object-cover object-center"
+            />
+          )}
         </div>
       </div>
     </section>

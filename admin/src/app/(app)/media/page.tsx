@@ -1,6 +1,7 @@
 'use client';
 
 import { FormEvent, useEffect, useState } from 'react';
+import { Upload } from 'lucide-react';
 import { ResourceManager } from '@/components/ResourceManager';
 import { api } from '@/lib/api';
 
@@ -75,8 +76,8 @@ export default function Page() {
 
   return (
     <div>
-      <h1 className="page-title">Photos & media</h1>
-      <p className="page-sub">Upload images (max 4 MB) or paste CDN URLs. Used across the public site.</p>
+      <h1 className="page-title">Media</h1>
+      <p className="page-sub">Upload photos (max 4 MB) for service cards, insurance logos, and page images.</p>
 
       <form className="card card-pad" style={{ marginBottom: '1rem' }} onSubmit={onUpload}>
         <h2 style={{ marginTop: 0 }}>Upload image</h2>
@@ -97,14 +98,15 @@ export default function Page() {
           </div>
         </div>
         <button type="submit" className="btn btn-primary" disabled={uploading}>
+          <Upload size={16} />
           {uploading ? 'Uploading…' : 'Upload'}
         </button>
       </form>
 
       <ResourceManager
         key={reloadKey}
-        title="Media library"
-        subtitle="Stored assets and URLs."
+        title="Uploaded files"
+        subtitle="Copy a URL into Services, Insurance, or Homepage fields."
         endpoint="/api/admin/media"
         createDefaults={{ folder: 'general' }}
         columns={[

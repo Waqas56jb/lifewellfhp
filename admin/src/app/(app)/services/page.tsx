@@ -5,8 +5,8 @@ import { ResourceManager } from '@/components/ResourceManager';
 export default function Page() {
   return (
     <ResourceManager
-      title="Services & treatment areas"
-      subtitle="Psychiatric and primary-care services listed on the public site."
+      title="Services"
+      subtitle="Treatment areas currently listed on the public website. Add, edit, unpublish, or delete any service."
       endpoint="/api/admin/services"
       createDefaults={{ published: true, sort_order: 0 }}
       columns={[

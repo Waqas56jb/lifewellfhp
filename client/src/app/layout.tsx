@@ -3,9 +3,11 @@ import { Lora, Source_Sans_3 } from 'next/font/google';
 import '@/styles/globals.css';
 
 import { site } from '@/data/site';
-import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { SkipLink } from '@/components/layout/SkipLink';
+import { NavigationProgress } from '@/components/layout/NavigationProgress';
+import { ThemeVars } from '@/components/layout/ThemeVars';
+import { SiteHeader } from '@/components/layout/SiteHeader';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { AnalyticsBeacon } from '@/components/seo/AnalyticsBeacon';
 import { homeGraph } from '@/lib/schema';
@@ -71,8 +73,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en-US" className={`${lora.variable} ${sourceSans.variable}`}>
       <body>
         <JsonLd data={homeGraph()} id="site-schema" />
+        <ThemeVars />
         <SkipLink />
-        <Header />
+        <NavigationProgress />
+        <SiteHeader />
         <main id="main-content" tabIndex={-1} className="focus:outline-none">
           {children}
         </main>

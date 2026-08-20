@@ -5,8 +5,8 @@ import { ResourceManager } from '@/components/ResourceManager';
 export default function Page() {
   return (
     <ResourceManager
-      title="Homepage & page sections"
-      subtitle="Editable marketing blocks (hero copy, CTAs, welcome text). Content is JSON."
+      title="Homepage"
+      subtitle="Hero and welcome copy currently shown on the public homepage. Edit or delete a section to change the live site."
       endpoint="/api/admin/sections"
       createDefaults={{ page_key: 'home', section_key: 'hero', published: true, content: '{}' }}
       columns={[

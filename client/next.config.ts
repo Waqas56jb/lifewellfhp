@@ -4,6 +4,13 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
 
+  experimental: {
+    staleTimes: {
+      dynamic: 30,
+      static: 180,
+    },
+  },
+
   images: {
     // All imagery is served locally from /public — no remote patterns needed.
     formats: ['image/avif', 'image/webp'],

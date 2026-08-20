@@ -86,6 +86,21 @@ export async function getAnalyticsSummary(_req: Request, res: Response): Promise
     return acc;
   }, {});
 
+  const priorSince = new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString();
+  const midpoint = since;
+  const [priorEvents, priorConversions] = await Promise.all([
+    sb.from('analytics_events').select('event_type, created_at').gte('created_at', priorSince).lt('created_at', midpoint),
+    sb.from('conversions').select('id, created_at').gte('created_at', priorSince).lt('created_at', midpoint),
+  ]);
+  const priorViews = (priorEvents.data ?? []).filter((e) => e.event_type === 'page_view').length;
+  const priorSessions = (priorEvents.data ?? []).filter((e) => e.event_type === 'session_start').length;
+  const priorConv = (priorConversions.data ?? []).length;
+
+  const pct = (now: number, prev: number) => {
+    if (!prev) return now ? 100 : 0;
+    return Math.round(((now - prev) / prev) * 100);
+  };
+
   res.json({
     success: true,
     data: {
@@ -95,15 +110,16 @@ export async function getAnalyticsSummary(_req: Request, res: Response): Promise
         sessions: events.filter((e) => e.event_type === 'session_start').length,
         conversions: conversions.length,
       },
+      deltas: {
+        pageViews: pct(pageViews.length, priorViews),
+        sessions: pct(events.filter((e) => e.event_type === 'session_start').length, priorSessions),
+        conversions: pct(conversions.length, priorConv),
+      },
       popularPages,
       devices: byDevice,
       trafficSources,
       trends,
       conversionCounts,
-      integrations: {
-        googleAnalytics: Boolean(process.env.GA4_MEASUREMENT_ID),
-        searchConsole: Boolean(process.env.GOOGLE_SEARCH_CONSOLE_SITE),
-      },
     },
   });
 }

@@ -9,10 +9,11 @@ import { CTASection } from '@/components/sections/CTASection';
 import { JsonLd } from '@/components/seo/JsonLd';
 
 import { publishedPosts } from '@/data/blog';
-import { serviceSummaries } from '@/data/services';
+import { serviceSummaries } from '@/data/service-catalog';
 import { formatDate, isoDate } from '@/lib/utils';
 import { pageMetadata } from '@/lib/seo';
 import { pageGraph } from '@/lib/schema';
+import { getResolvedContent } from '@/lib/cms-resolve';
 
 const DESCRIPTION =
   'Mental health and wellness articles from LifeWell Family Health & Psychiatry — practical guidance on anxiety, depression, ADHD, sleep and living well.';
@@ -34,8 +35,28 @@ export const metadata: Metadata = pageMetadata({
  * every source article is theme filler; posts appear here automatically once
  * real content replaces it.
  */
-export default function BlogIndexPage() {
-  const posts = publishedPosts;
+export default async function BlogIndexPage() {
+  const cms = await getResolvedContent();
+  const posts =
+    cms.posts.length > 0
+      ? cms.posts.map((post) => ({
+          slug: post.slug,
+          title: post.title,
+          excerpt: post.excerpt || '',
+          category: null as string | null,
+          image: post.coverImageUrl,
+          publishedAt: post.publishedAt,
+          href: `/blog/${post.slug}`,
+        }))
+      : publishedPosts.map((post) => ({
+          slug: post.slug,
+          title: post.title,
+          excerpt: post.excerpt,
+          category: post.category,
+          image: post.image,
+          publishedAt: post.publishedAt,
+          href: `/${post.slug}`,
+        }));
 
   return (
     <>
@@ -63,14 +84,19 @@ export default function BlogIndexPage() {
                   <article className="group flex w-full flex-col overflow-hidden rounded-md border border-border-subtle bg-surface-raised transition-shadow duration-fast hover:shadow-md">
                     {post.image && (
                       <div className="relative aspect-[16/9] overflow-hidden bg-surface-muted">
-                        <Image
-                          src={post.image}
-                          alt=""
-                          fill
-                          loading="lazy"
-                          sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 92vw"
-                          className="object-cover"
-                        />
+                        {post.image.startsWith('http') ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={post.image} alt="" className="absolute inset-0 h-full w-full object-cover" />
+                        ) : (
+                          <Image
+                            src={post.image}
+                            alt=""
+                            fill
+                            loading="lazy"
+                            sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 92vw"
+                            className="object-cover"
+                          />
+                        )}
                       </div>
                     )}
                     <div className="flex flex-1 flex-col p-6">
@@ -81,7 +107,7 @@ export default function BlogIndexPage() {
                       )}
                       <h2 className="text-h5">
                         <Link
-                          href={`/${post.slug}`}
+                          href={post.href}
                           className="text-text-primary no-underline after:absolute after:inset-0 after:content-[''] group-hover:text-brand-primary-solid"
                         >
                           {post.title}

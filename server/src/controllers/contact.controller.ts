@@ -3,6 +3,7 @@ import { randomUUID } from 'node:crypto';
 import { contactSchema, fieldErrors } from '../validation/schemas.js';
 import { sendContactNotification } from '../services/email.service.js';
 import { storeLead } from './leads.controller.js';
+import { logEmailMessage } from '../lib/mailLog.js';
 import { badRequest } from '../utils/errors.js';
 import { logger } from '../utils/logger.js';
 import { supabaseConfigured } from '../lib/supabase.js';
@@ -48,6 +49,25 @@ export async function handleContact(req: Request, res: Response): Promise<void> 
   }
 
   const result = await sendContactNotification(parsed.data, referenceId);
+
+  await logEmailMessage({
+    direction: 'inbound',
+    from_email: parsed.data.email,
+    from_name: parsed.data.name,
+    to_email: result.inbox,
+    to_name: 'LifeWell inbox',
+    subject: parsed.data.subject || `Website enquiry from ${parsed.data.name}`,
+    body: [
+      `Name: ${parsed.data.name}`,
+      `Email: ${parsed.data.email}`,
+      `Phone: ${parsed.data.phone || '—'}`,
+      `Reference: ${referenceId}`,
+      '',
+      parsed.data.message,
+    ].join('\n'),
+    status: result.delivered ? 'sent' : 'failed',
+    error: result.delivered ? null : 'SMTP did not accept the message',
+  });
 
   res.status(201).json({
     success: true,

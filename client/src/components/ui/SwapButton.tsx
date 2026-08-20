@@ -26,14 +26,14 @@ export function SwapButton({
 
   const compact = size === 'sm';
   const pill = cn(
-    'inline-flex min-w-0 items-center justify-center whitespace-nowrap rounded-[30px] bg-[#3E7FB1] font-semibold leading-[1.3] text-white no-underline transition-colors duration-300 group-hover:bg-[#5FAF6B]',
+    'inline-flex min-w-0 items-center justify-center whitespace-nowrap rounded-[30px] bg-[var(--lw-primary,#3E7FB1)] font-semibold leading-[1.3] text-white no-underline transition-colors duration-300 group-hover:bg-[var(--lw-accent,#5FAF6B)]',
     compact
       ? 'min-h-[40px] px-5 py-2 text-[14px]'
       : 'min-h-[51px] px-[30px] py-[14px] text-[16px] min-[1181px]:text-[18px]'
   );
 
   const chip = cn(
-    'inline-flex shrink-0 items-center justify-center rounded-full bg-[#3E7FB1] text-white transition-colors duration-300 group-hover:bg-[#5FAF6B]',
+    'inline-flex shrink-0 items-center justify-center rounded-full bg-[var(--lw-primary,#3E7FB1)] text-white transition-colors duration-300 group-hover:bg-[var(--lw-accent,#5FAF6B)]',
     compact ? 'size-10' : 'size-[51px]'
   );
 
@@ -60,7 +60,7 @@ export function SwapButton({
   }
 
   return (
-    <Link href={href} className={classes}>
+    <Link href={href} prefetch className={classes}>
       {inner}
     </Link>
   );
@@ -78,6 +78,7 @@ export function OutlineButton({
   return (
     <Link
       href={href}
+      prefetch
       className={cn(
         'inline-flex min-h-[51px] items-center justify-center gap-2 whitespace-nowrap rounded-[30px] border border-white px-[30px] py-[14px] text-[16px] font-semibold leading-[1.3] text-white no-underline transition-colors duration-300 hover:border-[#3E7FB1] hover:bg-[#3E7FB1] min-[1181px]:text-[18px]',
         className

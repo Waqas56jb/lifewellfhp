@@ -47,9 +47,13 @@ export async function api<T>(
   }
 
   if (!res.ok) {
+    const fallback =
+      res.status === 404
+        ? 'Login service is not running. In the server folder run npm run build, then npm start — or use npm run dev.'
+        : `Request failed (${res.status})`;
     return {
       success: false,
-      message: json.message || `Request failed (${res.status})`,
+      message: json.message && json.message !== 'Not found' ? json.message : fallback,
       errors: json.errors,
     };
   }

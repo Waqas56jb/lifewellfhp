@@ -4,7 +4,8 @@ import { notFound } from 'next/navigation';
 import { ServicePageContent } from '@/components/sections/ServicePageContent';
 import { JsonLd } from '@/components/seo/JsonLd';
 
-import { getService, getServiceSummary, serviceSlugs } from '@/data/services';
+import { getService } from '@/data/services';
+import { getServiceSummary, serviceSlugs } from '@/data/service-catalog';
 import { pageMetadata } from '@/lib/seo';
 import { serviceGraph } from '@/lib/schema';
 

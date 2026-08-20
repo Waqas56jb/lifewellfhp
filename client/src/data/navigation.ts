@@ -1,5 +1,5 @@
 import type { NavItem, NavLink } from '@/types/content';
-import { serviceCategories, summariesByCategory } from './services';
+import { serviceCategories, summariesByCategory } from './service-catalog';
 
 /**
  * Header navigation, mirroring the source site's structure.
