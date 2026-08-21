@@ -5,8 +5,7 @@ import { serviceCategories, summariesByCategory } from './service-catalog';
  * Header navigation, mirroring the source site's structure.
  *
  * The source labelled the bio link "Psychiatric Mental Health Nurse
- * Practitioner" — 43 characters, which forced awkward wrapping. Shortened to
- * "Meet Your Provider" for the menu; the full credential remains the page H1.
+ * Practitioner". That full title is used in the header, matching the live site.
  */
 export const headerNav: NavItem[] = [
   { label: 'Home', href: '/' },
@@ -24,7 +23,7 @@ export const headerNav: NavItem[] = [
       },
     ],
   },
-  { label: 'Meet Your Provider', href: '/bio' },
+  { label: 'Psychiatric Mental Health Nurse Practitioner', href: '/bio' },
   { label: 'Fees & Insurance', href: '/fees-insurance' },
   { label: 'Contact Us', href: '/contact-telehealth-mental-health-provider' },
 ];

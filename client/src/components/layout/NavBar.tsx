@@ -10,8 +10,11 @@ import { SwapButton } from '@/components/ui/SwapButton';
 import { MobileMenu } from './MobileMenu';
 
 /** Extra room for the Get Started control plus flex gaps. */
-const CTA_RESERVE = 240;
-const ROW_GAP = 24;
+const CTA_RESERVE = 210;
+const ROW_GAP = 20;
+
+const NAV_LINK =
+  'inline-flex min-h-[42px] shrink-0 items-center whitespace-nowrap rounded-[30px] px-3.5 py-[5px] text-[15px] font-semibold leading-none no-underline transition-colors duration-300 xl:px-[18px] min-[1601px]:px-[22px] min-[1601px]:text-[16px]';
 
 export function NavBar({
   items,
@@ -33,7 +36,7 @@ export function NavBar({
     setMobileOpen(false);
   }, [pathname]);
 
-  // Switch to the hamburger whenever the links would overlap the logo.
+  // Use the hamburger whenever logo + links + CTA would overflow the bar.
   useLayoutEffect(() => {
     const host = hostRef.current;
     const measure = measureRef.current;
@@ -65,17 +68,14 @@ export function NavBar({
   const showCompact = compact !== false;
 
   return (
-    <div
-      ref={hostRef}
-      className="relative flex min-w-0 flex-1 items-center justify-end gap-2 sm:gap-3 min-[1440px]:gap-4"
-    >
+    <div ref={hostRef} className="flex min-w-0 flex-1 items-center gap-3 lg:gap-5">
       <ul
         ref={measureRef}
         aria-hidden
-        className="pointer-events-none invisible fixed left-0 top-0 -z-10 flex w-max items-center gap-0.5 whitespace-nowrap text-[15px] font-semibold min-[1601px]:gap-[3px] min-[1601px]:text-[16px]"
+        className="pointer-events-none invisible fixed left-0 top-0 -z-10 flex w-max items-center gap-[3px] whitespace-nowrap text-[15px] font-semibold min-[1601px]:text-[16px]"
       >
         {items.map((item) => (
-          <li key={item.href} className="px-3.5 py-[5px] min-[1601px]:px-[22px]">
+          <li key={item.href} className="px-3.5 py-[5px] xl:px-[18px] min-[1601px]:px-[22px]">
             {item.label}
           </li>
         ))}
@@ -84,11 +84,11 @@ export function NavBar({
       <nav
         aria-label="Main"
         className={cn(
-          'min-w-0',
-          compact === null ? 'hidden min-[1440px]:block' : showDesktop ? 'block' : 'hidden'
+          'min-w-0 flex-1',
+          compact === null ? 'hidden min-[1440px]:flex' : showDesktop ? 'flex' : 'hidden'
         )}
       >
-        <ul className="flex items-center justify-end gap-0.5 min-[1601px]:gap-[3px]">
+        <ul className="flex w-full items-center justify-center gap-[3px]">
           {items.map((item) =>
             item.groups ? (
               <MegaMenuItem key={item.href} item={item} pathname={pathname} />
@@ -105,49 +105,54 @@ export function NavBar({
 
       <div
         className={cn(
-          'shrink-0',
-          compact === null
-            ? 'hidden sm:flex min-[1440px]:hidden'
-            : showCompact
-              ? 'hidden sm:flex'
-              : 'hidden'
+          'flex shrink-0 items-center gap-2 sm:gap-3',
+          compact === null ? 'ml-auto min-[1440px]:ml-0' : showCompact && 'ml-auto'
         )}
       >
-        <SwapButton href={cta.href} size="sm">
-          {cta.label}
-        </SwapButton>
-      </div>
+        <div
+          className={cn(
+            compact === null ? 'hidden min-[1440px]:flex' : showDesktop ? 'flex' : 'hidden'
+          )}
+        >
+          <SwapCta href={cta.href} label={cta.label} />
+        </div>
 
-      <div
-        className={cn(
-          'shrink-0',
-          compact === null ? 'hidden min-[1440px]:flex' : showDesktop ? 'flex' : 'hidden'
-        )}
-      >
-        <SwapCta href={cta.href} label={cta.label} />
-      </div>
+        <div
+          className={cn(
+            compact === null
+              ? 'hidden sm:flex min-[1440px]:hidden'
+              : showCompact
+                ? 'hidden sm:flex'
+                : 'hidden'
+          )}
+        >
+          <SwapButton href={cta.href} size="sm">
+            {cta.label}
+          </SwapButton>
+        </div>
 
-      <button
-        type="button"
-        onClick={() => setMobileOpen(true)}
-        aria-expanded={mobileOpen}
-        aria-controls="mobile-menu"
-        aria-label="Open menu"
-        className={cn(
-          'relative z-10 min-h-11 min-w-11 shrink-0 touch-manipulation items-center justify-center gap-2 rounded-sm border px-3 text-sm font-semibold transition-colors duration-quick sm:px-4',
-          compact === null
-            ? 'inline-flex min-[1440px]:hidden'
-            : showCompact
-              ? 'inline-flex'
-              : 'hidden',
-          overlay
-            ? 'border-white/50 text-white hover:bg-white/10'
-            : 'border-border-subtle text-text-primary hover:bg-surface-muted'
-        )}
-      >
-        <BurgerIcon />
-        <span className="hidden sm:inline">Menu</span>
-      </button>
+        <button
+          type="button"
+          onClick={() => setMobileOpen(true)}
+          aria-expanded={mobileOpen}
+          aria-controls="mobile-menu"
+          aria-label="Open menu"
+          className={cn(
+            'relative z-10 min-h-11 min-w-11 shrink-0 touch-manipulation items-center justify-center gap-2 rounded-sm border px-3 text-sm font-semibold transition-colors duration-quick sm:px-4',
+            compact === null
+              ? 'inline-flex min-[1440px]:hidden'
+              : showCompact
+                ? 'inline-flex'
+                : 'hidden',
+            overlay
+              ? 'border-white/50 text-white hover:bg-white/10'
+              : 'border-border-subtle text-text-primary hover:bg-surface-muted'
+          )}
+        >
+          <BurgerIcon />
+          <span className="hidden sm:inline">Menu</span>
+        </button>
+      </div>
 
       <MobileMenu
         id="mobile-menu"
@@ -182,7 +187,7 @@ function TopLevelLink({
       prefetch
       aria-current={active ? 'page' : undefined}
       className={cn(
-        'inline-flex min-h-[42px] max-w-[16rem] shrink-0 items-center justify-center whitespace-nowrap rounded-[30px] px-3.5 py-[5px] text-[15px] font-semibold leading-tight no-underline transition-colors duration-300 min-[1601px]:max-w-none min-[1601px]:px-[22px] min-[1601px]:text-[16px]',
+        NAV_LINK,
         active
           ? 'bg-[var(--lw-primary)] text-white'
           : 'text-[var(--lw-accent)] hover:bg-[var(--lw-primary)] hover:text-white'
@@ -321,7 +326,8 @@ function MegaMenuItem({ item, pathname }: { item: NavItem; pathname: string }) {
         aria-controls={panelId}
         onClick={() => setOpen((v) => !v)}
         className={cn(
-          'inline-flex min-h-[42px] max-w-[16rem] shrink-0 items-center justify-center gap-[7px] whitespace-nowrap rounded-[30px] px-3.5 py-[5px] text-[15px] font-semibold leading-tight transition-colors duration-300 min-[1601px]:max-w-none min-[1601px]:px-[22px] min-[1601px]:text-[16px]',
+          NAV_LINK,
+          'gap-[7px]',
           active || open
             ? 'bg-[var(--lw-primary)] text-white'
             : 'text-[var(--lw-accent)] hover:bg-[var(--lw-primary)] hover:text-white'

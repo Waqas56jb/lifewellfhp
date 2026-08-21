@@ -19,7 +19,7 @@ export function SwapButton({
   size?: 'md' | 'sm';
 }) {
   const classes = cn(
-    'group inline-flex max-w-full items-center gap-1',
+    'group inline-flex max-w-full items-center',
     fullWidth && 'w-full',
     className
   );
