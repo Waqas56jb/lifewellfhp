@@ -30,7 +30,7 @@ export const headerNav: NavItem[] = [
 
 export const headerCta: NavLink = {
   label: 'Get Started',
-  href: '/book-telehealth-mental-health-appointment',
+  href: '/book-telehealth-mental-health-appointment#charm-calendar',
 };
 
 /** Footer columns, matching the source site's four-column layout. */

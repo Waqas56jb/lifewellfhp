@@ -93,7 +93,7 @@ export const providerPage = {
   consultation: {
     heading: 'Schedule Your Consultation Today',
     body: 'Take the first step toward better mental health with secure and personalized telehealth support tailored to your needs.',
-    cta: { label: 'Start Your Care Today', href: '/book-telehealth-mental-health-appointment' },
+    cta: { label: 'Start Your Care Today', href: '/book-telehealth-mental-health-appointment#charm-calendar' },
   },
   /** As published in the /bio/ credential rows. */
   educationBlurb:

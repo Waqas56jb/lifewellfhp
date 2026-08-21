@@ -76,8 +76,8 @@ export const site = {
    * CTAs stay on-site (`page`); the EHR calendar URL is the iframe source.
    */
   booking: {
-    url: 'https://ehr.charmtracker.com/publicCal.sas?method=getCal&digest=26a1a06adbd537c481b1d04dd4f7172a9e13b95e979de3c2ffd67310b926494cef59d40e1bb127af1871e728dd80f5a6c2fe0580a6189219',
-    page: '/book-telehealth-mental-health-appointment',
+    url: 'https://ehr.charmtracker.com/publicCal.sas?method=getCal&digest=26a1a06adbd537c481b1d04dd4f7172a298949fe2840a1731b54d620355c17e76ee57013c1a537e61871e728dd80f5a6c2fe0580a6189219',
+    page: '/book-telehealth-mental-health-appointment#charm-calendar',
     label: 'Book a Session',
     /** Retained for reference; not linked from the UI. */
     alternateSystem: 'https://lourdie-chachoute.clientsecure.me',

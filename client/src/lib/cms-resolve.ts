@@ -351,7 +351,7 @@ const DEFAULT_SETTINGS = {
   headingFont: 'Lora',
   bodyFont: 'Source Sans 3',
   headerCtaLabel: 'Get Started',
-  headerCtaUrl: '/book-telehealth-mental-health-appointment',
+  headerCtaUrl: '/book-telehealth-mental-health-appointment#charm-calendar',
   logoUrl: null as string | null,
   practicePhone: null as string | null,
   practiceEmail: null as string | null,

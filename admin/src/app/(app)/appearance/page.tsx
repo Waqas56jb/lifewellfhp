@@ -24,7 +24,7 @@ const empty: Settings = {
   heading_font: 'Lora',
   body_font: 'Source Sans 3',
   header_cta_label: 'Get Started',
-  header_cta_url: '/book-telehealth-mental-health-appointment',
+  header_cta_url: '/book-telehealth-mental-health-appointment#charm-calendar',
   logo_url: '',
   practice_phone: '',
   practice_email: '',

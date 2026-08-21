@@ -232,7 +232,7 @@ export const DEFAULT_SITE_SETTINGS = {
   heading_font: 'Lora',
   body_font: 'Source Sans 3',
   header_cta_label: 'Get Started',
-  header_cta_url: '/book-telehealth-mental-health-appointment',
+  header_cta_url: '/book-telehealth-mental-health-appointment#charm-calendar',
   logo_url: null as string | null,
   practice_phone: null as string | null,
   practice_email: null as string | null,

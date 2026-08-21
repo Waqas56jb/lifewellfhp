@@ -45,11 +45,13 @@ export function BookingCalendar({
 
         <div className="mx-auto mt-10 max-w-[1100px] overflow-hidden rounded-[30px] border border-[#e1e8ee] bg-white shadow-[0_10px_28px_rgba(62,127,177,0.12)]">
           <iframe
+            width="100%"
+            height="1000"
             src={src}
             title="CharmHealth appointment calendar"
-            className="block h-[min(1100px,90dvh)] min-h-[720px] w-full max-w-none border-0 bg-white"
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
+            style={{ overflow: 'hidden' }}
+            frameBorder={0}
+            className="block w-full max-w-none border-0 bg-white"
           />
         </div>
       </Container>
