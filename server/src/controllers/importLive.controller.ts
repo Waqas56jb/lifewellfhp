@@ -106,6 +106,7 @@ export async function runLiveImport(): Promise<Record<string, number>> {
     title,
     summary,
     image_url: SERVICE_META[slug]?.image || null,
+    icon: SERVICE_META[slug]?.image || null,
     category: SERVICE_META[slug]?.category || 'psychiatric',
     published: true,
     sort_order: i,
@@ -116,6 +117,7 @@ export async function runLiveImport(): Promise<Record<string, number>> {
       slug,
       title,
       summary,
+      icon: SERVICE_META[slug]?.image || null,
       published: true,
       sort_order: i,
     }));

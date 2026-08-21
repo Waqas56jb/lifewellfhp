@@ -20,7 +20,7 @@ export default function Page() {
             title={String(form.title || '')}
             summary={form.summary ? String(form.summary) : null}
             body={form.body ? String(form.body) : null}
-            imageUrl={form.image_url ? String(form.image_url) : null}
+            imageUrl={form.image_url ? String(form.image_url) : form.icon ? String(form.icon) : null}
             category={form.category ? String(form.category) : null}
             slug={form.slug ? String(form.slug) : ''}
           />

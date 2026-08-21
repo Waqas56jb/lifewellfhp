@@ -14,6 +14,9 @@ import { recordLabel, writeAuditLog } from '../lib/audit.js';
 
 function withoutOptionalMediaFields(payload: Record<string, unknown>) {
   const next = { ...payload };
+  if (typeof next.image_url === 'string' && next.image_url && !next.icon) {
+    next.icon = next.image_url;
+  }
   delete next.image_url;
   delete next.category;
   return next;

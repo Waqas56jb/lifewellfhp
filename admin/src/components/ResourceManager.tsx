@@ -92,6 +92,9 @@ export function ResourceManager({
   function openEdit(row: Record<string, unknown>) {
     setEditing(row);
     const next = { ...row };
+    if ((next.image_url == null || next.image_url === '') && typeof next.icon === 'string' && next.icon) {
+      next.image_url = next.icon;
+    }
     for (const field of fields) {
       if (field.type === 'json' && next[field.key] != null && typeof next[field.key] !== 'string') {
         next[field.key] = JSON.stringify(next[field.key], null, 2);
@@ -124,6 +127,10 @@ export function ResourceManager({
         }
       }
       body[field.key] = value;
+    }
+
+    if (fields.some((field) => field.key === 'image_url') && body.image_url) {
+      body.icon = body.image_url;
     }
 
     const res = isEdit
