@@ -12,7 +12,11 @@ const schema = z.object({
   PORT: z.coerce.number().int().positive().default(4000),
 
   /** Comma-separated list of origins permitted to call this API. */
-  CORS_ORIGINS: z.string().default('http://localhost:3000,http://localhost:3001'),
+  CORS_ORIGINS: z
+    .string()
+    .default(
+      'http://localhost:3000,http://localhost:3001,https://lifewellfhp-client.vercel.app,https://lifewellfhp-admin.vercel.app'
+    ),
 
   /** Destination for contact-form notifications. */
   CONTACT_EMAIL: z.string().email().default('contact@lifewellfhp.com'),

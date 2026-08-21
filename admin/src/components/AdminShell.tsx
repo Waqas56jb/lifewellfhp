@@ -162,7 +162,7 @@ function AdminShellInner({ children }: { children: ReactNode }) {
             <NotificationBell />
             <a
               className="btn btn-ghost"
-              href={process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}
+              href={process.env.NEXT_PUBLIC_SITE_URL || 'https://lifewellfhp-client.vercel.app'}
               target="_blank"
               rel="noreferrer"
             >

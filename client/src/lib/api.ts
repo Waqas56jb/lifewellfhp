@@ -6,7 +6,7 @@ import type { ApiResponse, ContactFormValues } from '@/types/content';
  * The base URL is public by design (the browser calls it directly); no secret
  * ever reaches this layer. All credentials live server-side.
  */
-const API_BASE = (process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000').replace(/\/$/, '');
+const API_BASE = (process.env.NEXT_PUBLIC_API_URL ?? 'https://lifewellfhp-server.vercel.app').replace(/\/$/, '');
 
 const GENERIC_ERROR =
   'We could not send your message just now. Please try again, or call us at (407) 603-1717.';

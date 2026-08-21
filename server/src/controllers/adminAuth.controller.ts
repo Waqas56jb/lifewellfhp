@@ -217,7 +217,7 @@ async function emailStaffCredentials(input: {
   password: string;
   adminUrl?: string;
 }): Promise<{ delivered: boolean; error?: string }> {
-  const signInUrl = input.adminUrl || 'http://localhost:3001/login';
+  const signInUrl = input.adminUrl || 'https://lifewellfhp-admin.vercel.app/login';
   const text = [
     `Dear ${input.name},`,
     ``,

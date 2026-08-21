@@ -2,7 +2,7 @@
  * Public CMS client — fetches published content from the API.
  * Falls back to null when the CMS is empty/unconfigured so static data remains.
  */
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://lifewellfhp-server.vercel.app';
 
 export type PublicCmsPayload = {
   announcements: unknown[];
