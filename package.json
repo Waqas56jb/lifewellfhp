@@ -1,0 +1,12 @@
+{
+  "name": "lifewellfhp",
+  "private": true,
+  "description": "LifeWell monorepo. Vercel Root Directory should be client, admin, or server. This file lets a repo-root import still build the matching Next.js app.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "vercel-install": "node scripts/vercel-monorepo.mjs install",
+    "vercel-build": "node scripts/vercel-monorepo.mjs build"
+  }
+}

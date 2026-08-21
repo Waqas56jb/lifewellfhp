@@ -4,6 +4,7 @@ node_modules/
 .pnp.js
 
 # Builds
+.next/
 client/.next/
 client/out/
 admin/.next/
@@ -33,6 +34,7 @@ client/playwright-report/
 client/hero-shots/
 
 # Next.js
+.vercel
 client/.vercel
 admin/.vercel
 client/next-env.d.ts

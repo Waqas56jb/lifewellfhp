@@ -39,12 +39,6 @@ const nextConfig: NextConfig = {
   // as the real routes so existing search rankings and inbound links survive.
   async redirects() {
     return [
-      {
-        source: '/:path*',
-        has: [{ type: 'host', value: 'lifewellfhp-client.vercel.app' }],
-        destination: 'https://www.lifewellfhp.com/:path*',
-        permanent: true,
-      },
       { source: '/about', destination: '/bio', permanent: true },
       { source: '/contact', destination: '/contact-telehealth-mental-health-provider', permanent: true },
       { source: '/book', destination: '/book-telehealth-mental-health-appointment', permanent: true },

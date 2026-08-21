@@ -1,16 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { Container, Section } from '@/components/ui/Section';
 import { SwapButton } from '@/components/ui/SwapButton';
 import { site } from '@/data/site';
 
-const LIVE_ORIGIN = 'https://www.lifewellfhp.com';
-
 /**
- * CharmHealth Web Embed is allowlisted for the live LifeWell host.
- * The Vercel preview hostname is rejected, so those visits are sent to www.
- * Do not send users to the apex domain — its TLS certificate is not valid.
+ * CharmHealth Web Embed. Do not bounce visitors to the apex domain — its TLS
+ * certificate is not valid, and www/apex Vercel domain redirects currently loop.
  */
 export function BookingCalendar({
   src = site.booking.url,
@@ -19,21 +15,6 @@ export function BookingCalendar({
   src?: string;
   label?: string;
 }) {
-  const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    const host = window.location.hostname;
-    if (host.endsWith('.vercel.app')) {
-      const next = new URL(
-        `${window.location.pathname}${window.location.search}${window.location.hash || '#charm-calendar'}`,
-        LIVE_ORIGIN
-      );
-      window.location.replace(next.toString());
-      return;
-    }
-    setReady(true);
-  }, []);
-
   return (
     <Section
       id="charm-calendar"
@@ -63,23 +44,17 @@ export function BookingCalendar({
           </div>
         </div>
 
-        {ready ? (
-          <div className="mx-auto mt-10 max-w-[1100px] overflow-hidden rounded-[30px] border border-[#e1e8ee] bg-white shadow-[0_10px_28px_rgba(62,127,177,0.12)]">
-            <iframe
-              width="100%"
-              height="1000"
-              src={src}
-              title="CharmHealth appointment calendar"
-              style={{ overflow: 'hidden' }}
-              frameBorder={0}
-              className="block w-full max-w-none border-0 bg-white"
-            />
-          </div>
-        ) : (
-          <p className="mx-auto mt-10 max-w-[40ch] text-center text-[15px] text-[#5b6675]">
-            Opening the booking calendar on the live LifeWell site…
-          </p>
-        )}
+        <div className="mx-auto mt-10 max-w-[1100px] overflow-hidden rounded-[30px] border border-[#e1e8ee] bg-white shadow-[0_10px_28px_rgba(62,127,177,0.12)]">
+          <iframe
+            width="100%"
+            height="1000"
+            src={src}
+            title="CharmHealth appointment calendar"
+            style={{ overflow: 'hidden' }}
+            frameBorder={0}
+            className="block w-full max-w-none border-0 bg-white"
+          />
+        </div>
       </Container>
     </Section>
   );

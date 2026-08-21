@@ -21,6 +21,7 @@ const repoRoot = join(here, '..', '..');
 
 const CONFIGS = [
   join(repoRoot, 'client', 'vercel.json'),
+  join(repoRoot, 'admin', 'vercel.json'),
   join(repoRoot, 'server', 'vercel.json'),
   join(repoRoot, 'vercel.json'),
 ];

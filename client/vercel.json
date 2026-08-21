@@ -1,14 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
-  "redirects": [
-    {
-      "source": "/(.*)",
-      "has": [{ "type": "host", "value": "lifewellfhp-client.vercel.app" }],
-      "destination": "https://www.lifewellfhp.com/$1",
-      "permanent": true
-    }
-  ],
   "headers": [
     {
       "source": "/video/(.*)",
