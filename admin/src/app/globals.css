@@ -2094,8 +2094,13 @@ table.data th {
   }
 }
 
+.topbar-actions {
+  flex-shrink: 0;
+}
+
 .notif-wrap {
   position: relative;
+  flex-shrink: 0;
 }
 
 .notif-btn {
@@ -2118,28 +2123,57 @@ table.data th {
   text-align: center;
 }
 
+.notif-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 79;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  background: rgb(15 23 32 / 0.45);
+  cursor: pointer;
+}
+
 .notif-panel {
-  position: absolute;
-  top: calc(100% + 8px);
-  right: 0;
-  width: min(360px, calc(100vw - 2rem));
+  position: fixed;
+  z-index: 80;
+  width: min(360px, calc(100vw - 1.5rem));
   max-height: min(70vh, 480px);
   overflow: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   background: #fff;
   border: 1px solid var(--line);
   border-radius: 16px;
   box-shadow: var(--shadow);
-  z-index: 40;
 }
 
 .notif-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 0.5rem;
   padding: 0.85rem 1rem 0.4rem;
   position: sticky;
   top: 0;
+  z-index: 1;
   background: #fff;
+}
+
+.notif-head > strong {
+  min-width: 0;
+  font-size: 0.95rem;
+}
+
+.notif-head-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+.notif-close {
+  display: none;
 }
 
 .notif-empty {
@@ -2157,11 +2191,20 @@ table.data th {
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
+  min-width: 0;
   padding: 0.7rem 1rem;
 }
 
 .notif-list li.unread {
   background: var(--brand-soft);
+}
+
+.notif-list strong,
+.notif-list span,
+.notif-list em {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .notif-list strong {
@@ -2173,6 +2216,48 @@ table.data th {
   color: var(--muted);
   font-size: 0.78rem;
   font-style: normal;
+}
+
+@media (max-width: 760px) {
+  .notif-panel {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: auto;
+    width: 100%;
+    max-width: none;
+    max-height: min(85dvh, calc(100dvh - env(safe-area-inset-top) - 12px));
+    border-radius: 20px 20px 0 0;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .notif-panel::before {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 4px;
+    margin: 0.55rem auto 0.1rem;
+    border-radius: 999px;
+    background: #d5dee6;
+  }
+
+  .notif-head {
+    padding: 0.75rem 0.9rem 0.55rem;
+  }
+
+  .notif-close {
+    display: inline-flex;
+  }
+
+  .notif-head-actions .btn {
+    min-height: 44px;
+    padding-inline: 0.75rem;
+  }
+
+  .notif-list li a,
+  .notif-list li > div {
+    padding: 0.85rem 0.9rem;
+  }
 }
 
 .filter-bar {
