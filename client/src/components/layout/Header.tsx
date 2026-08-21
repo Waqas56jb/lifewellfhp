@@ -49,8 +49,9 @@ export function Header({
           ? 'bg-transparent'
           : 'bg-white shadow-[0_5px_10px_0_rgb(0_0_0/0.03)]'
       )}
+      style={{ paddingTop: 'env(safe-area-inset-top)' }}
     >
-      <div className="flex min-h-[72px] w-full items-center justify-between gap-4 px-5 py-[20px] sm:min-h-[90px] sm:px-[30px] sm:py-[30px] lg:min-h-[110px] lg:gap-[30px] lg:px-[70px]">
+      <div className="flex min-h-[72px] w-full min-w-0 items-center justify-between gap-3 px-4 py-[16px] sm:min-h-[90px] sm:gap-4 sm:px-[30px] sm:py-[30px] lg:min-h-[110px] lg:gap-[30px] lg:px-[70px]">
         <Link
           href="/"
           prefetch

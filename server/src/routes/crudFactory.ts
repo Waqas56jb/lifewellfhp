@@ -87,7 +87,7 @@ export function createCrudRouter(options: CrudOptions): Router {
       let payload = parsed.data as Record<string, unknown>;
       if (beforeCreate) payload = beforeCreate(payload);
       let { data, error } = await getSupabase().from(table).insert(payload).select('*').single();
-      if (error && /column .* does not exist/i.test(error.message)) {
+      if (error && /does not exist|schema cache/i.test(error.message)) {
         const retry = await getSupabase().from(table).insert(withoutOptionalMediaFields(payload)).select('*').single();
         data = retry.data;
         error = retry.error;
@@ -126,7 +126,7 @@ export function createCrudRouter(options: CrudOptions): Router {
         .eq('id', req.params.id)
         .select('*')
         .maybeSingle();
-      if (error && /column .* does not exist/i.test(error.message)) {
+      if (error && /does not exist|schema cache/i.test(error.message)) {
         const retry = await getSupabase()
           .from(table)
           .update(withoutOptionalMediaFields(payload))

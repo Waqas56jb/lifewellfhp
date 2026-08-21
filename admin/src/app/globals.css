@@ -30,16 +30,19 @@ html,
 body {
   margin: 0;
   height: 100%;
+  min-height: 100dvh;
   background: var(--surface);
   color: var(--ink);
   font-family: var(--font-body);
   -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
   overflow: hidden;
+  overflow-x: clip;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+body:has(.login-shell) {
+  overflow: auto;
+  height: auto;
 }
 
 button,
@@ -47,6 +50,15 @@ input,
 select,
 textarea {
   font: inherit;
+  font-size: 16px;
+  max-width: 100%;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
 }
 
 .admin-shell {
@@ -58,6 +70,8 @@ textarea {
   grid-template-rows: 100%;
   background: #f6f9fc;
   transition: grid-template-columns 0.24s ease;
+  width: 100%;
+  max-width: 100vw;
 }
 
 .admin-shell.collapsed {
@@ -305,9 +319,14 @@ textarea {
   justify-content: space-between;
   gap: 0.85rem;
   padding: 0.85rem 1.1rem;
+  padding-top: max(0.85rem, env(safe-area-inset-top));
   background: rgb(255 255 255 / 0.92);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--line);
+}
+
+.topbar-menu {
+  display: none;
 }
 
 .topbar-left,
@@ -378,8 +397,8 @@ textarea {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   border: 1px solid var(--line);
   background: #fff;
   color: #2f6691;
@@ -1318,10 +1337,11 @@ table.data th {
 
 .login-shell {
   min-height: 100dvh;
-  height: 100dvh;
   overflow: auto;
   display: grid;
   background: #f4f7fa;
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
 }
 
 @media (min-width: 960px) {
@@ -1477,6 +1497,7 @@ table.data th {
   min-height: 54px;
   padding: 0.85rem 1.05rem;
   color: #374151;
+  font-size: 16px;
   box-shadow: 0 1px 2px rgb(62 127 177 / 0.04);
 }
 
@@ -2163,10 +2184,96 @@ table.data th {
 
 .filter-bar select,
 .filter-bar input {
-  min-height: 42px;
+  min-height: 44px;
   border: 1px solid var(--line);
   border-radius: 12px;
   padding: 0 0.8rem;
   background: #fff;
+  font-size: 16px;
 }
+
+/* Phones: overlay drawer only — no 72px icon rail eating the screen. */
+@media (max-width: 760px) {
+  .admin-shell,
+  .admin-shell.collapsed {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .admin-shell.collapsed .sidebar {
+    display: none;
+  }
+
+  .admin-shell:not(.collapsed) .sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: min(88vw, 320px);
+    max-width: calc(100vw - 2.5rem);
+    z-index: 50;
+    box-shadow: 12px 0 40px rgb(47 102 145 / 0.12);
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .topbar-menu {
+    display: inline-flex;
+  }
+
+  .page-title {
+    font-size: clamp(1.45rem, 6vw, 2rem);
+  }
+
+  .kpi-grid,
+  .grid-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .login-panel {
+    padding: max(1.25rem, env(safe-area-inset-top)) 1rem max(1.5rem, env(safe-area-inset-bottom));
+    align-content: start;
+  }
+
+  .modal-overlay {
+    padding: env(safe-area-inset-top) 0.5rem env(safe-area-inset-bottom);
+  }
+
+  .preview-modal,
+  .modal-card-split {
+    width: 100%;
+    max-height: 100dvh;
+    border-radius: 16px;
+  }
+
+  .card-pad {
+    padding: 0.95rem 0.9rem;
+  }
+
+  img,
+  video,
+  iframe {
+    max-width: 100%;
+  }
+}
+
+/* Tablets portrait */
+@media (min-width: 761px) and (max-width: 1080px) {
+  .kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .appearance-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Landscape phones */
+@media (max-height: 500px) and (orientation: landscape) {
+  .login-panel {
+    place-items: start center;
+    padding-block: 1rem;
+  }
+
+  .admin-shell:not(.collapsed) .sidebar {
+    width: min(70vw, 300px);
+  }
+}
+
 

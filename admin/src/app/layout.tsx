@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Lora, Source_Sans_3 } from 'next/font/google';
 import './globals.css';
 import { Providers } from './providers';
@@ -22,6 +22,14 @@ export const metadata: Metadata = {
   title: 'LifeWell Admin',
   description: 'Website content and leads control center for LifeWell Family Health & Psychiatry.',
   robots: { index: false, follow: false },
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+  themeColor: '#2f6691',
+  colorScheme: 'light',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

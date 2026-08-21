@@ -27,13 +27,13 @@ export function Hero({
   return (
     <section
       aria-labelledby="hero-heading"
-      className="relative isolate flex min-h-[700px] items-center overflow-hidden md:min-h-[950px]"
+      className="relative isolate flex min-h-[100svh] max-h-none items-center overflow-hidden md:min-h-[850px] min-[1181px]:min-h-[950px]"
     >
       <HeroMedia />
 
       <div aria-hidden="true" className="absolute inset-0 -z-10 bg-black/50" />
 
-      <div className="relative w-full px-5 pb-16 pt-[96px] sm:px-[30px] sm:pb-20 sm:pt-[120px] lg:px-[70px] lg:py-[100px] min-[1601px]:px-10 min-[1601px]:pb-[100px] min-[1601px]:pt-[200px]">
+      <div className="relative w-full px-4 pb-14 pt-[calc(88px+env(safe-area-inset-top))] sm:px-[30px] sm:pb-20 sm:pt-[calc(120px+env(safe-area-inset-top))] lg:px-[70px] lg:py-[100px] min-[1601px]:px-10 min-[1601px]:pb-[100px] min-[1601px]:pt-[200px]">
         <div className="w-full max-w-[670px] md:w-1/2 md:max-w-none min-[1181px]:max-w-[670px]">
           <h1
             id="hero-heading"

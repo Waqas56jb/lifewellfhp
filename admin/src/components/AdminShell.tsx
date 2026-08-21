@@ -39,6 +39,9 @@ function AdminShellInner({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     mainRef.current?.scrollTo({ top: 0 });
+    if (typeof window !== 'undefined' && window.matchMedia('(max-width: 1080px)').matches) {
+      setCollapsed(true);
+    }
   }, [pathname]);
 
   useEffect(() => {
@@ -83,7 +86,10 @@ function AdminShellInner({ children }: { children: ReactNode }) {
 
       <aside className="sidebar" aria-label="Admin navigation">
         <div className="sidebar-head">
-          <Link href="/" className="sidebar-brand" prefetch scroll={false} onClick={() => begin('/')}>
+            <Link href="/" className="sidebar-brand" prefetch scroll={false} onClick={() => {
+              begin('/');
+              if (window.matchMedia('(max-width: 1080px)').matches) setCollapsed(true);
+            }}>
             <Image src="/images/brand/logo.avif" alt="LifeWell" width={354} height={63} className="sidebar-logo" />
             <span>Control Center</span>
           </Link>
@@ -119,7 +125,10 @@ function AdminShellInner({ children }: { children: ReactNode }) {
                       className={`nav-link ${active ? 'active' : ''}`}
                       onMouseEnter={() => router.prefetch(item.href)}
                       onFocus={() => router.prefetch(item.href)}
-                      onClick={() => begin(item.href)}
+                      onClick={() => {
+                        begin(item.href);
+                        if (window.matchMedia('(max-width: 1080px)').matches) setCollapsed(true);
+                      }}
                     >
                       <Icon size={18} strokeWidth={1.85} aria-hidden />
                       <span>{item.label}</span>
@@ -143,6 +152,14 @@ function AdminShellInner({ children }: { children: ReactNode }) {
       <div className="main">
         <header className="topbar">
           <div className="topbar-left">
+            <button
+              type="button"
+              className="icon-btn topbar-menu"
+              aria-label="Open menu"
+              onClick={() => setCollapsed(false)}
+            >
+              <Menu size={20} />
+            </button>
             {pathname !== '/' ? (
               <button
                 type="button"

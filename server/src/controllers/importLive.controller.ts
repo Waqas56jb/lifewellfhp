@@ -112,7 +112,7 @@ export async function runLiveImport(): Promise<Record<string, number>> {
     sort_order: i,
   }));
   let { error: serviceUpsertErr } = await sb.from('services').upsert(servicePayload, { onConflict: 'slug' });
-  if (serviceUpsertErr && /column .* does not exist/i.test(serviceUpsertErr.message)) {
+  if (serviceUpsertErr && /does not exist|schema cache/i.test(serviceUpsertErr.message)) {
     const fallback = SERVICES.map(([slug, title, summary], i) => ({
       slug,
       title,

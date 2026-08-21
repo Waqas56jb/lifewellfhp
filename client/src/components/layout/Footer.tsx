@@ -16,7 +16,7 @@ export async function Footer() {
   const logo = cms.settings.logoUrl || '/images/brand/logo.avif';
   const remoteLogo = logo.startsWith('http');
   return (
-    <footer className="bg-[#F4F7FA]">
+    <footer className="bg-[#F4F7FA] pb-[env(safe-area-inset-bottom)]">
       <div className="footer-band rounded-t-[30px] bg-[var(--lw-primary)] text-white sm:rounded-t-[40px]">
         <Container>
           <div className="flex flex-col gap-5 border-b border-white/30 py-10 sm:flex-row sm:items-start sm:justify-between sm:gap-8 sm:py-12 lg:py-14">

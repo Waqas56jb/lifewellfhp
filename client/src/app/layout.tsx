@@ -79,7 +79,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SkipLink />
         <NavigationProgress />
         <SiteHeader />
-        <main id="main-content" tabIndex={-1} className="focus:outline-none">
+        <main id="main-content" tabIndex={-1} className="min-w-0 overflow-x-clip focus:outline-none">
           {children}
         </main>
         <Footer />

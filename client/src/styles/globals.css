@@ -139,7 +139,7 @@
     -webkit-text-size-adjust: 100%;
     scroll-behavior: smooth;
     /* Offset anchor targets so the sticky header never covers them. */
-    scroll-padding-top: 6rem;
+    scroll-padding-top: calc(6rem + env(safe-area-inset-top));
     /* clip does not create a scroll container, so position:fixed overlays
        (mobile menu, search) stay viewport-relative on iOS. */
     overflow-x: clip;
@@ -157,6 +157,7 @@
     overflow-x: clip;
     padding-left: env(safe-area-inset-left);
     padding-right: env(safe-area-inset-right);
+    overflow-wrap: break-word;
   }
 
   h1,
@@ -215,10 +216,22 @@
 
   img,
   svg,
-  video {
+  video,
+  iframe {
     display: block;
     max-width: 100%;
+  }
+
+  img,
+  video {
     height: auto;
+  }
+
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+    max-width: 100%;
   }
 
   ul,

@@ -26,7 +26,7 @@ export function SwapButton({
 
   const compact = size === 'sm';
   const pill = cn(
-    'inline-flex min-w-0 items-center justify-center whitespace-nowrap rounded-[30px] bg-[var(--lw-primary)] font-semibold leading-[1.3] text-white no-underline transition-colors duration-300 group-hover:bg-[var(--lw-accent)]',
+    'inline-flex min-w-0 max-w-[calc(100%-44px)] items-center justify-center rounded-[30px] bg-[var(--lw-primary)] font-semibold leading-[1.3] text-white no-underline transition-colors duration-300 group-hover:bg-[var(--lw-accent)] sm:max-w-none',
     compact
       ? 'min-h-[40px] px-5 py-2 text-[14px]'
       : 'min-h-[51px] px-[30px] py-[14px] text-[16px] min-[1181px]:text-[18px]'
@@ -34,7 +34,7 @@ export function SwapButton({
 
   const chip = cn(
     'inline-flex shrink-0 items-center justify-center rounded-full bg-[var(--lw-primary)] text-white transition-colors duration-300 group-hover:bg-[var(--lw-accent)]',
-    compact ? 'size-10' : 'size-[51px]'
+    compact ? 'size-10' : 'size-11 sm:size-[51px]'
   );
 
   const inner = (
