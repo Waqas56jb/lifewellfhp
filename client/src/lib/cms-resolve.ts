@@ -111,6 +111,7 @@ type CmsSection = {
   title?: string | null;
   content?: Record<string, unknown> | null;
   published?: boolean;
+  updated_at?: string;
 };
 
 function cmsLive(cms: PublicCmsPayload | null): boolean {
@@ -125,9 +126,15 @@ function cmsLive(cms: PublicCmsPayload | null): boolean {
   );
 }
 
-function sectionContent(cms: PublicCmsPayload | null, page: string, key: string): Record<string, unknown> | null {
+function latestSection(cms: PublicCmsPayload | null, page: string, key: string): CmsSection | undefined {
   const sections = (cms?.sections ?? []) as CmsSection[];
-  const row = sections.find((s) => s.page_key === page && s.section_key === key && s.published !== false);
+  return [...sections]
+    .filter((s) => s.page_key === page && s.section_key === key && s.published !== false)
+    .sort((a, b) => Date.parse(b.updated_at || '') - Date.parse(a.updated_at || ''))[0];
+}
+
+function sectionContent(cms: PublicCmsPayload | null, page: string, key: string): Record<string, unknown> | null {
+  const row = latestSection(cms, page, key);
   return row?.content && typeof row.content === 'object' ? (row.content as Record<string, unknown>) : null;
 }
 
@@ -241,11 +248,7 @@ function mapHomeServices(cms: PublicCmsPayload | null, live: boolean): ServiceSu
 }
 
 function mapHero(cms: PublicCmsPayload | null): ResolvedHero {
-  const sections = (cms?.sections ?? []) as CmsSection[];
-  const heroSection = sections.find(
-    (s) => s.page_key === 'home' && s.section_key === 'hero' && s.published !== false
-  );
-  const content = (heroSection?.content ?? {}) as Record<string, unknown>;
+  const content = (latestSection(cms, 'home', 'hero')?.content ?? {}) as Record<string, unknown>;
   const headline = typeof content.headline === 'string' ? content.headline : null;
   const subhead = typeof content.subhead === 'string' ? content.subhead : null;
   const badge = typeof content.badge === 'string' ? content.badge : null;
@@ -273,11 +276,7 @@ function mapHero(cms: PublicCmsPayload | null): ResolvedHero {
 }
 
 function mapWelcome(cms: PublicCmsPayload | null): typeof staticWelcome {
-  const sections = (cms?.sections ?? []) as CmsSection[];
-  const welcomeSection = sections.find(
-    (s) => s.page_key === 'home' && s.section_key === 'welcome' && s.published !== false
-  );
-  const content = (welcomeSection?.content ?? {}) as Record<string, unknown>;
+  const content = (latestSection(cms, 'home', 'welcome')?.content ?? {}) as Record<string, unknown>;
   const heading = typeof content.heading === 'string' ? content.heading : null;
   const body = Array.isArray(content.body)
     ? content.body.filter((b): b is string => typeof b === 'string')
@@ -318,6 +317,11 @@ function mapAnnouncements(cms: PublicCmsPayload | null) {
   }[];
   return rows
     .filter((r) => r.active !== false && r.title && r.body)
+    .filter((r) => {
+      const title = String(r.title).trim();
+      const body = String(r.body).trim();
+      return !(/^test$/i.test(title) && /^test$/i.test(body));
+    })
     .map((r) => ({
       title: String(r.title),
       body: String(r.body),

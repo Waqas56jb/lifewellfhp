@@ -3,10 +3,39 @@ import { Container, Section } from '@/components/ui/Section';
 import { SwapButton } from '@/components/ui/SwapButton';
 import { welcome as staticWelcome } from '@/data/marketing';
 
+function WelcomeHeading({ heading }: { heading: string }) {
+  const branded = /^welcome to\s+lifewell(\s+family health\s*&\s*psychiatry)?$/i.test(heading.trim());
+  if (branded) {
+    return (
+      <h2
+        id="welcome-heading"
+        className="font-heading text-[28px] font-normal leading-[1.2] tracking-normal sm:text-[38px] min-[1181px]:text-[56px]"
+      >
+        <span className="whitespace-nowrap">
+          <span className="text-[var(--lw-accent)] not-italic">Welcome to </span>
+          <span className="italic text-[var(--lw-primary)]">LifeWell</span>
+        </span>
+        <span className="block italic text-[var(--lw-primary)]">
+          Family Health &amp;
+          <br />
+          Psychiatry
+        </span>
+      </h2>
+    );
+  }
+
+  return (
+    <h2
+      id="welcome-heading"
+      className="font-heading text-[28px] font-normal italic leading-[1.2] tracking-normal text-[var(--lw-primary)] sm:text-[38px] min-[1181px]:text-[56px]"
+    >
+      {heading}
+    </h2>
+  );
+}
+
 /**
- * Welcome band — live split title:
- *   Welcome to (green, roman) LifeWell (blue, italic)
- *   Family Health & / Psychiatry (blue, italic)
+ * Welcome band. Heading and body come from the CMS homepage editor.
  */
 export function WelcomeSection({ welcome = staticWelcome }: { welcome?: typeof staticWelcome }) {
   return (
@@ -26,20 +55,7 @@ export function WelcomeSection({ welcome = staticWelcome }: { welcome?: typeof s
           </div>
 
           <div>
-            <h2
-              id="welcome-heading"
-              className="font-heading text-[28px] font-normal leading-[1.2] tracking-normal sm:text-[38px] min-[1181px]:text-[56px]"
-            >
-              <span className="whitespace-nowrap">
-                <span className="text-[var(--lw-accent)] not-italic">Welcome to </span>
-                <span className="italic text-[var(--lw-primary)]">LifeWell</span>
-              </span>
-              <span className="block italic text-[var(--lw-primary)]">
-                Family Health &amp;
-                <br />
-                Psychiatry
-              </span>
-            </h2>
+            <WelcomeHeading heading={welcome.heading} />
 
             <div className="mt-6 space-y-4 sm:mt-8 sm:space-y-5">
               {welcome.body.map((paragraph) => (

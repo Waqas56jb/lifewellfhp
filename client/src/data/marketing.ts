@@ -20,8 +20,8 @@ export const hero = {
 export const welcome = {
   heading: 'Welcome to LifeWell Family Health & Psychiatry',
   body: [
-    'At LifeWell Family Health & Psychiatry, I provide professional, compassionate, and confidential telehealth mental health care through secure and convenient virtual services. I am Lourdie Chachoute, NP, APRN, PMHNP-BC, a dual-certified Family Nurse Practitioner and Psychiatric-Mental Health Nurse Practitioner with over 15 years of diverse clinical experience.',
-    'My approach focuses on personalized treatment, thoughtful medication management, and holistic care that supports both emotional and physical well-being. I specialize in treating anxiety, depression, ADHD, trauma-related conditions, sleep disorders, and mood concerns, while also integrating women’s health and chronic disease support. I develop individualized treatment plans designed to help you feel heard, supported, and empowered on your journey toward long-term mental wellness.',
+    "At LifeWell Family Health & Psychiatry, we believe that true wellness is a harmonious balance of emotional resilience and physical vitality. Located in Orlando's Avalon Park area, our practice is dedicated to delivering bespoke, evidence-based care tailored to the distinct needs of every individual and family we serve. We understand that modern life demands flexibility without ever compromising on quality. That is why we proudly offer a seamless blend of in-person clinical visits and secure, confidential telehealth sessions, ensuring exceptional psychiatric and family healthcare is always accessible on your terms.",
+    'Our comprehensive clinical expertise encompasses: Advanced management for anxiety, depression, and ADHD Targeted support for trauma recovery and sleep disorders Psychiatric evaluations and thoughtful medication management Chronic disease support and integrated women’s health care Every treatment pathway is thoughtfully curated to provide a safe, sanctuary-like environment where you feel deeply heard, profoundly supported, and empowered to achieve lifelong wellness.',
   ],
   cta: { label: 'Learn More About the Provider', href: '/bio' },
   image: {

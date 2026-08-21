@@ -7,6 +7,7 @@ export async function SiteHeader() {
     <Header
       cta={{ label: cms.settings.headerCtaLabel, href: cms.settings.headerCtaUrl }}
       logoUrl={cms.settings.logoUrl}
+      notices={cms.announcements}
     />
   );
 }

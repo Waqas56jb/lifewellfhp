@@ -10,6 +10,7 @@ type SectionRow = {
   title?: string | null;
   content?: Record<string, unknown> | null;
   published?: boolean;
+  updated_at?: string;
 };
 
 type HeroForm = { badge: string; headline: string; subhead: string };
@@ -34,8 +35,12 @@ export function HomepageCopy() {
       return;
     }
     const rows = res.data || [];
-    const heroRow = rows.find((r) => r.page_key === 'home' && r.section_key === 'hero');
-    const welcomeRow = rows.find((r) => r.page_key === 'home' && r.section_key === 'welcome');
+    const byLatest = (page: string, key: string) =>
+      [...rows]
+        .filter((r) => r.page_key === page && r.section_key === key)
+        .sort((a, b) => Date.parse(b.updated_at || '') - Date.parse(a.updated_at || ''))[0];
+    const heroRow = byLatest('home', 'hero');
+    const welcomeRow = byLatest('home', 'welcome');
     if (heroRow) {
       setHeroId(heroRow.id);
       const c = (heroRow.content || {}) as Record<string, unknown>;
@@ -93,7 +98,7 @@ export function HomepageCopy() {
       setError(heroRes.message || welcomeRes.message || 'Save failed');
       return;
     }
-    setMessage('Saved. The public homepage will update within about a minute.');
+    setMessage('Saved. Refresh the public site — homepage text updates on the next load.');
     await load();
   }
 
@@ -101,7 +106,7 @@ export function HomepageCopy() {
     <form className="card card-pad" onSubmit={onSubmit} style={{ marginBottom: '1.25rem' }}>
       <h2>Website text</h2>
       <p className="muted" style={{ marginTop: 0 }}>
-        Hero and welcome copy currently on the live homepage. Edit and save — or delete a section below.
+        Hero and welcome copy currently on the live homepage. Save, then refresh the public site to see it.
       </p>
       {error ? <div className="error-banner">{error}</div> : null}
       {message ? <div className="ok-banner">{message}</div> : null}

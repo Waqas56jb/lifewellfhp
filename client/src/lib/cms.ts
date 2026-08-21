@@ -24,6 +24,7 @@ export async function fetchPublicCms(): Promise<PublicCmsPayload | null> {
   try {
     const res = await fetch(`${API_URL}/api/public/content`, {
       cache: 'no-store',
+      next: { revalidate: 0 },
     });
     if (!res.ok) return null;
     const json = (await res.json()) as { success: boolean; data: PublicCmsPayload | null };

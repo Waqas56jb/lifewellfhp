@@ -16,6 +16,9 @@ import { site } from '@/data/site';
 import { pageMetadata } from '@/lib/seo';
 import { getResolvedContent } from '@/lib/cms-resolve';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export const metadata: Metadata = pageMetadata({
   title: 'Telehealth Mental Health Care | PMHNP Online Therapy & Medication Management',
   description: site.description,
