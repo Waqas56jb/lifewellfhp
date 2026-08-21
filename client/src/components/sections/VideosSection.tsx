@@ -18,7 +18,7 @@ export function VideosSection({
   if (!videos.length) return null;
 
   return (
-    <Section tone="raised" aria-labelledby="videos-heading">
+    <Section tone="raised" id="videos" aria-labelledby="videos-heading">
       <Container>
         <SectionHeading
           eyebrow="Education"

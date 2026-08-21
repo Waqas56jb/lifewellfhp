@@ -25,15 +25,24 @@ export function ServiceCard({
   return (
     <article className={cn('group relative flex h-full flex-col', className)}>
       <div className="relative overflow-hidden rounded-[20px]">
-        <Image
-          src={service.image.src}
-          alt={service.image.alt}
-          width={service.image.width}
-          height={service.image.height}
-          loading="lazy"
-          sizes="(min-width: 1181px) 22vw, (min-width: 768px) 45vw, 92vw"
-          className="aspect-[4/3] w-full object-cover transition-transform duration-300 group-hover:scale-110"
-        />
+        {service.image.src.startsWith('http') ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={service.image.src}
+            alt={service.image.alt}
+            className="aspect-[4/3] w-full object-cover transition-transform duration-300 group-hover:scale-110"
+          />
+        ) : (
+          <Image
+            src={service.image.src}
+            alt={service.image.alt}
+            width={service.image.width}
+            height={service.image.height}
+            loading="lazy"
+            sizes="(min-width: 1181px) 22vw, (min-width: 768px) 45vw, 92vw"
+            className="aspect-[4/3] w-full object-cover transition-transform duration-300 group-hover:scale-110"
+          />
+        )}
       </div>
 
       <div

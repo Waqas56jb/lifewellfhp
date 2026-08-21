@@ -14,9 +14,11 @@ export const announcementUpdate = announcementCreate.partial();
 export const serviceCreate = z.object({
   slug: z.string().min(1).max(120),
   title: z.string().min(1).max(200),
-  summary: z.string().max(1000).optional().nullable(),
+  summary: z.string().max(4000).optional().nullable(),
   body: z.string().max(50000).optional().nullable(),
   icon: z.string().max(200).optional().nullable(),
+  image_url: z.string().max(1000).optional().nullable().or(z.literal('')),
+  category: z.enum(['psychiatric', 'primary-care']).optional().nullable(),
   published: z.boolean().default(true),
   sort_order: z.number().int().default(0),
   seo_title: z.string().max(200).optional().nullable(),

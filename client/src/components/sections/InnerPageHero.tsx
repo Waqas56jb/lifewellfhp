@@ -77,14 +77,19 @@ export function InnerPageHero({
 
   const photo = image ? (
     <div className="relative min-h-[400px] sm:min-h-[500px] lg:min-h-[570px] lg:w-[55%]">
-      <Image
-        src={image.src}
-        alt={image.alt}
-        fill
-        priority
-        sizes="(min-width: 1024px) 55vw, 100vw"
-        className="object-cover object-center"
-      />
+      {image.src.startsWith('http') ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={image.src} alt={image.alt} className="absolute inset-0 h-full w-full object-cover object-center" />
+      ) : (
+        <Image
+          src={image.src}
+          alt={image.alt}
+          fill
+          priority
+          sizes="(min-width: 1024px) 55vw, 100vw"
+          className="object-cover object-center"
+        />
+      )}
     </div>
   ) : null;
 

@@ -8,19 +8,15 @@ import { getService } from '@/data/services';
 import { getServiceSummary, serviceSlugs } from '@/data/service-catalog';
 import { pageMetadata } from '@/lib/seo';
 import { serviceGraph } from '@/lib/schema';
+import { getResolvedContent } from '@/lib/cms-resolve';
 
 export function generateStaticParams() {
   return serviceSlugs.map((slug) => ({ slug }));
 }
 
-/** Unknown slugs 404 rather than rendering an empty shell. */
-export const dynamicParams = false;
-
-function description(slug: string): string {
-  const summary = getServiceSummary(slug);
-  const text = summary?.description ?? '';
-  return text.length > 158 ? `${text.slice(0, 155).trimEnd()}…` : text;
-}
+/** CMS can add new service slugs after build. */
+export const dynamicParams = true;
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({
   params,
@@ -28,14 +24,18 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
+  const cms = await getResolvedContent();
+  const summary = cms.serviceSummaries.find((s) => s.slug === slug) || getServiceSummary(slug);
   const service = getService(slug);
-  if (!service) return {};
+  const detail = cms.serviceDetails.find((s) => s.slug === slug);
+  if (!service && !summary) return {};
 
-  const summary = getServiceSummary(slug);
+  const text = detail?.seoDescription || summary?.description || '';
+  const description = text.length > 158 ? `${text.slice(0, 155).trimEnd()}…` : text;
 
   return pageMetadata({
-    title: `${service.title} | Telehealth`,
-    description: description(slug),
+    title: detail?.seoTitle || `${summary?.title || service?.title} | Telehealth`,
+    description,
     path: `/services/${slug}`,
     image: summary
       ? {
@@ -50,12 +50,16 @@ export async function generateMetadata({
 
 export default async function ServicePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const cms = await getResolvedContent();
+  const summary = cms.serviceSummaries.find((s) => s.slug === slug) || getServiceSummary(slug);
   const service = getService(slug);
-  if (!service) notFound();
+  if (!service && !summary) notFound();
+
+  const description = summary?.description ?? '';
 
   return (
     <>
-      <JsonLd data={serviceGraph(service, description(slug))} id={`service-${slug}-schema`} />
+      {service ? <JsonLd data={serviceGraph(service, description)} id={`service-${slug}-schema`} /> : null}
       <ServicePageContent slug={slug} />
     </>
   );

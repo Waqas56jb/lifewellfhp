@@ -19,6 +19,20 @@ const SERVICES = [
   ['lab-testing-coordination-telehealth', 'Lab Testing Coordination', 'I provide lab testing coordination through secure telehealth visits, including ordering appropriate laboratory tests, reviewing results, and explaining findings to help guide your treatment and protect your long-term health.'],
 ] as const;
 
+const SERVICE_META: Record<string, { image: string; category: 'psychiatric' | 'primary-care' }> = {
+  'psychiatric-evaluations': { image: '/images/services/Psychiatric-Evaluation-Telehealth.avif', category: 'psychiatric' },
+  'medication-management': { image: '/images/services/Psychiatric-Medication-Management-Telehealth.avif', category: 'psychiatric' },
+  'treatment-for-depression-anxiety-adhd-bipolar-disorder-ptsd': { image: '/images/services/Telehealth-Treatment-for-Depression-Anxiety-ADHD-PTSD.avif', category: 'psychiatric' },
+  'psychiatric-follow-up-visits-telehealth': { image: '/images/services/Psychiatric-Follow-Up-Visits-Telehealth.avif', category: 'psychiatric' },
+  'annual-physical-exam-telehealth': { image: '/images/services/Annual-Physical-Exam-Telehealth.avif', category: 'primary-care' },
+  'chronic-disease-management-telehealth': { image: '/images/services/Chronic-Disease-Management-Telehealth.avif', category: 'primary-care' },
+  'preventive-care-telehealth': { image: '/images/services/Preventive-Care-Telehealth.avif', category: 'primary-care' },
+  'telehealth-sick-visits-primary-care': { image: '/images/services/Telehealth-Sick-Visits-Primary-Care.avif', category: 'primary-care' },
+  'weight-management-telehealth': { image: '/images/services/Weight-Management-Telehealth.avif', category: 'primary-care' },
+  'wellness-and-lifestyle-counseling-telehealth': { image: '/images/services/Wellness-and-Lifestyle-Counseling-Telehealth.avif', category: 'primary-care' },
+  'lab-testing-coordination-telehealth': { image: '/images/services/Lab-Testing-Coordination-Telehealth.avif', category: 'primary-care' },
+};
+
 const FAQS = [
   ['What is telehealth mental health care?', 'Telehealth mental health care allows you to receive therapy, psychiatric evaluation, and medication management through secure video appointments instead of in-person visits.'],
   ['How do I schedule an appointment?', 'You can schedule an appointment using the online booking system. After scheduling, you will receive confirmation and instructions for your telehealth session.'],
@@ -91,10 +105,23 @@ export async function runLiveImport(): Promise<Record<string, number>> {
     slug,
     title,
     summary,
+    image_url: SERVICE_META[slug]?.image || null,
+    category: SERVICE_META[slug]?.category || 'psychiatric',
     published: true,
     sort_order: i,
   }));
-  const { error: serviceUpsertErr } = await sb.from('services').upsert(servicePayload, { onConflict: 'slug' });
+  let { error: serviceUpsertErr } = await sb.from('services').upsert(servicePayload, { onConflict: 'slug' });
+  if (serviceUpsertErr && /column .* does not exist/i.test(serviceUpsertErr.message)) {
+    const fallback = SERVICES.map(([slug, title, summary], i) => ({
+      slug,
+      title,
+      summary,
+      published: true,
+      sort_order: i,
+    }));
+    const retry = await sb.from('services').upsert(fallback, { onConflict: 'slug' });
+    serviceUpsertErr = retry.error;
+  }
   if (serviceUpsertErr) throw badRequest(serviceUpsertErr.message);
   counts.services = servicePayload.length;
 

@@ -80,4 +80,7 @@ alter table admin_notifications enable row level security;
 alter table email_messages enable row level security;
 alter table site_settings enable row level security;
 
+alter table services add column if not exists image_url text;
+alter table services add column if not exists category text;
+
 notify pgrst, 'reload schema';

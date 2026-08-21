@@ -12,6 +12,13 @@ import {
 import { badRequest, notFound } from '../utils/errors.js';
 import { recordLabel, writeAuditLog } from '../lib/audit.js';
 
+function withoutOptionalMediaFields(payload: Record<string, unknown>) {
+  const next = { ...payload };
+  delete next.image_url;
+  delete next.category;
+  return next;
+}
+
 type CrudOptions = {
   table: string;
   module: AdminModule;
@@ -76,7 +83,12 @@ export function createCrudRouter(options: CrudOptions): Router {
       }
       let payload = parsed.data as Record<string, unknown>;
       if (beforeCreate) payload = beforeCreate(payload);
-      const { data, error } = await getSupabase().from(table).insert(payload).select('*').single();
+      let { data, error } = await getSupabase().from(table).insert(payload).select('*').single();
+      if (error && /column .* does not exist/i.test(error.message)) {
+        const retry = await getSupabase().from(table).insert(withoutOptionalMediaFields(payload)).select('*').single();
+        data = retry.data;
+        error = retry.error;
+      }
       if (error) throw badRequest(error.message);
       const actor = (req as AuthedRequest).admin;
       await writeAuditLog({
@@ -105,12 +117,22 @@ export function createCrudRouter(options: CrudOptions): Router {
         updated_at: new Date().toISOString(),
       };
       if (beforeUpdate) payload = beforeUpdate(payload);
-      const { data, error } = await getSupabase()
+      let { data, error } = await getSupabase()
         .from(table)
         .update(payload)
         .eq('id', req.params.id)
         .select('*')
         .maybeSingle();
+      if (error && /column .* does not exist/i.test(error.message)) {
+        const retry = await getSupabase()
+          .from(table)
+          .update(withoutOptionalMediaFields(payload))
+          .eq('id', req.params.id)
+          .select('*')
+          .maybeSingle();
+        data = retry.data;
+        error = retry.error;
+      }
       if (error) throw badRequest(error.message);
       if (!data) throw notFound('Record not found.');
       const actor = (req as AuthedRequest).admin;

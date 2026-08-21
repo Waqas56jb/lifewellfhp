@@ -3,7 +3,10 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { Upload } from 'lucide-react';
 import { ResourceManager } from '@/components/ResourceManager';
+import { MediaPreview } from '@/components/SitePreviews';
 import { api } from '@/lib/api';
+import { MEDIA_LIBRARY_HINT } from '@/lib/placements';
+import { publicAssetUrl } from '@/lib/site';
 
 export default function Page() {
   const [uploading, setUploading] = useState(false);
@@ -11,6 +14,7 @@ export default function Page() {
   const [error, setError] = useState<string | null>(null);
   const [title, setTitle] = useState('');
   const [alt, setAlt] = useState('');
+  const [localPreview, setLocalPreview] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
 
   async function onUpload(e: FormEvent<HTMLFormElement>) {
@@ -63,21 +67,22 @@ export default function Page() {
       setError(res.message || 'Upload failed');
       return;
     }
-    setMessage('Image uploaded.');
+    setMessage('Image stored in the library. Attach the URL to a service, insurance plan, homepage, or logo, then Save there — that is when visitors see it.');
     setTitle('');
     setAlt('');
+    setLocalPreview(null);
     form.reset();
     setReloadKey((k) => k + 1);
   }
 
   useEffect(() => {
-    // force remount of resource table after upload
+    // remount list after upload
   }, [reloadKey]);
 
   return (
     <div>
       <h1 className="page-title">Media</h1>
-      <p className="page-sub">Upload photos (max 4 MB) for service cards, insurance logos, and page images.</p>
+      <p className="page-sub">{MEDIA_LIBRARY_HINT}</p>
 
       <form className="card card-pad" style={{ marginBottom: '1rem' }} onSubmit={onUpload}>
         <h2 style={{ marginTop: 0 }}>Upload image</h2>
@@ -94,25 +99,70 @@ export default function Page() {
           </div>
           <div className="field" style={{ gridColumn: '1 / -1' }}>
             <label htmlFor="file">Image file</label>
-            <input id="file" name="file" type="file" accept="image/*" required />
+            <input
+              id="file"
+              name="file"
+              type="file"
+              accept="image/*"
+              required
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (!file) {
+                  setLocalPreview(null);
+                  return;
+                }
+                const reader = new FileReader();
+                reader.onload = () => setLocalPreview(String(reader.result || ''));
+                reader.readAsDataURL(file);
+              }}
+            />
           </div>
         </div>
+        {localPreview ? (
+          <div className="upload-preview">
+            <p className="preview-kicker">File preview (not on the website yet)</p>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={localPreview} alt={alt || title || 'Upload preview'} />
+          </div>
+        ) : null}
         <button type="submit" className="btn btn-primary" disabled={uploading}>
           <Upload size={16} />
-          {uploading ? 'Uploading…' : 'Upload'}
+          {uploading ? 'Uploading…' : 'Upload to library'}
         </button>
       </form>
 
       <ResourceManager
         key={reloadKey}
         title="Uploaded files"
-        subtitle="Copy a URL into Services, Insurance, or Homepage fields."
+        subtitle="Preview shows the image and every page it is attached to. Copy the URL into Services, Insurance, Homepage, or Appearance."
         endpoint="/api/admin/media"
         createDefaults={{ folder: 'general' }}
+        itemLabel={(r) => String(r.title || 'Image')}
+        preview={{
+          hint: MEDIA_LIBRARY_HINT,
+          liveHref: () => '/our-services',
+          render: (form) => (
+            <MediaPreview
+              url={String(form.url || '')}
+              title={String(form.title || '')}
+              alt={form.alt_text ? String(form.alt_text) : null}
+            />
+          ),
+        }}
         columns={[
+          {
+            key: 'url',
+            label: 'Preview',
+            render: (r) =>
+              r.url ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={publicAssetUrl(String(r.url))} alt="" className="table-thumb" />
+              ) : (
+                '—'
+              ),
+          },
           { key: 'title', label: 'Title' },
           { key: 'folder', label: 'Folder' },
-          { key: 'url', label: 'URL', render: (r) => String(r.url || '').slice(0, 48) },
         ]}
         fields={[
           { key: 'title', label: 'Title' },

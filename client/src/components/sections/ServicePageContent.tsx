@@ -5,13 +5,9 @@ import { ContentSections } from '@/components/sections/ContentSections';
 import { BenefitsGrid } from '@/components/sections/BenefitsGrid';
 import { ServicesGrid } from '@/components/sections/ServicesGrid';
 import { SwapButton } from '@/components/ui/SwapButton';
-import {
-  getServiceSummary,
-  relatedServices,
-  summariesByCategory,
-  serviceCategories,
-} from '@/data/service-catalog';
+import { serviceCategories } from '@/data/service-catalog';
 import { getService } from '@/data/services';
+import { getResolvedContent } from '@/lib/cms-resolve';
 import { site } from '@/data/site';
 
 /**
@@ -19,22 +15,36 @@ import { site } from '@/data/site';
  * rounded hero card (featured image + title + excerpt), two-column body
  * with related-service lists, benefits band, then related cards.
  */
-export function ServicePageContent({ slug }: { slug: string }) {
+export async function ServicePageContent({ slug }: { slug: string }) {
+  const cms = await getResolvedContent();
+  const summary = cms.serviceSummaries.find((s) => s.slug === slug);
+  const detail = cms.serviceDetails.find((s) => s.slug === slug);
   const service = getService(slug);
-  const summary = getServiceSummary(slug);
-  if (!service || !summary) return null;
+  if (!summary && !service) return null;
 
-  const related = relatedServices(slug, 3);
-  const psych = summariesByCategory('psychiatric').filter((s) => s.slug !== slug);
-  const primary = summariesByCategory('primary-care').filter((s) => s.slug !== slug);
+  const title = summary?.title || service?.title || slug;
+  const lead = summary?.description || service?.lead || '';
+  const image = summary?.image || {
+    src: '/images/services/Psychiatric-Evaluation-Telehealth.avif',
+    alt: title,
+    width: 800,
+    height: 600,
+  };
+  const related = cms.serviceSummaries.filter((s) => s.slug !== slug).slice(0, 3);
+  const psych = cms.serviceSummaries.filter((s) => s.category === 'psychiatric' && s.slug !== slug);
+  const primary = cms.serviceSummaries.filter((s) => s.category === 'primary-care' && s.slug !== slug);
+  const cmsParagraphs = String(detail?.body || '')
+    .split(/\n+/)
+    .map((p) => p.trim())
+    .filter(Boolean);
 
   return (
     <div className="bg-white">
       <InnerPageHero
-        image={{ src: summary.image.src, alt: summary.image.alt }}
+        image={{ src: image.src, alt: image.alt }}
         imageSide="left"
-        title={summary.title}
-        lead={summary.description}
+        title={title}
+        lead={lead}
         leadSize="subhead"
       />
 
@@ -42,10 +52,10 @@ export function ServicePageContent({ slug }: { slug: string }) {
         <div className="mx-auto grid max-w-[1840px] items-start gap-12 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-16 min-[1601px]:grid-cols-[minmax(0,1fr)_24rem] min-[1601px]:gap-20">
           <article className="min-w-0">
             <h2 className="font-heading text-[28px] font-normal leading-[1.2] tracking-[-1px] text-[var(--lw-accent)] sm:text-[36px] min-[1181px]:text-[42px]">
-              {service.lead}
+              {service?.lead || title}
             </h2>
 
-            {service.intro.length > 0 && (
+            {service?.intro.length ? (
               <div className="mt-6 space-y-5">
                 {service.intro.map((paragraph) => (
                   <p
@@ -56,11 +66,22 @@ export function ServicePageContent({ slug }: { slug: string }) {
                   </p>
                 ))}
               </div>
-            )}
+            ) : cmsParagraphs.length ? (
+              <div className="mt-6 space-y-5">
+                {cmsParagraphs.map((paragraph) => (
+                  <p
+                    key={paragraph.slice(0, 40)}
+                    className="text-[16px] leading-[1.45] text-[#374151] min-[1181px]:text-[18px]"
+                  >
+                    {paragraph}
+                  </p>
+                ))}
+              </div>
+            ) : null}
 
-            <ContentSections sections={service.sections} variant="live" className="mt-12" />
+            {service ? <ContentSections sections={service.sections} variant="live" className="mt-12" /> : null}
 
-            {service.cta && (
+            {service?.cta && (
               <div className="mt-14 rounded-[20px] bg-[#EEF3F7] px-6 py-8 sm:px-8 sm:py-10">
                 <h2 className="font-heading text-[22px] font-normal leading-[1.25] tracking-[-1px] text-[var(--lw-accent)] sm:text-[28px] min-[1181px]:text-[32px]">
                   {service.cta.heading}
@@ -74,10 +95,8 @@ export function ServicePageContent({ slug }: { slug: string }) {
                   </p>
                 ))}
                 <div className="mt-7">
-                  <SwapButton href={site.booking.url}>
-                    {summary.title.length > 42
-                      ? 'Start Your Care Today'
-                      : `Schedule Your ${summary.title} Today`}
+                  <SwapButton href={cms.booking.url || site.booking.url}>
+                    {title.length > 42 ? 'Start Your Care Today' : `Schedule Your ${title} Today`}
                   </SwapButton>
                 </div>
               </div>

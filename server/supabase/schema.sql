@@ -56,6 +56,8 @@ create table if not exists services (
   summary text,
   body text,
   icon text,
+  image_url text,
+  category text,
   published boolean not null default true,
   sort_order int not null default 0,
   seo_title text,

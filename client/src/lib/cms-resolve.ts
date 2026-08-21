@@ -81,14 +81,28 @@ export type ResolvedContent = {
     publishedAt?: string | null;
     body?: string | null;
   }[];
+  serviceDetails: {
+    slug: string;
+    title: string;
+    summary: string;
+    body: string | null;
+    seoTitle: string | null;
+    seoDescription: string | null;
+  }[];
 };
 
 type CmsService = {
   slug?: string;
   title?: string;
   summary?: string | null;
+  body?: string | null;
   published?: boolean;
   sort_order?: number;
+  image_url?: string | null;
+  icon?: string | null;
+  category?: string | null;
+  seo_title?: string | null;
+  seo_description?: string | null;
 };
 
 type CmsSection = {
@@ -181,27 +195,43 @@ function mapServiceSummaries(cms: PublicCmsPayload | null, live: boolean): Servi
     .map((r) => {
       const slug = String(r.slug);
       const base = bySlug.get(slug);
-      if (!base) {
-        return {
-          slug,
-          title: String(r.title),
-          category: 'psychiatric' as const,
-          description: String(r.summary || r.title),
-          href: serviceHref(slug),
-          image: {
-            src: '/images/services/Psychiatric-Evaluation-Telehealth.avif',
-            width: 800,
-            height: 600,
-            alt: String(r.title),
-          },
-        } satisfies ServiceSummary;
-      }
+      const category =
+        r.category === 'primary-care' || r.category === 'psychiatric'
+          ? r.category
+          : base?.category ?? 'psychiatric';
+      const imageSrc =
+        (typeof r.image_url === 'string' && r.image_url) ||
+        (typeof r.icon === 'string' && r.icon) ||
+        base?.image.src ||
+        '/images/services/Psychiatric-Evaluation-Telehealth.avif';
       return {
-        ...base,
+        slug,
         title: String(r.title),
-        description: String(r.summary || base.description),
-      };
+        category,
+        description: String(r.summary || base?.description || r.title),
+        href: serviceHref(slug),
+        image: {
+          src: imageSrc,
+          width: base?.image.width ?? 800,
+          height: base?.image.height ?? 600,
+          alt: String(r.title),
+        },
+      } satisfies ServiceSummary;
     });
+}
+
+function mapServiceDetails(cms: PublicCmsPayload | null) {
+  const rows = (cms?.services ?? []) as CmsService[];
+  return rows
+    .filter((r) => r.slug && r.title)
+    .map((r) => ({
+      slug: String(r.slug),
+      title: String(r.title),
+      summary: String(r.summary || ''),
+      body: r.body ? String(r.body) : null,
+      seoTitle: r.seo_title ? String(r.seo_title) : null,
+      seoDescription: r.seo_description ? String(r.seo_description) : null,
+    }));
 }
 
 function mapHomeServices(cms: PublicCmsPayload | null, live: boolean): ServiceSummary[] {
@@ -516,5 +546,6 @@ export const getResolvedContent = cache(async (): Promise<ResolvedContent> => {
     provider: mapProvider(cms),
     locations: mapLocations(cms),
     posts: mapPosts(cms),
+    serviceDetails: mapServiceDetails(cms),
   };
 });
