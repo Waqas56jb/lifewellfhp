@@ -100,7 +100,7 @@ export function Eyebrow({
     return (
       <p
         className={cn(
-          'mb-2.5 w-fit rounded-[7px] bg-[#EEF3F7] px-[15px] pb-1 pt-1.5 text-[11px] font-semibold uppercase tracking-[1px] text-[#5FAF6B] sm:text-[12px] min-[1181px]:text-[13px]',
+          'mb-2.5 w-fit rounded-[7px] bg-[#EEF3F7] px-[15px] pb-1 pt-1.5 text-[11px] font-semibold uppercase tracking-[1px] text-[var(--lw-accent)] sm:text-[12px] min-[1181px]:text-[13px]',
           className
         )}
       >
@@ -190,13 +190,13 @@ export function SectionHeading({
       >
         {accent ? (
           <>
-            <span className={cn('not-italic', tone === 'inverse' ? 'text-white' : 'text-[#5FAF6B]')}>
+            <span className={cn('not-italic', tone === 'inverse' ? 'text-white' : 'text-[var(--lw-accent)]')}>
               {title}{' '}
             </span>
             <span
               className={cn(
                 'italic tracking-normal sm:text-[38px] min-[1181px]:text-[56px]',
-                tone === 'inverse' ? 'text-white' : 'text-[#3E7FB1]'
+                tone === 'inverse' ? 'text-white' : 'text-[var(--lw-primary)]'
               )}
             >
               {accent}

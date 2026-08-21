@@ -53,8 +53,8 @@ export function FAQAccordion({
               key={faq.question}
               className={cn(
                 'group rounded-[20px] bg-[#EEF3F7] px-5 py-7 transition-colors duration-300 sm:px-[30px] sm:py-[35px]',
-                'hover:bg-[#3E7FB1]',
-                expanded && 'bg-[#3E7FB1] hover:bg-[#3E7FB1]'
+                'hover:bg-[var(--lw-primary)]',
+                expanded && 'bg-[var(--lw-primary)] hover:bg-[var(--lw-primary)]'
               )}
             >
               <Heading>
@@ -68,7 +68,7 @@ export function FAQAccordion({
                 >
                   <span
                     className={cn(
-                      'font-heading text-[22px] font-normal leading-[1.25] tracking-[-1px] text-[#5FAF6B] transition-colors duration-300 sm:text-[24px] min-[1181px]:text-[30px]',
+                      'font-heading text-[22px] font-normal leading-[1.25] tracking-[-1px] text-[var(--lw-accent)] transition-colors duration-300 sm:text-[24px] min-[1181px]:text-[30px]',
                       'group-hover:text-white',
                       expanded && 'text-white'
                     )}
@@ -78,7 +78,7 @@ export function FAQAccordion({
                   <span
                     aria-hidden="true"
                     className={cn(
-                      'shrink-0 text-[#5FAF6B] transition-colors duration-300 group-hover:text-white',
+                      'shrink-0 text-[var(--lw-accent)] transition-colors duration-300 group-hover:text-white',
                       expanded && 'text-white'
                     )}
                   >

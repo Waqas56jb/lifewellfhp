@@ -43,15 +43,15 @@ export function TestimonialsPageContent({
       >
         <div className="relative mx-auto max-w-[1840px]">
           <div className="mx-auto max-w-[40rem] text-center">
-            <p className="mx-auto w-fit rounded-[7px] bg-[#EEF3F7] px-4 py-1 text-[11px] font-semibold uppercase tracking-[1px] text-[#5FAF6B] sm:text-[12px] min-[1181px]:text-[13px]">
+            <p className="mx-auto w-fit rounded-[7px] bg-[#EEF3F7] px-4 py-1 text-[11px] font-semibold uppercase tracking-[1px] text-[var(--lw-accent)] sm:text-[12px] min-[1181px]:text-[13px]">
               {testimonialsSection.eyebrow}
             </p>
             <h2
               id="patients-saying-heading"
               className="mt-5 font-heading text-[30px] font-normal leading-[1.15] tracking-[-2px] sm:text-[48px] min-[1181px]:text-[56px]"
             >
-              <span className="text-[#5FAF6B]">What Patients </span>
-              <span className="italic text-[#3E7FB1]">Are Saying</span>
+              <span className="text-[var(--lw-accent)]">What Patients </span>
+              <span className="italic text-[var(--lw-primary)]">Are Saying</span>
             </h2>
             <p className="mt-5 text-[16px] leading-[1.45] text-[#374151] min-[1181px]:text-[18px]">
               Honest feedback from patients who found support, understanding, and lasting care.

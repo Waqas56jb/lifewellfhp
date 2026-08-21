@@ -56,7 +56,7 @@ export default function AppearancePage() {
     });
     setSaving(false);
     if (!res.success) setError(res.message || 'Save failed');
-    else setMessage('Saved. The public website will pick this up within about a minute.');
+    else setMessage('Saved. Refresh the public website to see the new colors.');
   }
 
   return (
@@ -69,24 +69,45 @@ export default function AppearancePage() {
       {message ? <div className="ok-banner">{message}</div> : null}
 
       <form className="card card-pad" onSubmit={onSubmit}>
+        <p className="page-sub" style={{ marginTop: 0 }}>
+          These colors apply to the public website (buttons, headings, footer). The admin sidebar stays blue on purpose.
+        </p>
         <div className="grid-2">
           <div className="field">
             <label htmlFor="primary_color">Primary color</label>
-            <input
-              id="primary_color"
-              type="color"
-              value={form.primary_color}
-              onChange={(e) => setForm({ ...form, primary_color: e.target.value })}
-            />
+            <div className="color-row">
+              <input
+                id="primary_color"
+                type="color"
+                value={form.primary_color}
+                onChange={(e) => setForm({ ...form, primary_color: e.target.value })}
+              />
+              <input
+                aria-label="Primary color hex"
+                value={form.primary_color}
+                onChange={(e) => setForm({ ...form, primary_color: e.target.value })}
+                pattern="^#[0-9A-Fa-f]{6}$"
+                placeholder="#3E7FB1"
+              />
+            </div>
           </div>
           <div className="field">
             <label htmlFor="accent_color">Accent color</label>
-            <input
-              id="accent_color"
-              type="color"
-              value={form.accent_color}
-              onChange={(e) => setForm({ ...form, accent_color: e.target.value })}
-            />
+            <div className="color-row">
+              <input
+                id="accent_color"
+                type="color"
+                value={form.accent_color}
+                onChange={(e) => setForm({ ...form, accent_color: e.target.value })}
+              />
+              <input
+                aria-label="Accent color hex"
+                value={form.accent_color}
+                onChange={(e) => setForm({ ...form, accent_color: e.target.value })}
+                pattern="^#[0-9A-Fa-f]{6}$"
+                placeholder="#5FAF6B"
+              />
+            </div>
           </div>
           <div className="field">
             <label htmlFor="heading_font">Heading font</label>

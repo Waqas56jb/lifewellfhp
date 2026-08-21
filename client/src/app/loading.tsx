@@ -6,7 +6,7 @@ export default function Loading() {
       aria-live="polite"
       aria-label="Loading page"
     >
-      <div className="nav-progress-bar h-full w-full origin-left bg-[#3E7FB1]" />
+      <div className="nav-progress-bar h-full w-full origin-left bg-[var(--lw-primary)]" />
     </div>
   );
 }

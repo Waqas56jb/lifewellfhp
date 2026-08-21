@@ -323,12 +323,16 @@ const DEFAULT_SETTINGS = {
   practiceEmail: null as string | null,
 };
 
+function hexColor(value: unknown, fallback: string) {
+  return typeof value === 'string' && /^#[0-9A-Fa-f]{6}$/.test(value) ? value : fallback;
+}
+
 function mapSettings(cms: PublicCmsPayload | null) {
   const row = (cms?.settings ?? null) as Record<string, unknown> | null;
   if (!row) return DEFAULT_SETTINGS;
   return {
-    primaryColor: typeof row.primary_color === 'string' ? row.primary_color : DEFAULT_SETTINGS.primaryColor,
-    accentColor: typeof row.accent_color === 'string' ? row.accent_color : DEFAULT_SETTINGS.accentColor,
+    primaryColor: hexColor(row.primary_color, DEFAULT_SETTINGS.primaryColor),
+    accentColor: hexColor(row.accent_color, DEFAULT_SETTINGS.accentColor),
     headingFont: typeof row.heading_font === 'string' ? row.heading_font : DEFAULT_SETTINGS.headingFont,
     bodyFont: typeof row.body_font === 'string' ? row.body_font : DEFAULT_SETTINGS.bodyFont,
     headerCtaLabel: typeof row.header_cta_label === 'string' ? row.header_cta_label : DEFAULT_SETTINGS.headerCtaLabel,

@@ -198,7 +198,7 @@ function Accordion({ item, pathname }: { item: NavItem; pathname: string }) {
             <Link
               href={item.href}
               prefetch
-              className="mb-3 block px-4 font-heading text-[18px] font-medium leading-snug text-[#5FAF6B] no-underline"
+              className="mb-3 block px-4 font-heading text-[18px] font-medium leading-snug text-[var(--lw-accent)] no-underline"
             >
               {group.label}
             </Link>
@@ -212,8 +212,8 @@ function Accordion({ item, pathname }: { item: NavItem; pathname: string }) {
                     className={cn(
                       'flex min-h-11 items-center rounded-sm px-4 py-2 text-[15px] leading-snug no-underline transition-colors duration-quick',
                       pathname === link.href
-                        ? 'font-semibold text-[#3E7FB1]'
-                        : 'text-[#5FAF6B] hover:bg-[#F7FAFC] hover:text-[#3E7FB1]'
+                        ? 'font-semibold text-[var(--lw-primary)]'
+                        : 'text-[var(--lw-accent)] hover:bg-[#F7FAFC] hover:text-[var(--lw-primary)]'
                     )}
                   >
                     {link.label}

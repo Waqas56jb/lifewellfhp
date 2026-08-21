@@ -1282,6 +1282,19 @@ table.data th {
 .field input[type='color'] {
   padding: 0.2rem;
   height: 44px;
+  width: 56px;
+  flex: 0 0 auto;
+}
+
+.color-row {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.color-row input:not([type='color']) {
+  flex: 1;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
 .empty {

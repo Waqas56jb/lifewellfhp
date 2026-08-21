@@ -41,7 +41,7 @@ export function CTASection({
             <SwapButton href={primaryHref}>{primaryLabel}</SwapButton>
             <a
               href={secondaryHref}
-              className="inline-flex min-h-[51px] items-center justify-center rounded-[30px] border border-white px-[30px] py-[14px] text-[16px] font-semibold text-white no-underline transition-colors duration-300 hover:bg-white hover:text-[#3E7FB1] min-[1181px]:text-[18px]"
+              className="inline-flex min-h-[51px] items-center justify-center rounded-[30px] border border-white px-[30px] py-[14px] text-[16px] font-semibold text-white no-underline transition-colors duration-300 hover:bg-white hover:text-[var(--lw-primary)] min-[1181px]:text-[18px]"
             >
               {secondaryLabel}
             </a>
@@ -85,8 +85,8 @@ export function ContactCTA({
                 id="contact-cta-heading"
                 className="font-heading text-[28px] font-normal leading-[1.2] tracking-normal sm:text-[40px] min-[1181px]:text-[48px]"
               >
-                <span className="text-[#5FAF6B]">Reach Out and Take </span>
-                <span className="italic text-[#3E7FB1]">the First Step</span>
+                <span className="text-[var(--lw-accent)]">Reach Out and Take </span>
+                <span className="italic text-[var(--lw-primary)]">the First Step</span>
               </h2>
 
               <div className="mt-8">

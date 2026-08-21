@@ -365,11 +365,13 @@ export async function runLiveImport(): Promise<Record<string, number>> {
   }
   counts.media = 1;
 
+  const { data: existingSettings } = await sb.from('site_settings').select('*').eq('id', 'default').maybeSingle();
   await sb.from('site_settings').upsert({
     ...DEFAULT_SITE_SETTINGS,
-    logo_url: '/images/brand/logo.avif',
-    practice_phone: '(407) 603-1717',
-    practice_email: 'contact@lifewellfhp.com',
+    ...(existingSettings || {}),
+    logo_url: existingSettings?.logo_url || '/images/brand/logo.avif',
+    practice_phone: existingSettings?.practice_phone || '(407) 603-1717',
+    practice_email: existingSettings?.practice_email || 'contact@lifewellfhp.com',
     updated_at: new Date().toISOString(),
   });
   counts.settings = 1;

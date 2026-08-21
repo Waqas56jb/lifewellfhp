@@ -18,7 +18,7 @@ const borderFor = (invalid?: boolean, compact?: boolean) =>
   invalid
     ? 'border-error focus:border-error'
     : compact
-      ? 'border-[#E6ECF1] hover:border-[#3E7FB1] focus:border-[#3E7FB1]'
+      ? 'border-[#E6ECF1] hover:border-[var(--lw-primary)] focus:border-[var(--lw-primary)]'
       : 'border-border-input hover:border-brand-primary';
 
 interface BaseProps {
@@ -46,7 +46,7 @@ function Wrapper({
         htmlFor={id}
         className={
           compact
-            ? 'mb-2.5 block text-[11px] font-bold uppercase tracking-[1.6px] text-[#5FAF6B]'
+            ? 'mb-2.5 block text-[11px] font-bold uppercase tracking-[1.6px] text-[var(--lw-accent)]'
             : 'mb-2 block text-sm font-semibold text-text-primary'
         }
       >

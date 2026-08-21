@@ -38,8 +38,8 @@ export function InsuranceGrid({
             id="insurance-heading"
             className="font-heading text-[30px] font-normal leading-[1.15] tracking-[-3px] sm:text-[48px] min-[1181px]:text-[56px]"
           >
-            <span className="text-[#5FAF6B]">{title} </span>
-            <span className="italic text-[#3E7FB1]">{accent}</span>
+            <span className="text-[var(--lw-accent)]">{title} </span>
+            <span className="italic text-[var(--lw-primary)]">{accent}</span>
           </h2>
           <p className="mx-auto mt-5 max-w-[46rem] text-[16px] leading-[1.45] text-[#374151] min-[1181px]:text-[18px]">
             {body}

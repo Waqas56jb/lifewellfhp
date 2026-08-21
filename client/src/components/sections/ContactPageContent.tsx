@@ -17,26 +17,26 @@ export function ContactPageContent() {
         <div className="mx-auto grid max-w-[1280px] items-stretch gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-x-10">
           <div className="lg:pr-10 min-[1601px]:pr-20">
             <h2 className="font-heading text-[30px] font-normal leading-[1.15] tracking-[-3px] sm:text-[48px] min-[1181px]:text-[56px]">
-              <span className="text-[#5FAF6B]">{contactPage.infoHeading} </span>
-              <span className="italic tracking-normal text-[#3E7FB1]">{contactPage.infoAccent}</span>
+              <span className="text-[var(--lw-accent)]">{contactPage.infoHeading} </span>
+              <span className="italic tracking-normal text-[var(--lw-primary)]">{contactPage.infoAccent}</span>
             </h2>
             <p className="mt-6 text-[14px] leading-[1.45] text-[#374151] sm:text-[16px] min-[1181px]:text-[18px]">
               {contactPage.infoBody}
             </p>
 
-            <h3 className="mt-10 font-body text-[12px] font-semibold uppercase tracking-[1px] text-[#5FAF6B] sm:text-[13px] min-[1181px]:text-[15px]">
+            <h3 className="mt-10 font-body text-[12px] font-semibold uppercase tracking-[1px] text-[var(--lw-accent)] sm:text-[13px] min-[1181px]:text-[15px]">
               Email:
             </h3>
             <p className="mt-2">
               <a
                 href={site.contact.emailHref}
-                className="text-[14px] leading-[1.45] text-[#374151] no-underline hover:text-[#3E7FB1] sm:text-[16px] min-[1181px]:text-[18px]"
+                className="text-[14px] leading-[1.45] text-[#374151] no-underline hover:text-[var(--lw-primary)] sm:text-[16px] min-[1181px]:text-[18px]"
               >
                 {site.contact.email}
               </a>
             </p>
 
-            <h3 className="mt-8 font-body text-[12px] font-semibold uppercase tracking-[1px] text-[#5FAF6B] sm:text-[13px] min-[1181px]:text-[15px]">
+            <h3 className="mt-8 font-body text-[12px] font-semibold uppercase tracking-[1px] text-[var(--lw-accent)] sm:text-[13px] min-[1181px]:text-[15px]">
               Open:
             </h3>
             <div className="mt-2 space-y-1 text-[14px] leading-[1.45] text-[#374151] sm:text-[16px] min-[1181px]:text-[18px]">
@@ -45,7 +45,7 @@ export function ContactPageContent() {
               ))}
             </div>
 
-            <h3 className="mt-8 font-body text-[12px] font-semibold uppercase tracking-[1px] text-[#5FAF6B] sm:text-[13px] min-[1181px]:text-[15px]">
+            <h3 className="mt-8 font-body text-[12px] font-semibold uppercase tracking-[1px] text-[var(--lw-accent)] sm:text-[13px] min-[1181px]:text-[15px]">
               Address:
             </h3>
             <address className="mt-2 not-italic text-[14px] leading-[1.45] text-[#374151] sm:text-[16px] min-[1181px]:text-[18px]">
@@ -84,7 +84,7 @@ export function ContactPageContent() {
             />
           </div>
           <div>
-            <h2 className="font-heading text-[30px] font-normal leading-[1.15] tracking-[-3px] text-[#5FAF6B] sm:text-[48px] min-[1181px]:text-[56px]">
+            <h2 className="font-heading text-[30px] font-normal leading-[1.15] tracking-[-3px] text-[var(--lw-accent)] sm:text-[48px] min-[1181px]:text-[56px]">
               {contactPage.formHeading} {contactPage.formAccent}
             </h2>
             <p className="mt-6 text-[14px] leading-[1.45] text-[#374151] sm:text-[16px] min-[1181px]:text-[18px]">
@@ -106,10 +106,10 @@ function ContactHero() {
       <div className="mx-auto flex max-w-[1840px] flex-col overflow-hidden rounded-[20px] bg-[#EEF3F7] sm:rounded-[30px] lg:min-h-[570px] lg:flex-row">
         <div className="flex flex-col justify-center gap-8 px-5 py-10 sm:gap-10 sm:px-[60px] sm:py-[60px] lg:w-[42.4%] lg:px-[60px] lg:py-10">
           <h1 className="font-heading text-[35px] font-normal leading-[1.15] tracking-[-3px] sm:text-[48px] min-[1181px]:text-[56px]">
-            <span className="italic tracking-normal text-[#3E7FB1] sm:text-[50px] sm:leading-[1.05] min-[1181px]:text-[60px]">
+            <span className="italic tracking-normal text-[var(--lw-primary)] sm:text-[50px] sm:leading-[1.05] min-[1181px]:text-[60px]">
               {contactPage.headingLead}{' '}
             </span>
-            <span className="text-[#5FAF6B]">{contactPage.headingAccent}</span>
+            <span className="text-[var(--lw-accent)]">{contactPage.headingAccent}</span>
           </h1>
           <p className="text-[14px] leading-[1.45] text-[#374151] sm:text-[16px] min-[1181px]:text-[18px]">
             {contactPage.lead}
@@ -141,7 +141,7 @@ function ContactHero() {
             <p className="font-body text-[11px] font-semibold uppercase tracking-[1px] text-[#374151] sm:text-[12px] min-[1181px]:text-[13px]">
               Give Us a Call:
             </p>
-            <p className="mt-1 font-heading text-[20px] font-medium italic leading-[1.3] tracking-[-1px] text-[#3E7FB1] transition-colors duration-300 hover:text-[#4A8F55] sm:text-[24px] min-[1181px]:text-[26px]">
+            <p className="mt-1 font-heading text-[20px] font-medium italic leading-[1.3] tracking-[-1px] text-[var(--lw-primary)] transition-colors duration-300 hover:text-[#4A8F55] sm:text-[24px] min-[1181px]:text-[26px]">
               {contactPage.phoneDisplay}
             </p>
           </a>
@@ -177,8 +177,8 @@ function HeroAction({
 }) {
   const classes =
     variant === 'solid'
-      ? 'inline-flex min-h-[51px] items-center gap-2.5 rounded-[30px] bg-[#3E7FB1] px-6 text-[16px] font-normal text-white no-underline transition-colors duration-300 hover:bg-transparent hover:text-[#5FAF6B] hover:ring-1 hover:ring-[#5FAF6B] min-[1181px]:text-[18px]'
-      : 'inline-flex min-h-[51px] items-center gap-2.5 rounded-[30px] border border-[#3E7FB1] bg-transparent px-6 text-[16px] font-normal text-[#374151] no-underline transition-colors duration-300 hover:border-[#5FAF6B] hover:bg-[#5FAF6B] hover:text-white min-[1181px]:text-[18px]';
+      ? 'inline-flex min-h-[51px] items-center gap-2.5 rounded-[30px] bg-[var(--lw-primary)] px-6 text-[16px] font-normal text-white no-underline transition-colors duration-300 hover:bg-transparent hover:text-[var(--lw-accent)] hover:ring-1 hover:ring-[var(--lw-accent)] min-[1181px]:text-[18px]'
+      : 'inline-flex min-h-[51px] items-center gap-2.5 rounded-[30px] border border-[var(--lw-primary)] bg-transparent px-6 text-[16px] font-normal text-[#374151] no-underline transition-colors duration-300 hover:border-[var(--lw-accent)] hover:bg-[var(--lw-accent)] hover:text-white min-[1181px]:text-[18px]';
 
   const glyph = <ActionIcon name={icon} />;
 

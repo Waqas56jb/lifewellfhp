@@ -40,10 +40,10 @@ export function ServiceCard({
         className="relative z-10 -mt-10 flex flex-1 flex-col gap-5 rounded-[20px] px-5 py-[30px] sm:px-[30px]"
         style={{ backgroundColor: tone }}
       >
-        <h3 className="text-[20px] font-medium italic leading-[1.3] tracking-[-1px] text-[#5FAF6B] sm:text-[24px] min-[1181px]:text-[26px]">
+        <h3 className="text-[20px] font-medium italic leading-[1.3] tracking-[-1px] text-[var(--lw-accent)] sm:text-[24px] min-[1181px]:text-[26px]">
           <Link
             href={service.href}
-            className="rounded-xs text-inherit no-underline transition-colors duration-300 after:absolute after:inset-0 after:content-[''] group-hover:text-[#3E7FB1]"
+            className="rounded-xs text-inherit no-underline transition-colors duration-300 after:absolute after:inset-0 after:content-[''] group-hover:text-[var(--lw-primary)]"
           >
             {service.title}
           </Link>
@@ -55,7 +55,7 @@ export function ServiceCard({
 
         <span
           aria-hidden="true"
-          className="mt-auto inline-flex items-center gap-[7px] text-[11px] font-semibold uppercase tracking-[1px] text-[#5FAF6B] transition-colors duration-300 group-hover:text-[#3E7FB1] sm:text-[12px] min-[1181px]:text-[13px]"
+          className="mt-auto inline-flex items-center gap-[7px] text-[11px] font-semibold uppercase tracking-[1px] text-[var(--lw-accent)] transition-colors duration-300 group-hover:text-[var(--lw-primary)] sm:text-[12px] min-[1181px]:text-[13px]"
         >
           Learn More
           <ArrowIcon className="transition-transform duration-300 group-hover:translate-x-[5px]" />

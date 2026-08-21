@@ -110,8 +110,8 @@ function TopLevelLink({
       className={cn(
         'inline-flex min-h-[42px] shrink-0 items-center whitespace-nowrap rounded-[30px] px-[22px] py-[5px] text-[16px] font-semibold no-underline transition-colors duration-300 min-[1601px]:px-[25px]',
         active
-          ? 'bg-[#3E7FB1] text-white'
-          : 'text-[#5FAF6B] hover:bg-[#3E7FB1] hover:text-white'
+          ? 'bg-[var(--lw-primary)] text-white'
+          : 'text-[var(--lw-accent)] hover:bg-[var(--lw-primary)] hover:text-white'
       )}
     >
       {children}
@@ -249,8 +249,8 @@ function MegaMenuItem({ item, pathname }: { item: NavItem; pathname: string }) {
         className={cn(
           'inline-flex min-h-[42px] shrink-0 items-center gap-[7px] whitespace-nowrap rounded-[30px] px-[22px] py-[5px] text-[16px] font-semibold transition-colors duration-300 min-[1601px]:px-[25px]',
           active || open
-            ? 'bg-[#3E7FB1] text-white'
-            : 'text-[#5FAF6B] hover:bg-[#3E7FB1] hover:text-white'
+            ? 'bg-[var(--lw-primary)] text-white'
+            : 'text-[var(--lw-accent)] hover:bg-[var(--lw-primary)] hover:text-white'
         )}
       >
         {item.label}

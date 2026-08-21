@@ -36,7 +36,7 @@ export function BenefitsGrid({
         <ul className="mt-10 flex list-none flex-col gap-2.5 min-[1181px]:mt-16">
           {items.map((benefit, i) => (
             <li key={benefit.title}>
-              <article className="group flex min-h-[140px] items-center gap-[15px] overflow-hidden rounded-[30px] bg-[#EEF3F7] px-5 py-5 transition-colors duration-500 hover:bg-[#5FAF6B] max-[767px]:flex-col max-[767px]:items-start sm:px-[30px] sm:py-[30px]">
+              <article className="group flex min-h-[140px] items-center gap-[15px] overflow-hidden rounded-[30px] bg-[#EEF3F7] px-5 py-5 transition-colors duration-500 hover:bg-[var(--lw-accent)] max-[767px]:flex-col max-[767px]:items-start sm:px-[30px] sm:py-[30px]">
                 <div className="relative flex h-[88px] w-[88px] shrink-0 items-center justify-center">
                   <span
                     aria-hidden="true"
@@ -56,7 +56,7 @@ export function BenefitsGrid({
                 </div>
 
                 <div className="flex min-w-0 flex-1 flex-col gap-2 transition-transform duration-500 ease-out group-hover:translate-x-2 sm:flex-row sm:items-center sm:gap-8">
-                  <h3 className="w-full shrink-0 font-body text-[18px] font-semibold leading-snug tracking-normal text-[#3E7FB1] transition-colors duration-500 group-hover:text-white sm:w-[240px] sm:text-[20px] min-[1181px]:w-[280px] min-[1181px]:text-[22px]">
+                  <h3 className="w-full shrink-0 font-body text-[18px] font-semibold leading-snug tracking-normal text-[var(--lw-primary)] transition-colors duration-500 group-hover:text-white sm:w-[240px] sm:text-[20px] min-[1181px]:w-[280px] min-[1181px]:text-[22px]">
                     {benefit.title}
                   </h3>
                   <p className="min-w-0 flex-1 text-[14px] leading-[1.45] text-[#374151] transition-colors duration-500 group-hover:text-white sm:text-[16px] min-[1181px]:text-[18px]">
@@ -66,7 +66,7 @@ export function BenefitsGrid({
 
                 <span
                   aria-hidden="true"
-                  className="ml-auto inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-[#3E7FB1] text-white max-[767px]:mt-2"
+                  className="ml-auto inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-[var(--lw-primary)] text-white max-[767px]:mt-2"
                 >
                   <ArrowIcon />
                 </span>

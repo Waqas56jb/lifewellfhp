@@ -31,10 +31,10 @@ export function WelcomeSection({ welcome = staticWelcome }: { welcome?: typeof s
               className="font-heading text-[28px] font-normal leading-[1.2] tracking-normal sm:text-[38px] min-[1181px]:text-[56px]"
             >
               <span className="whitespace-nowrap">
-                <span className="text-[#5FAF6B] not-italic">Welcome to </span>
-                <span className="italic text-[#3E7FB1]">LifeWell</span>
+                <span className="text-[var(--lw-accent)] not-italic">Welcome to </span>
+                <span className="italic text-[var(--lw-primary)]">LifeWell</span>
               </span>
-              <span className="block italic text-[#3E7FB1]">
+              <span className="block italic text-[var(--lw-primary)]">
                 Family Health &amp;
                 <br />
                 Psychiatry

@@ -1,5 +1,10 @@
 @import 'tailwindcss';
 
+:root {
+  --lw-primary: #3e7fb1;
+  --lw-accent: #5faf6b;
+}
+
 /* ==========================================================================
    LifeWell Family Health & Psychiatry — Design Tokens
    Palette preserved from the original Elementor global kit so the rebuilt
@@ -7,6 +12,7 @@
    design system had #3E7FB1 labelled "Strong Border" and #000000 as base
    surface; both would have broken the brand). Contrast-safe text variants
    added for WCAG 2.2 AA.
+   Appearance colors from the admin panel override --lw-primary / --lw-accent.
    ========================================================================== */
 
 @theme {
@@ -15,14 +21,14 @@
      rings, icon fills and tinted surfaces (all >=3:1, which is the bar for
      large text and non-text UI). White label text on it measures only
      4.31:1, so solid controls use the brand's own darker sibling instead. */
-  --color-brand-primary: #3e7fb1;
+  --color-brand-primary: var(--lw-primary);
   --color-brand-primary-solid: #2f6691; /* white text -> 6.12:1 */
   --color-brand-primary-hover: #2b5c83; /* white text -> 7.09:1 */
   --color-brand-primary-soft: #e8f0f7;
   /* Same hue tinted for dark photographic grounds. #3E7FB1 measures only
      2.21:1 over the hero scrim, so the hero heading uses this instead. */
   --color-brand-primary-on-dark: #a8d2ef;
-  --color-brand-accent: #5faf6b; /* decorative fills only, never behind text */
+  --color-brand-accent: var(--lw-accent); /* decorative fills only, never behind text */
   --color-brand-accent-strong: #3d7a47; /* white text -> 5.16:1 */
   --color-brand-accent-hover: #336840;
   --color-brand-accent-soft: #eaf4ec;
@@ -45,7 +51,7 @@
   --color-border-subtle: #e1e8ee;
   --color-border-strong: #c9d6e2;
   --color-border-input: #6b8299; /* 3.98:1 on white, 3.70:1 on base */
-  --color-border-focus: #3e7fb1;
+  --color-border-focus: var(--lw-primary);
 
   /* ---- Semantic ---- */
   --color-success: #4a8f55;
@@ -292,17 +298,17 @@
     font-style: normal;
     line-height: 1.4;
     letter-spacing: 0;
-    color: #5faf6b;
+    color: var(--lw-accent);
     text-decoration: none;
     border-radius: 7px;
     transition: color 0.3s, background-color 0.3s;
   }
   .services-mega a.mega-heading:hover {
-    color: #3e7fb1;
+    color: var(--lw-primary);
   }
   .services-mega a.mega-link:hover {
     color: #ffffff;
-    background-color: #3e7fb1;
+    background-color: var(--lw-primary);
   }
 
   ::selection {

@@ -56,7 +56,7 @@ export async function getPublicContent(_req: Request, res: Response): Promise<vo
       ? settings.data[0] ?? null
       : settings.data ?? null;
 
-  res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
+  res.setHeader('Cache-Control', 'no-store');
   res.json({
     success: true,
     source: 'cms',

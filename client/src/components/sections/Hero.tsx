@@ -39,8 +39,8 @@ export function Hero({
             id="hero-heading"
             className="font-heading text-[35px] font-normal italic leading-[1.05] tracking-normal [text-wrap:wrap] md:text-[50px] min-[1181px]:text-[60px]"
           >
-            <span className="text-[#3E7FB1]">{primary}{accent ? ' ' : ''}</span>
-            {accent ? <span className="text-[#5FAF6B]">{accent}</span> : null}
+            <span className="text-[var(--lw-primary)]">{primary}{accent ? ' ' : ''}</span>
+            {accent ? <span className="text-[var(--lw-accent)]">{accent}</span> : null}
           </h1>
 
           <p className="mt-6 text-[14px] font-normal leading-[1.45] text-white sm:text-[16px] min-[1181px]:text-[18px]">

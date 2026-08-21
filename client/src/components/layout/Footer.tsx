@@ -17,7 +17,7 @@ export async function Footer() {
   const remoteLogo = logo.startsWith('http');
   return (
     <footer className="bg-[#F4F7FA]">
-      <div className="footer-band rounded-t-[30px] bg-[var(--lw-primary,#3E7FB1)] text-white sm:rounded-t-[40px]">
+      <div className="footer-band rounded-t-[30px] bg-[var(--lw-primary)] text-white sm:rounded-t-[40px]">
         <Container>
           <div className="flex flex-col gap-5 border-b border-white/30 py-10 sm:flex-row sm:items-start sm:justify-between sm:gap-8 sm:py-12 lg:py-14">
             <h2 className="max-w-[16ch] font-heading text-[28px] font-normal leading-[1.2] text-white sm:text-[34px] lg:max-w-[18ch] min-[1181px]:text-[42px]">
@@ -73,7 +73,7 @@ export async function Footer() {
                       href={s.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex size-10 items-center justify-center rounded-full bg-[var(--lw-accent,#5FAF6B)] text-white transition-colors duration-300 hover:bg-white hover:text-[var(--lw-accent,#5FAF6B)]"
+                      className="inline-flex size-10 items-center justify-center rounded-full bg-[var(--lw-accent)] text-white transition-colors duration-300 hover:bg-white hover:text-[var(--lw-accent)]"
                     >
                       <span className="sr-only">
                         {site.name} on {s.name}

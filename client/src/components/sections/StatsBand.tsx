@@ -38,9 +38,9 @@ export function StatsBand({ stats, bookingUrl }: { stats: Stat[]; bookingUrl?: s
                 id="stats-heading"
                 className="font-heading text-[30px] font-normal leading-[1.15] tracking-[-2px] sm:text-[42px] min-[1181px]:text-[52px]"
               >
-                <span className="text-[#3E7FB1]">Start Your Mental </span>
-                <span className="italic text-[#5FAF6B]">Wellness</span>
-                <span className="text-[#3E7FB1]"> Journey Today</span>
+                <span className="text-[var(--lw-primary)]">Start Your Mental </span>
+                <span className="italic text-[var(--lw-accent)]">Wellness</span>
+                <span className="text-[var(--lw-primary)]"> Journey Today</span>
               </h2>
               <p className="mt-5 max-w-[42ch] font-heading text-[16px] font-normal italic leading-[1.45] text-[#374151] sm:text-[18px]">
                 {primaryCta.body}
@@ -120,7 +120,7 @@ function Counter({ value, suffix }: { value: number; suffix: string }) {
   return (
     <span
       ref={ref}
-      className="block font-heading text-[42px] font-normal leading-none text-[#3E7FB1] sm:text-[52px] min-[1181px]:text-[56px]"
+      className="block font-heading text-[42px] font-normal leading-none text-[var(--lw-primary)] sm:text-[52px] min-[1181px]:text-[56px]"
     >
       {formatCount(display)}
       {suffix}

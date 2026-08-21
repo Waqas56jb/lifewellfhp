@@ -30,20 +30,20 @@ export function InnerPageHero({
     <h1 className="font-heading text-[35px] font-normal leading-[1.15] tracking-[-3px] sm:text-[48px] min-[1181px]:text-[56px]">
       {accentFirst ? (
         <>
-          <span className="italic tracking-normal text-[#3E7FB1] sm:text-[50px] sm:leading-[1.05] min-[1181px]:text-[60px]">
+          <span className="italic tracking-normal text-[var(--lw-primary)] sm:text-[50px] sm:leading-[1.05] min-[1181px]:text-[60px]">
             {title}
             {accent ? ' ' : ''}
           </span>
-          {accent && <span className="text-[#5FAF6B]">{accent}</span>}
+          {accent && <span className="text-[var(--lw-accent)]">{accent}</span>}
         </>
       ) : (
         <>
-          <span className="text-[#5FAF6B]">
+          <span className="text-[var(--lw-accent)]">
             {title}
             {accent ? ' ' : ''}
           </span>
           {accent && (
-            <span className="italic tracking-normal text-[#3E7FB1] sm:text-[50px] sm:leading-[1.05] min-[1181px]:text-[60px]">
+            <span className="italic tracking-normal text-[var(--lw-primary)] sm:text-[50px] sm:leading-[1.05] min-[1181px]:text-[60px]">
               {accent}
             </span>
           )}

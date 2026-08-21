@@ -39,7 +39,7 @@ export function BioPageContent({
         <Container>
           <div className="grid items-start gap-12 lg:grid-cols-[minmax(0,32%)_minmax(0,68%)] lg:gap-[100px]">
             <aside className="text-center lg:px-10 lg:py-10">
-              <h2 className="font-heading text-[22px] font-medium italic leading-[1.3] tracking-[-1px] text-[#5FAF6B] sm:text-[24px] min-[1181px]:text-[26px]">
+              <h2 className="font-heading text-[22px] font-medium italic leading-[1.3] tracking-[-1px] text-[var(--lw-accent)] sm:text-[24px] min-[1181px]:text-[26px]">
                 {providerPage.consultation.heading}
               </h2>
               <p className="mt-5 text-[16px] leading-[1.45] text-[#374151] min-[1181px]:text-[18px]">
@@ -51,7 +51,7 @@ export function BioPageContent({
             </aside>
 
             <div className="min-w-0">
-              <h2 className="font-heading text-[28px] font-normal leading-[1.2] tracking-[-1px] text-[#5FAF6B] sm:text-[36px] min-[1181px]:text-[42px]">
+              <h2 className="font-heading text-[28px] font-normal leading-[1.2] tracking-[-1px] text-[var(--lw-accent)] sm:text-[36px] min-[1181px]:text-[42px]">
                 Short Biography
               </h2>
               <div className="mt-6 space-y-5">
@@ -62,7 +62,7 @@ export function BioPageContent({
                 ))}
               </div>
 
-              <h3 className="mt-12 font-heading text-[28px] font-normal leading-[1.2] tracking-[-1px] text-[#5FAF6B] sm:text-[36px] min-[1181px]:text-[42px]">
+              <h3 className="mt-12 font-heading text-[28px] font-normal leading-[1.2] tracking-[-1px] text-[var(--lw-accent)] sm:text-[36px] min-[1181px]:text-[42px]">
                 Short Biography
               </h3>
 
@@ -73,7 +73,7 @@ export function BioPageContent({
                 <CredentialRow title="Years of practice" body={providerPage.yearsBlurb} last />
               </dl>
 
-              <h3 className="mt-10 font-heading text-[28px] font-normal leading-[1.2] tracking-[-1px] text-[#5FAF6B] sm:text-[36px] min-[1181px]:text-[42px]">
+              <h3 className="mt-10 font-heading text-[28px] font-normal leading-[1.2] tracking-[-1px] text-[var(--lw-accent)] sm:text-[36px] min-[1181px]:text-[42px]">
                 Working Shifts
               </h3>
               <ul className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -83,7 +83,7 @@ export function BioPageContent({
                       href={site.booking.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex flex-col items-center rounded-[15px] bg-[#5FAF6B] px-6 py-8 text-center no-underline transition-transform duration-300 hover:-translate-y-2.5"
+                      className="flex flex-col items-center rounded-[15px] bg-[var(--lw-accent)] px-6 py-8 text-center no-underline transition-transform duration-300 hover:-translate-y-2.5"
                     >
                       <span className="text-[16px] font-semibold leading-snug text-white sm:text-[18px]">
                         {shift.day}
@@ -143,7 +143,7 @@ export function BioPageContent({
         />
         <Container className="relative">
           <div className="mx-auto max-w-[40rem] text-center">
-            <p className="mx-auto w-fit rounded-[7px] bg-[#EEF3F7] px-4 py-1 text-[11px] font-semibold uppercase tracking-[1px] text-[#5FAF6B] sm:text-[12px] min-[1181px]:text-[13px]">
+            <p className="mx-auto w-fit rounded-[7px] bg-[#EEF3F7] px-4 py-1 text-[11px] font-semibold uppercase tracking-[1px] text-[var(--lw-accent)] sm:text-[12px] min-[1181px]:text-[13px]">
               Testimonials
             </p>
             <h2 id="bio-testimonials-heading" className="sr-only">
@@ -189,10 +189,10 @@ function BioHero({
     <section className="px-5 pb-16 pt-4 sm:px-[30px] sm:pb-24 lg:px-10 lg:pb-[150px] min-[1601px]:px-[80px]">
       <div className="mx-auto flex max-w-[1840px] flex-col-reverse overflow-hidden rounded-[20px] sm:rounded-[30px] lg:min-h-[570px] lg:flex-row">
         <div className="flex flex-col justify-center gap-8 bg-[#EEF3F7] px-5 py-10 sm:gap-10 sm:px-[60px] sm:py-[60px] lg:w-1/2 lg:px-20 lg:py-5 min-[1601px]:px-[100px]">
-          <p className="w-fit rounded-[7px] bg-[#5FAF6B] px-4 py-1 text-[11px] font-semibold uppercase tracking-[1px] text-white sm:text-[12px] min-[1181px]:text-[13px]">
+          <p className="w-fit rounded-[7px] bg-[var(--lw-accent)] px-4 py-1 text-[11px] font-semibold uppercase tracking-[1px] text-white sm:text-[12px] min-[1181px]:text-[13px]">
             About Me
           </p>
-          <h1 className="max-w-[16ch] font-heading text-[32px] font-normal leading-[1.1] tracking-[-2px] text-[#5FAF6B] sm:text-[44px] min-[1181px]:text-[56px] min-[1601px]:text-[62px]">
+          <h1 className="max-w-[16ch] font-heading text-[32px] font-normal leading-[1.1] tracking-[-2px] text-[var(--lw-accent)] sm:text-[44px] min-[1181px]:text-[56px] min-[1601px]:text-[62px]">
             {overlay.name}, {overlay.credentials}
           </h1>
 
@@ -200,7 +200,7 @@ function BioHero({
             <li className="border-b border-[#ddd] py-[15px]">
               <a
                 href={site.contact.phoneHref}
-                className="text-[16px] leading-[1.45] text-[#374151] no-underline hover:text-[#3E7FB1] min-[1181px]:text-[18px]"
+                className="text-[16px] leading-[1.45] text-[#374151] no-underline hover:text-[var(--lw-primary)] min-[1181px]:text-[18px]"
               >
                 Phone: (407) 603 - 1717
               </a>
@@ -211,7 +211,7 @@ function BioHero({
             <li className="py-[15px]">
               <a
                 href={site.contact.emailHref}
-                className="text-[16px] leading-[1.45] text-[#374151] no-underline hover:text-[#3E7FB1] min-[1181px]:text-[18px]"
+                className="text-[16px] leading-[1.45] text-[#374151] no-underline hover:text-[var(--lw-primary)] min-[1181px]:text-[18px]"
               >
                 Email: {site.contact.email}
               </a>
@@ -225,7 +225,7 @@ function BioHero({
                   href={s.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex size-10 items-center justify-center rounded-full bg-[#5FAF6B] text-white transition-colors duration-300 hover:bg-[#2F6691]"
+                  className="inline-flex size-10 items-center justify-center rounded-full bg-[var(--lw-accent)] text-white transition-colors duration-300 hover:bg-[#2F6691]"
                 >
                   <span className="sr-only">
                     {site.name} on {s.name}
@@ -280,7 +280,7 @@ function CredentialRow({
           : 'grid gap-4 border-b border-[#E1E8EE] py-7 sm:grid-cols-[minmax(0,40%)_minmax(0,60%)] sm:gap-10 lg:gap-[100px]'
       }
     >
-      <dt className="font-heading text-[20px] font-medium italic leading-[1.3] tracking-[-1px] text-[#5FAF6B] sm:text-[24px] min-[1181px]:text-[26px]">
+      <dt className="font-heading text-[20px] font-medium italic leading-[1.3] tracking-[-1px] text-[var(--lw-accent)] sm:text-[24px] min-[1181px]:text-[26px]">
         {title}
       </dt>
       <dd className="text-[16px] leading-[1.45] text-[#374151] min-[1181px]:text-[18px]">{body}</dd>

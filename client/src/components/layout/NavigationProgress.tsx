@@ -66,7 +66,7 @@ export function NavigationProgress() {
       aria-label="Loading page"
       aria-hidden="true"
     >
-      <div className="nav-progress-bar h-full w-full origin-left bg-[#3E7FB1]" />
+      <div className="nav-progress-bar h-full w-full origin-left bg-[var(--lw-primary)]" />
     </div>
   );
 }

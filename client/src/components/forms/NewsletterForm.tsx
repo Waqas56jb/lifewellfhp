@@ -142,7 +142,7 @@ export function NewsletterForm({ variant = 'default' }: { variant?: 'default' | 
           <button
             type="submit"
             disabled={busy}
-            className="inline-flex min-h-12 shrink-0 items-center justify-center rounded-[30px] bg-[#5FAF6B] px-6 text-[15px] font-semibold text-white transition-colors duration-300 hover:bg-white hover:text-[#3E7FB1] disabled:opacity-60"
+            className="inline-flex min-h-12 shrink-0 items-center justify-center rounded-[30px] bg-[var(--lw-accent)] px-6 text-[15px] font-semibold text-white transition-colors duration-300 hover:bg-white hover:text-[var(--lw-primary)] disabled:opacity-60"
           >
             {busy ? 'Signing up…' : 'Sign Up'}
           </button>

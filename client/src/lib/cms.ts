@@ -23,7 +23,7 @@ export type PublicCmsPayload = {
 export async function fetchPublicCms(): Promise<PublicCmsPayload | null> {
   try {
     const res = await fetch(`${API_URL}/api/public/content`, {
-      next: { revalidate: 60 },
+      cache: 'no-store',
     });
     if (!res.ok) return null;
     const json = (await res.json()) as { success: boolean; data: PublicCmsPayload | null };

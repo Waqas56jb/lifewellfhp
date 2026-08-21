@@ -38,7 +38,7 @@ export function HowItWorks({
     >
       <Container>
         <div className="flex flex-col items-center text-center">
-          <p className="mb-3 text-[11px] font-semibold uppercase tracking-[1px] text-[#5FAF6B] sm:text-[12px] min-[1181px]:text-[13px]">
+          <p className="mb-3 text-[11px] font-semibold uppercase tracking-[1px] text-[var(--lw-accent)] sm:text-[12px] min-[1181px]:text-[13px]">
             {eyebrow}
           </p>
           <h2
@@ -47,8 +47,8 @@ export function HowItWorks({
           >
             {accent ? (
               <>
-                <span className="font-heading not-italic text-[#3E7FB1]">{lead} </span>
-                <span className="font-heading italic text-[#5FAF6B]">{accent}</span>
+                <span className="font-heading not-italic text-[var(--lw-primary)]">{lead} </span>
+                <span className="font-heading italic text-[var(--lw-accent)]">{accent}</span>
               </>
             ) : (
               <span className="font-heading">{heading}</span>
@@ -91,12 +91,12 @@ export function HowItWorks({
                 <article className="flex items-start gap-5 rounded-[20px] bg-white px-5 py-6 shadow-[0_4px_24px_rgb(62_127_177_/_0.08)] sm:items-center sm:gap-6 sm:px-7 sm:py-7">
                   <span
                     aria-hidden="true"
-                    className="w-10 shrink-0 text-center font-heading text-[36px] font-normal leading-none text-[#5FAF6B] sm:w-12 sm:text-[42px] min-[1181px]:text-[48px]"
+                    className="w-10 shrink-0 text-center font-heading text-[36px] font-normal leading-none text-[var(--lw-accent)] sm:w-12 sm:text-[42px] min-[1181px]:text-[48px]"
                   >
                     {i + 1}
                   </span>
                   <div className="min-w-0">
-                    <h3 className="flex flex-wrap items-center gap-2 font-heading text-[20px] font-normal leading-snug tracking-[-1px] text-[#3E7FB1] sm:text-[24px] min-[1181px]:text-[26px]">
+                    <h3 className="flex flex-wrap items-center gap-2 font-heading text-[20px] font-normal leading-snug tracking-[-1px] text-[var(--lw-primary)] sm:text-[24px] min-[1181px]:text-[26px]">
                       <span className="sr-only">Step {i + 1}: </span>
                       {step.title}
                       <LongArrow />

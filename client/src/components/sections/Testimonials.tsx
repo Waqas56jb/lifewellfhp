@@ -46,8 +46,8 @@ export function Testimonials({ testimonials }: { testimonials: Testimonial[] }) 
             id={headingId}
             className="font-heading text-[30px] font-normal leading-[1.15] tracking-[-2px] sm:text-[48px] min-[1181px]:text-[56px]"
           >
-            <span className="text-[#5FAF6B]">What Patients </span>
-            <span className="italic text-[#3E7FB1]">Are Saying</span>
+            <span className="text-[var(--lw-accent)]">What Patients </span>
+            <span className="italic text-[var(--lw-primary)]">Are Saying</span>
           </h2>
           <p className="mx-auto mt-5 max-w-[52ch] text-[16px] leading-[1.45] text-[#5b6675] min-[1181px]:text-[18px]">
             {testimonialsSection.body}
@@ -63,7 +63,7 @@ export function Testimonials({ testimonials }: { testimonials: Testimonial[] }) 
             onBlurCapture={() => setPaused(false)}
           >
             <blockquote>
-              <p className="font-heading text-[20px] font-normal leading-[1.55] text-[#5FAF6B] sm:text-[24px] min-[1181px]:text-[28px]">
+              <p className="font-heading text-[20px] font-normal leading-[1.55] text-[var(--lw-accent)] sm:text-[24px] min-[1181px]:text-[28px]">
                 {current.quote}
               </p>
             </blockquote>

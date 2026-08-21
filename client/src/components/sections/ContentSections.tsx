@@ -29,7 +29,7 @@ export function ContentSections({
           <Heading
             className={
               live
-                ? 'font-heading text-[22px] font-normal leading-[1.25] tracking-[-1px] text-[#5FAF6B] sm:text-[28px] min-[1181px]:text-[32px]'
+                ? 'font-heading text-[22px] font-normal leading-[1.25] tracking-[-1px] text-[var(--lw-accent)] sm:text-[28px] min-[1181px]:text-[32px]'
                 : headingLevel === 2
                   ? 'text-h3'
                   : 'text-h4'
