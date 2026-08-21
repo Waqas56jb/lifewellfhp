@@ -20,7 +20,7 @@ const upserts = [
         title: 'Telehealth visits available',
         body: 'Secure video appointments for psychiatric and primary care.',
         tone: 'info',
-        active: true,
+        active: false,
         sort_order: 0,
       },
     ],
