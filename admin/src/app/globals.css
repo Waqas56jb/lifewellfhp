@@ -387,7 +387,7 @@ a {
 }
 
 @media (max-width: 720px) {
-  .content {
+.content {
     padding: 0.9rem 0.8rem 1.6rem;
     padding-bottom: max(1.6rem, env(safe-area-inset-bottom));
   }
