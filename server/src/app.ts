@@ -27,7 +27,8 @@ export function createApp(): Express {
       // This is a JSON API; it serves no HTML, so the default CSP is
       // unnecessary. The frontend sets its own.
       contentSecurityPolicy: false,
-      crossOriginResourcePolicy: { policy: 'same-site' },
+      // Public JSON API called from the marketing site on another origin.
+      crossOriginResourcePolicy: { policy: 'cross-origin' },
       referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
     })
   );
@@ -68,3 +69,6 @@ export function createApp(): Express {
 
   return app;
 }
+
+const app = createApp();
+export default app;

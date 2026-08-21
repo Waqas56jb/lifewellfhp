@@ -16,6 +16,13 @@ import { supabaseConfigured } from '../lib/supabase.js';
 
 export const router: Router = Router();
 
+router.get('/', (_req, res) => {
+  res.json({
+    status: 'ok',
+    service: 'LifeWell API',
+  });
+});
+
 router.get('/health', (_req, res) => {
   res.json({
     status: 'ok',
