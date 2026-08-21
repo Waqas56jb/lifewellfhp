@@ -1,5 +1,5 @@
 export const PUBLIC_SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || 'https://www.lifewellfhp.com';
+  process.env.NEXT_PUBLIC_SITE_URL || 'https://lifewellfhp.com';
 
 export function publicAssetUrl(url: string | null | undefined): string {
   if (!url) return '';

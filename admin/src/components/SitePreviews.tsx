@@ -112,7 +112,7 @@ export function SeoPreview({
   ogImage?: string | null;
   noindex?: boolean;
 }) {
-  const url = `www.lifewellfhp.com${path || '/'}`;
+  const url = `lifewellfhp.com${path || '/'}`;
   return (
     <div className="seo-mock">
       {noindex ? <p className="preview-place warn">Hidden from Google (noindex).</p> : null}

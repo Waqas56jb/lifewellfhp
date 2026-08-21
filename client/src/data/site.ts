@@ -16,7 +16,7 @@ export const site = {
     'LifeWell Family Health & Psychiatry provides compassionate, secure telehealth mental health care tailored to your individual needs.',
 
   /** Production origin. Override with NEXT_PUBLIC_SITE_URL at build time. */
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.lifewellfhp.com',
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://lifewellfhp.com',
   locale: 'en_US',
   language: 'en-US',
 
