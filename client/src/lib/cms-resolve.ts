@@ -64,14 +64,30 @@ export type ResolvedContent = {
     title?: string | null;
     bio?: string | null;
     photoUrl?: string | null;
+    education: string[];
+    certifications: string[];
   } | null;
   locations: {
     name: string;
     phone?: string | null;
     email?: string | null;
     address?: string | null;
+    street?: string | null;
+    city?: string | null;
+    region?: string | null;
+    postalCode?: string | null;
+    hours: string[];
     isPrimary: boolean;
   }[];
+  seoByPath: Record<
+    string,
+    {
+      title: string | null;
+      description: string | null;
+      ogImageUrl: string | null;
+      noindex: boolean;
+    }
+  >;
   posts: {
     slug: string;
     title: string;
@@ -381,6 +397,21 @@ function mapSettings(cms: PublicCmsPayload | null) {
   };
 }
 
+function stringList(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  return value.filter((item): item is string => typeof item === 'string' && item.trim().length > 0);
+}
+
+function hoursLines(value: unknown): string[] {
+  if (Array.isArray(value)) return stringList(value);
+  if (value && typeof value === 'object') {
+    return Object.values(value as Record<string, unknown>).filter(
+      (item): item is string => typeof item === 'string' && item.trim().length > 0
+    );
+  }
+  return [];
+}
+
 function mapProvider(cms: PublicCmsPayload | null) {
   const rows = (cms?.providers ?? []) as {
     name?: string;
@@ -388,6 +419,8 @@ function mapProvider(cms: PublicCmsPayload | null) {
     title?: string | null;
     bio?: string | null;
     photo_url?: string | null;
+    education?: unknown;
+    certifications?: unknown;
     published?: boolean;
   }[];
   const row = rows.find((r) => r.published !== false && r.name);
@@ -398,6 +431,8 @@ function mapProvider(cms: PublicCmsPayload | null) {
     title: row.title ?? null,
     bio: row.bio ?? null,
     photoUrl: row.photo_url ?? null,
+    education: stringList(row.education),
+    certifications: stringList(row.certifications),
   };
 }
 
@@ -407,9 +442,11 @@ function mapLocations(cms: PublicCmsPayload | null) {
     phone?: string | null;
     email?: string | null;
     address_line1?: string | null;
+    address_line2?: string | null;
     city?: string | null;
     state?: string | null;
     postal_code?: string | null;
+    hours?: unknown;
     is_primary?: boolean;
     published?: boolean;
   }[];
@@ -419,9 +456,36 @@ function mapLocations(cms: PublicCmsPayload | null) {
       name: String(r.name),
       phone: r.phone ?? null,
       email: r.email ?? null,
-      address: [r.address_line1, r.city, r.state, r.postal_code].filter(Boolean).join(', ') || null,
+      street: [r.address_line1, r.address_line2].filter(Boolean).join(', ') || null,
+      city: r.city ?? null,
+      region: r.state ?? null,
+      postalCode: r.postal_code ?? null,
+      address: [r.address_line1, r.address_line2, r.city, r.state, r.postal_code].filter(Boolean).join(', ') || null,
+      hours: hoursLines(r.hours),
       isPrimary: Boolean(r.is_primary),
     }));
+}
+
+function mapSeo(cms: PublicCmsPayload | null) {
+  const rows = (cms?.seo ?? []) as {
+    path?: string;
+    title?: string | null;
+    description?: string | null;
+    og_image_url?: string | null;
+    noindex?: boolean;
+  }[];
+  const seoByPath: ResolvedContent['seoByPath'] = {};
+  for (const row of rows) {
+    const path = typeof row.path === 'string' ? row.path : '';
+    if (!path) continue;
+    seoByPath[path] = {
+      title: row.title ? String(row.title) : null,
+      description: row.description ? String(row.description) : null,
+      ogImageUrl: row.og_image_url ? String(row.og_image_url) : null,
+      noindex: Boolean(row.noindex),
+    };
+  }
+  return seoByPath;
 }
 
 function mapPosts(cms: PublicCmsPayload | null) {
@@ -555,5 +619,6 @@ export const getResolvedContent = cache(async (): Promise<ResolvedContent> => {
     locations: mapLocations(cms),
     posts: mapPosts(cms),
     serviceDetails: mapServiceDetails(cms),
+    seoByPath: mapSeo(cms),
   };
 });

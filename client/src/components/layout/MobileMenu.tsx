@@ -22,6 +22,7 @@ interface MobileMenuProps {
   items: NavItem[];
   cta: NavLink;
   pathname: string;
+  phone?: string | null;
 }
 
 const FOCUSABLE =
@@ -34,9 +35,12 @@ const FOCUSABLE =
  * the trigger, and locks body scroll without the layout shift that hiding the
  * scrollbar normally causes.
  */
-export function MobileMenu({ id, open, onClose, items, cta, pathname }: MobileMenuProps) {
+export function MobileMenu({ id, open, onClose, items, cta, pathname, phone }: MobileMenuProps) {
   const panelRef = useRef<HTMLDivElement>(null);
   const previouslyFocused = useRef<HTMLElement | null>(null);
+  const displayPhone = phone || site.contact.phone;
+  const digits = displayPhone.replace(/\D/g, '').replace(/^1/, '');
+  const phoneHref = digits ? `tel:+1${digits}` : site.contact.phoneHref;
 
   useEffect(() => {
     if (!open) return;
@@ -162,10 +166,10 @@ export function MobileMenu({ id, open, onClose, items, cta, pathname }: MobileMe
             {cta.label}
           </SwapButton>
           <a
-            href={site.contact.phoneHref}
+            href={phoneHref}
             className="flex min-h-11 items-center justify-center gap-2 text-sm font-semibold text-text-link"
           >
-            Call {site.contact.phone}
+            Call {displayPhone}
           </a>
         </div>
       </div>

@@ -37,7 +37,8 @@ export async function fetchPublicCms(): Promise<PublicCmsPayload | null> {
 export async function fetchPublicBlogPost(slug: string): Promise<Record<string, unknown> | null> {
   try {
     const res = await fetch(`${API_URL}/api/public/blog/${encodeURIComponent(slug)}`, {
-      next: { revalidate: 60 },
+      cache: 'no-store',
+      next: { revalidate: 0 },
     });
     if (!res.ok) return null;
     const json = (await res.json()) as { success: boolean; data: Record<string, unknown> | null };

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Container, Section } from '@/components/ui/Section';
 import { InnerPageHero } from '@/components/sections/InnerPageHero';
-import { CTASection } from '@/components/sections/CTASection';
+import { CmsCta } from '@/components/CmsCta';
 import { pageMetadata } from '@/lib/seo';
 import { fetchPublicBlogPost } from '@/lib/cms';
 
@@ -38,7 +38,7 @@ export default async function BlogPostPage({ params }: Props) {
           </article>
         </Container>
       </Section>
-      <CTASection />
+      <CmsCta />
     </>
   );
 }

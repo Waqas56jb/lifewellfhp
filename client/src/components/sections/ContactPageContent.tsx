@@ -4,14 +4,47 @@ import { SwapButton } from '@/components/ui/SwapButton';
 import { contactPage } from '@/data/contact';
 import { site } from '@/data/site';
 
+export type ContactCms = {
+  phone: string;
+  email: string;
+  hours: string[];
+  street: string;
+  cityLine: string;
+  mapSrc: string;
+  bookingUrl: string;
+};
+
+function telHref(phone: string) {
+  const digits = phone.replace(/\D/g, '').replace(/^1/, '');
+  return digits ? `tel:+1${digits}` : site.contact.phoneHref;
+}
+
 /**
  * /contact-telehealth-mental-health-provider — Elementor post 50990:
  * hero card (copy left, photo right), contact + map, ask-a-question form.
  */
-export function ContactPageContent() {
+export function ContactPageContent({ contact }: { contact?: ContactCms } = {}) {
+  const phone = contact?.phone || site.contact.phone;
+  const email = contact?.email || site.contact.email;
+  const hours = contact?.hours?.length ? contact.hours : contactPage.hours;
+  const street = contact?.street || site.address.street;
+  const cityLine =
+    contact?.cityLine || `${site.address.city}, ${site.address.region} ${site.address.postalCode}`;
+  const mapSrc = contact?.mapSrc || contactPage.mapSrc;
+  const bookingUrl = contact?.bookingUrl || site.booking.page;
+  const phoneHref = telHref(phone);
+  const emailHref = `mailto:${email}`;
+  const smsHref = phoneHref.replace('tel:', 'sms:');
+
   return (
     <div className="bg-white">
-      <ContactHero />
+      <ContactHero
+        phone={phone}
+        phoneHref={phoneHref}
+        emailHref={emailHref}
+        smsHref={smsHref}
+        bookingUrl={bookingUrl}
+      />
 
       <section className="px-5 pb-16 sm:px-[30px] sm:pb-24 lg:px-10 lg:pb-[150px] min-[1601px]:px-[80px]">
         <div className="mx-auto grid max-w-[1280px] items-stretch gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-x-10">
@@ -29,10 +62,10 @@ export function ContactPageContent() {
             </h3>
             <p className="mt-2">
               <a
-                href={site.contact.emailHref}
+                href={emailHref}
                 className="text-[14px] leading-[1.45] text-[#374151] no-underline hover:text-[var(--lw-primary)] sm:text-[16px] min-[1181px]:text-[18px]"
               >
-                {site.contact.email}
+                {email}
               </a>
             </p>
 
@@ -40,7 +73,7 @@ export function ContactPageContent() {
               Open:
             </h3>
             <div className="mt-2 space-y-1 text-[14px] leading-[1.45] text-[#374151] sm:text-[16px] min-[1181px]:text-[18px]">
-              {contactPage.hours.map((line) => (
+              {hours.map((line) => (
                 <p key={line}>{line}</p>
               ))}
             </div>
@@ -51,17 +84,17 @@ export function ContactPageContent() {
             <address className="mt-2 not-italic text-[14px] leading-[1.45] text-[#374151] sm:text-[16px] min-[1181px]:text-[18px]">
               <p className="font-semibold">Mailing</p>
               <p className="mt-1">
-                {site.address.street}
+                {street}
                 <br />
-                {site.address.city}, {site.address.region} {site.address.postalCode}
+                {cityLine}
               </p>
             </address>
           </div>
 
           <div className="min-h-[320px] overflow-hidden rounded-[20px] sm:min-h-[420px] lg:min-h-[520px]">
             <iframe
-              title={`${site.address.street}, ${site.address.city}, ${site.address.region}`}
-              src={contactPage.mapSrc}
+              title={`${street}, ${cityLine}`}
+              src={mapSrc}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               className="h-full min-h-[320px] w-full border-0 sm:min-h-[420px] lg:min-h-[520px]"
@@ -100,7 +133,19 @@ export function ContactPageContent() {
   );
 }
 
-function ContactHero() {
+function ContactHero({
+  phone,
+  phoneHref,
+  emailHref,
+  smsHref,
+  bookingUrl,
+}: {
+  phone: string;
+  phoneHref: string;
+  emailHref: string;
+  smsHref: string;
+  bookingUrl: string;
+}) {
   return (
     <section className="px-5 pb-16 pt-4 sm:px-[30px] sm:pb-24 lg:px-10 lg:pb-[150px] min-[1601px]:px-[80px]">
       <div className="mx-auto flex max-w-[1840px] flex-col overflow-hidden rounded-[20px] bg-[#EEF3F7] sm:rounded-[30px] lg:min-h-[570px] lg:flex-row">
@@ -117,32 +162,32 @@ function ContactHero() {
 
           <ul className="flex flex-wrap gap-[15px]">
             <li>
-              <HeroAction href={site.contact.phoneHref} variant="solid" icon="call">
+              <HeroAction href={phoneHref} variant="solid" icon="call">
                 Call
               </HeroAction>
             </li>
             <li>
-              <HeroAction href={site.contact.smsHref} variant="ghost" icon="text" iconEnd>
+              <HeroAction href={smsHref} variant="ghost" icon="text" iconEnd>
                 Text
               </HeroAction>
             </li>
             <li>
-              <HeroAction href={site.contact.emailHref} variant="ghost" icon="email" iconEnd>
+              <HeroAction href={emailHref} variant="ghost" icon="email" iconEnd>
                 Email
               </HeroAction>
             </li>
           </ul>
 
           <div>
-            <SwapButton href={site.booking.page}>Book a Session</SwapButton>
+            <SwapButton href={bookingUrl}>Book a Session</SwapButton>
           </div>
 
-          <a href={site.contact.phoneHref} className="no-underline">
+          <a href={phoneHref} className="no-underline">
             <p className="font-body text-[11px] font-semibold uppercase tracking-[1px] text-[#374151] sm:text-[12px] min-[1181px]:text-[13px]">
               Give Us a Call:
             </p>
             <p className="mt-1 font-heading text-[20px] font-medium italic leading-[1.3] tracking-[-1px] text-[var(--lw-primary)] transition-colors duration-300 hover:text-[#4A8F55] sm:text-[24px] min-[1181px]:text-[26px]">
-              {contactPage.phoneDisplay}
+              {phone}
             </p>
           </a>
         </div>

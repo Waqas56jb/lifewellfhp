@@ -24,8 +24,10 @@ const LIVE_ORDER = [
  */
 export function OurServicesPageContent({
   services = serviceSummaries,
+  bookingUrl,
 }: {
   services?: typeof serviceSummaries;
+  bookingUrl?: string;
 }) {
   const bySlug = new Map(services.map((s) => [s.slug, s]));
   const ordered = LIVE_ORDER.map((slug) => bySlug.get(slug)).filter(Boolean) as typeof serviceSummaries;
@@ -53,6 +55,7 @@ export function OurServicesPageContent({
       </section>
 
       <JourneyCta
+        href={bookingUrl}
         image={{
           src: '/images/sections/Online-Mental-Health-Services.avif',
           alt: 'Online Mental Health Services',

@@ -20,10 +20,12 @@ export function NavBar({
   items,
   cta,
   overlay = false,
+  phone,
 }: {
   items: NavItem[];
   cta: NavLink;
   overlay?: boolean;
+  phone?: string | null;
 }) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -161,6 +163,7 @@ export function NavBar({
         items={items}
         cta={cta}
         pathname={pathname}
+        phone={phone}
       />
     </div>
   );

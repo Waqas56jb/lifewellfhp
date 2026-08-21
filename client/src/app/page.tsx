@@ -13,17 +13,20 @@ import { ContactCTA } from '@/components/sections/CTASection';
 import { VideosSection } from '@/components/sections/VideosSection';
 
 import { site } from '@/data/site';
-import { pageMetadata } from '@/lib/seo';
+import { cmsMetadata } from '@/lib/cms-seo';
 import { getResolvedContent } from '@/lib/cms-resolve';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-export const metadata: Metadata = pageMetadata({
-  title: 'Telehealth Mental Health Care | PMHNP Online Therapy & Medication Management',
-  description: site.description,
-  path: '/',
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const cms = await getResolvedContent();
+  return cmsMetadata(cms, {
+    title: 'Telehealth Mental Health Care | PMHNP Online Therapy & Medication Management',
+    description: site.description,
+    path: '/',
+  });
+}
 
 /**
  * Homepage.

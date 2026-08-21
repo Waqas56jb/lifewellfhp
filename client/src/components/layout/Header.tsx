@@ -17,10 +17,12 @@ export function Header({
   cta,
   logoUrl,
   notices = [],
+  phone,
 }: {
   cta?: { label: string; href: string };
   logoUrl?: string | null;
   notices?: { title: string; body: string; tone: string }[];
+  phone?: string | null;
 } = {}) {
   const pathname = usePathname();
   const isHome = pathname === '/';
@@ -88,7 +90,7 @@ export function Header({
           )}
         </Link>
 
-        <NavBar items={headerNav} cta={button} overlay={overlay} />
+        <NavBar items={headerNav} cta={button} overlay={overlay} phone={phone} />
       </div>
     </header>
   );

@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { Container, Section } from '@/components/ui/Section';
 import { Button } from '@/components/ui/Button';
 import { Breadcrumbs } from '@/components/sections/PageHero';
-import { CTASection } from '@/components/sections/CTASection';
+import { CmsCta } from '@/components/CmsCta';
 import { JsonLd } from '@/components/seo/JsonLd';
 
 import { getPost, postSlugs } from '@/data/blog';
@@ -165,7 +165,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         </Container>
       </Section>
 
-      <CTASection />
+      <CmsCta />
     </>
   );
 }

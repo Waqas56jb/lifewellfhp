@@ -5,26 +5,28 @@ import Link from 'next/link';
 import { Container, Section } from '@/components/ui/Section';
 import { Button } from '@/components/ui/Button';
 import { InnerPageHero } from '@/components/sections/InnerPageHero';
-import { CTASection } from '@/components/sections/CTASection';
 import { JsonLd } from '@/components/seo/JsonLd';
 
 import { publishedPosts } from '@/data/blog';
 import { serviceSummaries } from '@/data/service-catalog';
 import { formatDate, isoDate } from '@/lib/utils';
-import { pageMetadata } from '@/lib/seo';
+import { cmsMetadata } from '@/lib/cms-seo';
 import { pageGraph } from '@/lib/schema';
 import { getResolvedContent } from '@/lib/cms-resolve';
+import { CmsCta } from '@/components/CmsCta';
 
 const DESCRIPTION =
   'Mental health and wellness articles from LifeWell Family Health & Psychiatry — practical guidance on anxiety, depression, ADHD, sleep and living well.';
 
-export const metadata: Metadata = pageMetadata({
-  title: 'Blog — Mental Health & Wellness Insights',
-  description: DESCRIPTION,
-  path: '/blog',
-  // Nothing is publishable yet; see data/blog.ts.
-  noIndex: publishedPosts.length === 0,
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const cms = await getResolvedContent();
+  return cmsMetadata(cms, {
+    title: 'Blog — Mental Health & Wellness Insights',
+    description: DESCRIPTION,
+    path: '/blog',
+    noIndex: cms.posts.length === 0 && publishedPosts.length === 0,
+  });
+}
 
 /**
  * Blog index.
@@ -136,7 +138,7 @@ export default async function BlogIndexPage() {
         </Container>
       </Section>
 
-      <CTASection />
+      <CmsCta />
     </>
   );
 }

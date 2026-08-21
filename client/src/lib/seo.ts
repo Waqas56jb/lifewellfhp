@@ -14,7 +14,7 @@ export const DEFAULT_OG_IMAGE = {
   alt: 'LifeWell Family Health & Psychiatry — telehealth mental health care',
 };
 
-interface PageMetaInput {
+export interface PageMetaInput {
   title: string;
   description: string;
   path: string;

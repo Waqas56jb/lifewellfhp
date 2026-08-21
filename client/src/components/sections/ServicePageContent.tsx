@@ -37,6 +37,8 @@ export async function ServicePageContent({ slug }: { slug: string }) {
     .split(/\n+/)
     .map((p) => p.trim())
     .filter(Boolean);
+  const bodyParagraphs = cmsParagraphs.length ? cmsParagraphs : service?.intro ?? [];
+  const bookHref = cms.booking.page || site.booking.page;
 
   return (
     <div className="bg-white">
@@ -52,23 +54,12 @@ export async function ServicePageContent({ slug }: { slug: string }) {
         <div className="mx-auto grid max-w-[1840px] items-start gap-12 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-16 min-[1601px]:grid-cols-[minmax(0,1fr)_24rem] min-[1601px]:gap-20">
           <article className="min-w-0">
             <h2 className="font-heading text-[28px] font-normal leading-[1.2] tracking-[-1px] text-[var(--lw-accent)] sm:text-[36px] min-[1181px]:text-[42px]">
-              {service?.lead || title}
+              {lead || title}
             </h2>
 
-            {service?.intro.length ? (
+            {bodyParagraphs.length ? (
               <div className="mt-6 space-y-5">
-                {service.intro.map((paragraph) => (
-                  <p
-                    key={paragraph.slice(0, 40)}
-                    className="text-[16px] leading-[1.45] text-[#374151] min-[1181px]:text-[18px]"
-                  >
-                    {paragraph}
-                  </p>
-                ))}
-              </div>
-            ) : cmsParagraphs.length ? (
-              <div className="mt-6 space-y-5">
-                {cmsParagraphs.map((paragraph) => (
+                {bodyParagraphs.map((paragraph) => (
                   <p
                     key={paragraph.slice(0, 40)}
                     className="text-[16px] leading-[1.45] text-[#374151] min-[1181px]:text-[18px]"
@@ -79,7 +70,9 @@ export async function ServicePageContent({ slug }: { slug: string }) {
               </div>
             ) : null}
 
-            {service ? <ContentSections sections={service.sections} variant="live" className="mt-12" /> : null}
+            {!cmsParagraphs.length && service ? (
+              <ContentSections sections={service.sections} variant="live" className="mt-12" />
+            ) : null}
 
             {service?.cta && (
               <div className="mt-14 rounded-[20px] bg-[#EEF3F7] px-6 py-8 sm:px-8 sm:py-10">
@@ -95,7 +88,7 @@ export async function ServicePageContent({ slug }: { slug: string }) {
                   </p>
                 ))}
                 <div className="mt-7">
-                  <SwapButton href={cms.booking.page || site.booking.page}>
+                  <SwapButton href={bookHref}>
                     {title.length > 42 ? 'Start Your Care Today' : `Schedule Your ${title} Today`}
                   </SwapButton>
                 </div>
@@ -123,7 +116,7 @@ export async function ServicePageContent({ slug }: { slug: string }) {
                 telehealth support tailored to your needs.
               </p>
               <div className="mt-6">
-                <SwapButton href={site.booking.page} size="sm">
+                <SwapButton href={bookHref} size="sm">
                   Start Your Care Today
                 </SwapButton>
               </div>
@@ -132,7 +125,7 @@ export async function ServicePageContent({ slug }: { slug: string }) {
         </div>
       </section>
 
-      <BenefitsGrid heading="Why Patients Choose Our Telehealth Clinic" tone="base" />
+      <BenefitsGrid heading={cms.benefitsHeading} items={cms.benefits} tone="base" />
 
       {related.length > 0 && (
         <section className="px-5 py-16 sm:px-[30px] sm:py-24 lg:px-10 lg:py-[150px] min-[1601px]:px-[80px]">

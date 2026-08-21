@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { FeesPageContent } from '@/components/sections/FeesPageContent';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { feesIntro } from '@/data/pricing';
-import { pageMetadata } from '@/lib/seo';
+import { cmsMetadata } from '@/lib/cms-seo';
 import { pageGraph } from '@/lib/schema';
 
 import { getResolvedContent } from '@/lib/cms-resolve';
@@ -11,17 +11,20 @@ import { getResolvedContent } from '@/lib/cms-resolve';
 const DESCRIPTION =
   'Transparent telehealth fees and insurance information — self-pay rates for mental health, primary care and weight management, plus accepted plans and superbill details.';
 
-export const metadata: Metadata = pageMetadata({
-  title: 'Fees & Insurance — Transparent Telehealth Pricing',
-  description: DESCRIPTION,
-  path: '/fees-insurance',
-  image: {
-    url: feesIntro.image.src,
-    width: feesIntro.image.width,
-    height: feesIntro.image.height,
-    alt: feesIntro.image.alt,
-  },
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const cms = await getResolvedContent();
+  return cmsMetadata(cms, {
+    title: 'Fees & Insurance — Transparent Telehealth Pricing',
+    description: DESCRIPTION,
+    path: '/fees-insurance',
+    image: {
+      url: feesIntro.image.src,
+      width: feesIntro.image.width,
+      height: feesIntro.image.height,
+      alt: feesIntro.image.alt,
+    },
+  });
+}
 
 export default async function FeesInsurancePage() {
   const cms = await getResolvedContent();

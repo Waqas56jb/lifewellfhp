@@ -19,8 +19,10 @@ const DISPLAY_NAME: Record<string, string> = {
  */
 export function TestimonialsPageContent({
   testimonials = staticTestimonials,
+  bookingUrl,
 }: {
   testimonials?: Testimonial[];
+  bookingUrl?: string;
 }) {
   const PAGE_QUOTES = testimonials.length > 1 ? testimonials.slice(1) : testimonials;
   return (
@@ -79,6 +81,7 @@ export function TestimonialsPageContent({
       </section>
 
       <JourneyCta
+        href={bookingUrl}
         image={{
           src: testimonialsSection.image.src,
           alt: '',

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 
 import { FaqsPageContent } from '@/components/sections/FaqsPageContent';
 import { JsonLd } from '@/components/seo/JsonLd';
-import { pageMetadata } from '@/lib/seo';
+import { cmsMetadata } from '@/lib/cms-seo';
 import { faqGraph } from '@/lib/schema';
 import { getResolvedContent } from '@/lib/cms-resolve';
 
@@ -13,11 +13,14 @@ import { getResolvedContent } from '@/lib/cms-resolve';
 const DESCRIPTION =
   'Answers to common questions about telehealth mental health care — how appointments work, insurance and fees, confidentiality, what you need for a visit, and rescheduling.';
 
-export const metadata: Metadata = pageMetadata({
-  title: 'Frequently Asked Questions — Telehealth Mental Health Care',
-  description: DESCRIPTION,
-  path: '/faqs',
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const cms = await getResolvedContent();
+  return cmsMetadata(cms, {
+    title: 'Frequently Asked Questions — Telehealth Mental Health Care',
+    description: DESCRIPTION,
+    path: '/faqs',
+  });
+}
 
 export default async function FaqsPage() {
   const cms = await getResolvedContent();

@@ -8,6 +8,7 @@ export async function SiteHeader() {
       cta={{ label: cms.settings.headerCtaLabel, href: cms.settings.headerCtaUrl }}
       logoUrl={cms.settings.logoUrl}
       notices={cms.announcements}
+      phone={cms.settings.practicePhone || cms.locations.find((row) => row.isPrimary)?.phone || cms.locations[0]?.phone}
     />
   );
 }

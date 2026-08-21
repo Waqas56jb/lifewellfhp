@@ -6,7 +6,7 @@ import { JsonLd } from '@/components/seo/JsonLd';
 
 import { getService } from '@/data/services';
 import { getServiceSummary, serviceSlugs } from '@/data/service-catalog';
-import { pageMetadata } from '@/lib/seo';
+import { cmsMetadata } from '@/lib/cms-seo';
 import { serviceGraph } from '@/lib/schema';
 import { getResolvedContent } from '@/lib/cms-resolve';
 
@@ -33,7 +33,7 @@ export async function generateMetadata({
   const text = detail?.seoDescription || summary?.description || '';
   const description = text.length > 158 ? `${text.slice(0, 155).trimEnd()}…` : text;
 
-  return pageMetadata({
+  return cmsMetadata(cms, {
     title: detail?.seoTitle || `${summary?.title || service?.title} | Telehealth`,
     description,
     path: `/services/${slug}`,

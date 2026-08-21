@@ -13,15 +13,29 @@ import { StatsBand } from '@/components/sections/StatsBand';
  */
 export function BioPageContent({
   overlay,
+  testimonials: cmsTestimonials,
+  stats: cmsStats,
+  bookingUrl,
+  phone,
+  email,
 }: {
   overlay?: {
     name?: string;
     credentials?: string;
+    title?: string | null;
     bio?: string | null;
     photoUrl?: string | null;
+    education?: string[];
+    certifications?: string[];
   };
+  testimonials?: typeof testimonials;
+  stats?: typeof stats;
+  bookingUrl?: string;
+  phone?: string | null;
+  email?: string | null;
 } = {}) {
-  const featured = testimonials.slice(0, 3);
+  const featured = (cmsTestimonials?.length ? cmsTestimonials : testimonials).slice(0, 3);
+  const bookHref = bookingUrl || site.booking.page;
   const display = {
     name: overlay?.name || provider.name,
     credentials: overlay?.credentials || provider.credentials,
@@ -30,10 +44,14 @@ export function BioPageContent({
       : provider.bio,
     photo: overlay?.photoUrl || provider.image.src,
   };
+  const education =
+    overlay?.education?.length ? overlay.education.join(' · ') : providerPage.educationBlurb;
+  const board =
+    overlay?.certifications?.length ? overlay.certifications.join(' · ') : providerPage.boardBlurb;
 
   return (
     <div className="bg-white">
-      <BioHero overlay={display} />
+      <BioHero overlay={display} phone={phone} email={email} />
 
       <section className="pb-16 sm:pb-24 lg:pb-[150px]">
         <Container>
@@ -46,7 +64,7 @@ export function BioPageContent({
                 {providerPage.consultation.body}
               </p>
               <div className="mt-8 flex justify-center">
-                <SwapButton href={site.booking.page}>{providerPage.consultation.cta.label}</SwapButton>
+                <SwapButton href={bookHref}>{providerPage.consultation.cta.label}</SwapButton>
               </div>
             </aside>
 
@@ -67,8 +85,8 @@ export function BioPageContent({
               </h3>
 
               <dl className="mt-8">
-                <CredentialRow title="Education" body={providerPage.educationBlurb} />
-                <CredentialRow title="Board certification" body={providerPage.boardBlurb} />
+                <CredentialRow title="Education" body={education} />
+                <CredentialRow title="Board certification" body={board} />
                 <CredentialRow title="Field of expertise" body={providerPage.expertiseBlurb} />
                 <CredentialRow title="Years of practice" body={providerPage.yearsBlurb} last />
               </dl>
@@ -80,7 +98,7 @@ export function BioPageContent({
                 {providerPage.shifts.map((shift) => (
                   <li key={shift.day}>
                     <a
-                      href={site.booking.page}
+                      href={bookHref}
                       className="flex flex-col items-center rounded-[15px] bg-[var(--lw-accent)] px-6 py-8 text-center no-underline transition-transform duration-300 hover:-translate-y-2.5"
                     >
                       <span className="text-[16px] font-semibold leading-snug text-white sm:text-[18px]">
@@ -172,17 +190,25 @@ export function BioPageContent({
         </Container>
       </section>
 
-      <StatsBand stats={stats} />
+      <StatsBand stats={cmsStats?.length ? cmsStats : stats} bookingUrl={bookHref} />
     </div>
   );
 }
 
 function BioHero({
   overlay,
+  phone,
+  email,
 }: {
   overlay: { name: string; credentials: string; photo: string };
+  phone?: string | null;
+  email?: string | null;
 }) {
   const remotePhoto = overlay.photo.startsWith('http');
+  const displayPhone = phone || site.contact.phone;
+  const displayEmail = email || site.contact.email;
+  const digits = displayPhone.replace(/\D/g, '').replace(/^1/, '');
+  const phoneHref = digits ? `tel:+1${digits}` : site.contact.phoneHref;
   return (
     <section className="px-5 pb-16 pt-4 sm:px-[30px] sm:pb-24 lg:px-10 lg:pb-[150px] min-[1601px]:px-[80px]">
       <div className="mx-auto flex max-w-[1840px] flex-col-reverse overflow-hidden rounded-[20px] sm:rounded-[30px] lg:min-h-[570px] lg:flex-row">
@@ -197,10 +223,10 @@ function BioHero({
           <ul className="w-full max-w-[28rem]">
             <li className="border-b border-[#ddd] py-[15px]">
               <a
-                href={site.contact.phoneHref}
+                href={phoneHref}
                 className="text-[16px] leading-[1.45] text-[#374151] no-underline hover:text-[var(--lw-primary)] min-[1181px]:text-[18px]"
               >
-                Phone: (407) 603 - 1717
+                Phone: {displayPhone}
               </a>
             </li>
             <li className="border-b border-[#ddd] py-[15px] text-[16px] leading-[1.45] text-[#374151] min-[1181px]:text-[18px]">
@@ -208,10 +234,10 @@ function BioHero({
             </li>
             <li className="py-[15px]">
               <a
-                href={site.contact.emailHref}
+                href={`mailto:${displayEmail}`}
                 className="text-[16px] leading-[1.45] text-[#374151] no-underline hover:text-[var(--lw-primary)] min-[1181px]:text-[18px]"
               >
-                Email: {site.contact.email}
+                Email: {displayEmail}
               </a>
             </li>
           </ul>

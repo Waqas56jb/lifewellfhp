@@ -51,6 +51,17 @@ export async function Footer() {
               </p>
 
               <address className="mt-5 space-y-1.5 font-body text-[15px] font-normal not-italic leading-relaxed text-white sm:text-[16px]">
+                {primary?.street || primary?.address ? (
+                  <p>
+                    {primary.street || primary.address}
+                    {primary.city ? (
+                      <>
+                        <br />
+                        {[primary.city, primary.region, primary.postalCode].filter(Boolean).join(', ')}
+                      </>
+                    ) : null}
+                  </p>
+                ) : null}
                 <p>
                   Phone:-{' '}
                   <a href={phoneHref} className="text-white no-underline hover:underline">
