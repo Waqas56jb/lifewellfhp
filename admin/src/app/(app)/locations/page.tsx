@@ -28,6 +28,7 @@ export default function Page() {
         { key: 'postal_code', label: 'Postal code' },
         { key: 'phone', label: 'Phone' },
         { key: 'email', label: 'Email' },
+        { key: 'hours', label: 'Hours (JSON)', type: 'json', full: true },
         { key: 'is_primary', label: 'Primary location', type: 'checkbox' },
         { key: 'published', label: 'Published', type: 'checkbox' },
       ]}

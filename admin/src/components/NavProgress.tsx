@@ -76,13 +76,8 @@ export function NavOverlay() {
   if (!pendingHref) return null;
 
   return (
-    <>
-      <div className="nav-progress" role="progressbar" aria-label="Loading page">
-        <span />
-      </div>
-      <div className="nav-overlay" role="status" aria-live="polite">
-        <PageLoader />
-      </div>
-    </>
+    <div className="nav-overlay" role="status" aria-live="polite">
+      <PageLoader />
+    </div>
   );
 }

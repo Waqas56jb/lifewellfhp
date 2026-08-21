@@ -13,7 +13,6 @@ import { ContactCTA } from '@/components/sections/CTASection';
 import { SiteNotice } from '@/components/sections/SiteNotice';
 import { VideosSection } from '@/components/sections/VideosSection';
 
-import { servicesSection, stats } from '@/data/marketing';
 import { site } from '@/data/site';
 import { pageMetadata } from '@/lib/seo';
 import { getResolvedContent } from '@/lib/cms-resolve';
@@ -41,11 +40,11 @@ export default async function HomePage() {
       <Section tone="raised" aria-labelledby="services-heading">
         <Container>
           <SectionHeading
-            eyebrow={servicesSection.eyebrow}
+            eyebrow={cms.servicesIntro.eyebrow}
             eyebrowVariant="badge"
             title="How I"
             accent="Help"
-            description={servicesSection.body}
+            description={cms.servicesIntro.body}
             descriptionClassName="mt-6 max-w-[42ch] text-[18px] leading-[1.35] text-[#374151] sm:text-[20px] min-[1181px]:text-[22px]"
             id="services-heading"
             align="center"
@@ -56,14 +55,20 @@ export default async function HomePage() {
             className="mt-10 md:mt-[60px] min-[1181px]:mt-20"
           />
           <div className="mt-10 flex justify-center md:mt-[60px] min-[1181px]:mt-20">
-            <SwapButton href={servicesSection.cta.href}>{servicesSection.cta.label}</SwapButton>
+            <SwapButton href="/our-services">{cms.servicesIntro.cta}</SwapButton>
           </div>
         </Container>
       </Section>
 
-      <BenefitsGrid />
-      <HowItWorks bookingUrl={cms.booking.url} />
-      <StatsBand stats={stats} bookingUrl={cms.booking.url} />
+      <BenefitsGrid heading={cms.benefitsHeading} items={cms.benefits} />
+      <HowItWorks
+        bookingUrl={cms.booking.url}
+        heading={cms.howItWorks.heading}
+        eyebrow={cms.howItWorks.eyebrow}
+        body={cms.howItWorks.body}
+        steps={cms.steps}
+      />
+      <StatsBand stats={cms.stats} bookingUrl={cms.booking.url} />
       <InsuranceGrid showCta={false} showDisclaimer={false} carriers={cms.insurance} />
       <Testimonials testimonials={cms.testimonials} />
       <VideosSection videos={cms.videos} />

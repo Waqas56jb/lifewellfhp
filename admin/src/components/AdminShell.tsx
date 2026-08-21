@@ -140,8 +140,7 @@ function AdminShellInner({ children }: { children: ReactNode }) {
         </div>
       </aside>
 
-      <div className="main" ref={mainRef}>
-        <NavOverlay />
+      <div className="main">
         <header className="topbar">
           <div className="topbar-left">
             {pathname !== '/' ? (
@@ -177,6 +176,7 @@ function AdminShellInner({ children }: { children: ReactNode }) {
           </div>
         </header>
         <div className="content" ref={mainRef}>
+          <NavOverlay />
           <div className="content-inner">{children}</div>
         </div>
       </div>

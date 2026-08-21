@@ -6,6 +6,8 @@ import { feesIntro } from '@/data/pricing';
 import { pageMetadata } from '@/lib/seo';
 import { pageGraph } from '@/lib/schema';
 
+import { getResolvedContent } from '@/lib/cms-resolve';
+
 const DESCRIPTION =
   'Transparent telehealth fees and insurance information — self-pay rates for mental health, primary care and weight management, plus accepted plans and superbill details.';
 
@@ -21,7 +23,8 @@ export const metadata: Metadata = pageMetadata({
   },
 });
 
-export default function FeesInsurancePage() {
+export default async function FeesInsurancePage() {
+  const cms = await getResolvedContent();
   return (
     <>
       <JsonLd
@@ -31,7 +34,11 @@ export default function FeesInsurancePage() {
         ])}
         id="fees-schema"
       />
-      <FeesPageContent />
+      <FeesPageContent
+        carriers={cms.insurance}
+        faqs={cms.feesFaqs}
+        bookingUrl={cms.booking.url}
+      />
     </>
   );
 }

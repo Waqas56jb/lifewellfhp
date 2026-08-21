@@ -25,6 +25,8 @@ export default function Page() {
         { key: 'title', label: 'Title / role' },
         { key: 'photo_url', label: 'Photo URL', type: 'url', full: true },
         { key: 'bio', label: 'Biography', type: 'textarea', full: true },
+        { key: 'education', label: 'Education (JSON list)', type: 'json', full: true },
+        { key: 'certifications', label: 'Certifications (JSON list)', type: 'json', full: true },
         { key: 'sort_order', label: 'Sort order', type: 'number' },
         { key: 'published', label: 'Published', type: 'checkbox' },
       ]}

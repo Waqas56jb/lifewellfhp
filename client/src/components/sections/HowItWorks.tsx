@@ -12,12 +12,16 @@ import { site } from '@/data/site';
 export function HowItWorks({
   steps = defaultSteps,
   heading = howItWorks.heading,
+  eyebrow = howItWorks.eyebrow,
+  body = howItWorks.body,
   tone = 'transparent',
   showCta = true,
   bookingUrl,
 }: {
   steps?: Step[];
   heading?: string;
+  eyebrow?: string;
+  body?: string;
   tone?: 'base' | 'muted' | 'raised' | 'transparent';
   showCta?: boolean;
   bookingUrl?: string;
@@ -35,7 +39,7 @@ export function HowItWorks({
       <Container>
         <div className="flex flex-col items-center text-center">
           <p className="mb-3 text-[11px] font-semibold uppercase tracking-[1px] text-[#5FAF6B] sm:text-[12px] min-[1181px]:text-[13px]">
-            {howItWorks.eyebrow}
+            {eyebrow}
           </p>
           <h2
             id="how-it-works-heading"
@@ -51,7 +55,7 @@ export function HowItWorks({
             )}
           </h2>
           <p className="mt-6 max-w-[46ch] font-body text-[16px] leading-[1.45] text-[#374151] sm:max-w-none sm:text-[18px] min-[1181px]:text-[22px] min-[1181px]:leading-[1.35]">
-            {howItWorks.body}
+            {body}
           </p>
         </div>
 

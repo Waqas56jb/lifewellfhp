@@ -1,5 +1,23 @@
--- LifeWell admin ops: notifications, outbound email log, site appearance.
+-- LifeWell admin ops: notifications, audit trail, email log, site appearance.
 -- Run this in the Supabase SQL editor if tables are missing.
+
+create table if not exists admin_audit_logs (
+  id uuid primary key default gen_random_uuid(),
+  actor_id uuid,
+  actor_email text,
+  actor_name text,
+  action text not null,
+  resource text not null,
+  resource_id text,
+  summary text not null,
+  meta jsonb not null default '{}'::jsonb,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists admin_audit_logs_created_idx on admin_audit_logs (created_at desc);
+create index if not exists admin_audit_logs_actor_idx on admin_audit_logs (actor_email);
+
+alter table admin_audit_logs enable row level security;
 
 create table if not exists admin_notifications (
   id uuid primary key default gen_random_uuid(),
@@ -61,3 +79,5 @@ alter table site_settings add column if not exists inbox_email text;
 alter table admin_notifications enable row level security;
 alter table email_messages enable row level security;
 alter table site_settings enable row level security;
+
+notify pgrst, 'reload schema';

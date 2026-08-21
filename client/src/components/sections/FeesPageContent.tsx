@@ -15,12 +15,22 @@ import {
 } from '@/data/pricing';
 import { site } from '@/data/site';
 import { formatPrice } from '@/lib/utils';
+import type { Faq, InsuranceCarrier } from '@/types/content';
 
 /**
  * /fees-insurance — Elementor post 50919: hero card (photo left), self-pay
  * rates, program packages, accepted plans, FAQ toggles, closing CTA.
  */
-export function FeesPageContent() {
+export function FeesPageContent({
+  carriers,
+  faqs = feesFaqs,
+  bookingUrl,
+}: {
+  carriers?: InsuranceCarrier[];
+  faqs?: Faq[];
+  bookingUrl?: string;
+} = {}) {
+  const bookHref = bookingUrl || site.booking.url;
   return (
     <div className="bg-white">
       <FeesHero />
@@ -76,7 +86,7 @@ export function FeesPageContent() {
                     </p>
                   )}
                   <div className="mt-5">
-                    <SwapButton href={site.booking.url}>Book a Session</SwapButton>
+                    <SwapButton href={bookHref}>Book a Session</SwapButton>
                   </div>
                 </article>
               </li>
@@ -121,7 +131,7 @@ export function FeesPageContent() {
                     ))}
                   </ul>
                   <div className="mt-6">
-                    <SwapButton href={site.booking.url}>Book a Session</SwapButton>
+                    <SwapButton href={bookHref}>Book a Session</SwapButton>
                   </div>
                 </article>
               </li>
@@ -155,6 +165,7 @@ export function FeesPageContent() {
         title="Accepted"
         accent="Insurance Plans"
         body="We believe in transparent and accessible care. We accept select insurance plans."
+        carriers={carriers}
       />
 
       <section className="bg-white px-5 py-16 sm:px-[30px] sm:py-24 lg:px-10 lg:py-[100px] min-[1601px]:px-[80px]" aria-labelledby="fees-faq-heading">
@@ -170,7 +181,7 @@ export function FeesPageContent() {
             <span className="italic tracking-normal text-[#3E7FB1]">About Payment &amp; Insurance</span>
           </h2>
           <div className="mx-auto mt-10 max-w-[52rem] lg:mt-14">
-            <FAQAccordion faqs={feesFaqs} variant="toggles" defaultOpen={[]} />
+            <FAQAccordion faqs={faqs} variant="toggles" defaultOpen={[]} />
           </div>
         </Container>
       </section>
@@ -186,7 +197,7 @@ export function FeesPageContent() {
               {feesClosing.body}
             </p>
             <div className="mt-8">
-              <SwapButton href={site.booking.url}>{feesClosing.cta}</SwapButton>
+              <SwapButton href={bookHref}>{feesClosing.cta}</SwapButton>
             </div>
           </div>
           <div>

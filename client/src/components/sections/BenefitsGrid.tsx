@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { Container, Section, SectionHeading } from '@/components/ui/Section';
-import { benefits, benefitsSection } from '@/data/marketing';
+import { benefits as staticBenefits, benefitsSection } from '@/data/marketing';
+import type { Benefit } from '@/types/content';
 
 /**
  * “Why Patients Choose My Telehealth Clinic”
@@ -11,9 +12,11 @@ import { benefits, benefitsSection } from '@/data/marketing';
  */
 export function BenefitsGrid({
   heading = benefitsSection.heading,
+  items = staticBenefits,
   tone = 'raised',
 }: {
   heading?: string;
+  items?: Benefit[];
   tone?: 'base' | 'muted' | 'raised';
 }) {
   const match = heading.match(/^(.*?)\s+((?:My|Our)\s+.*)$/);
@@ -31,7 +34,7 @@ export function BenefitsGrid({
         />
 
         <ul className="mt-10 flex list-none flex-col gap-2.5 min-[1181px]:mt-16">
-          {benefits.map((benefit, i) => (
+          {items.map((benefit, i) => (
             <li key={benefit.title}>
               <article className="group flex min-h-[140px] items-center gap-[15px] overflow-hidden rounded-[30px] bg-[#EEF3F7] px-5 py-5 transition-colors duration-500 hover:bg-[#5FAF6B] max-[767px]:flex-col max-[767px]:items-start sm:px-[30px] sm:py-[30px]">
                 <div className="relative flex h-[88px] w-[88px] shrink-0 items-center justify-center">

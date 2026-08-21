@@ -1,5 +1,5 @@
 import { cache } from 'react';
-import type { Faq, Testimonial, InsuranceCarrier } from '@/types/content';
+import type { Benefit, Faq, Testimonial, InsuranceCarrier, Stat, Step } from '@/types/content';
 import { fetchPublicCms, type PublicCmsPayload } from '@/lib/cms';
 import {
   faqs as staticFaqs,
@@ -7,8 +7,15 @@ import {
   insuranceCarriers as staticInsurance,
   hero as staticHero,
   welcome as staticWelcome,
+  benefits as staticBenefits,
+  benefitsSection as staticBenefitsSection,
+  howItWorks as staticHowItWorks,
+  steps as staticSteps,
+  stats as staticStats,
+  servicesSection as staticServicesSection,
 } from '@/data/marketing';
 import { site as staticSite } from '@/data/site';
+import { feesFaqs as staticFeesFaqs } from '@/data/pricing';
 import {
   homeServiceSummaries as staticHomeServices,
   serviceSummaries as staticServiceSummaries,
@@ -26,10 +33,17 @@ export type ResolvedContent = {
   hero: ResolvedHero;
   welcome: typeof staticWelcome;
   faqs: Faq[];
+  feesFaqs: Faq[];
   testimonials: Testimonial[];
   insurance: InsuranceCarrier[];
   homeServices: ServiceSummary[];
   serviceSummaries: ServiceSummary[];
+  servicesIntro: { eyebrow: string; heading: string; body: string; cta: string };
+  benefitsHeading: string;
+  benefits: Benefit[];
+  howItWorks: { eyebrow: string; heading: string; body: string };
+  steps: Step[];
+  stats: Stat[];
   booking: { url: string; label: string };
   announcements: { title: string; body: string; tone: string }[];
   videos: { title: string; url: string; provider: string; description?: string | null; embedHtml?: string | null }[];
@@ -85,15 +99,43 @@ type CmsSection = {
   published?: boolean;
 };
 
-function mapFaqs(cms: PublicCmsPayload | null): Faq[] {
-  const rows = (cms?.faqs ?? []) as { question?: string; answer?: string }[];
+function cmsLive(cms: PublicCmsPayload | null): boolean {
+  if (!cms) return false;
+  return Boolean(
+    cms.settings ||
+      cms.faqs?.length ||
+      cms.services?.length ||
+      cms.sections?.length ||
+      cms.testimonials?.length ||
+      cms.insurance?.length
+  );
+}
+
+function sectionContent(cms: PublicCmsPayload | null, page: string, key: string): Record<string, unknown> | null {
+  const sections = (cms?.sections ?? []) as CmsSection[];
+  const row = sections.find((s) => s.page_key === page && s.section_key === key && s.published !== false);
+  return row?.content && typeof row.content === 'object' ? (row.content as Record<string, unknown>) : null;
+}
+
+function mapFaqs(cms: PublicCmsPayload | null, live: boolean): Faq[] {
+  const rows = (cms?.faqs ?? []) as { question?: string; answer?: string; category?: string | null }[];
   const mapped = rows
-    .filter((r) => r.question && r.answer)
+    .filter((r) => r.question && r.answer && String(r.category || 'General') !== 'Fees')
     .map((r) => ({ question: String(r.question), answer: String(r.answer) }));
+  if (live) return mapped;
   return mapped.length ? mapped : staticFaqs;
 }
 
-function mapTestimonials(cms: PublicCmsPayload | null): Testimonial[] {
+function mapFeesFaqs(cms: PublicCmsPayload | null, live: boolean): Faq[] {
+  const rows = (cms?.faqs ?? []) as { question?: string; answer?: string; category?: string | null }[];
+  const mapped = rows
+    .filter((r) => r.question && r.answer && String(r.category || '') === 'Fees')
+    .map((r) => ({ question: String(r.question), answer: String(r.answer) }));
+  if (live) return mapped.length ? mapped : staticFeesFaqs;
+  return mapped.length ? mapped : staticFeesFaqs;
+}
+
+function mapTestimonials(cms: PublicCmsPayload | null, live: boolean): Testimonial[] {
   const rows = (cms?.testimonials ?? []) as {
     quote?: string;
     author_name?: string;
@@ -108,10 +150,11 @@ function mapTestimonials(cms: PublicCmsPayload | null): Testimonial[] {
       role: r.author_role ? String(r.author_role) : undefined,
       rating: typeof r.rating === 'number' ? r.rating : 5,
     }));
+  if (live) return mapped;
   return mapped.length ? mapped : staticTestimonials;
 }
 
-function mapInsurance(cms: PublicCmsPayload | null): InsuranceCarrier[] {
+function mapInsurance(cms: PublicCmsPayload | null, live: boolean): InsuranceCarrier[] {
   const rows = (cms?.insurance ?? []) as {
     name?: string;
     logo_url?: string | null;
@@ -124,12 +167,13 @@ function mapInsurance(cms: PublicCmsPayload | null): InsuranceCarrier[] {
       width: 160,
       height: 64,
     }));
+  if (live) return mapped;
   return mapped.length ? mapped : staticInsurance;
 }
 
-function mapServiceSummaries(cms: PublicCmsPayload | null): ServiceSummary[] {
+function mapServiceSummaries(cms: PublicCmsPayload | null, live: boolean): ServiceSummary[] {
   const rows = (cms?.services ?? []) as CmsService[];
-  if (!rows.length) return staticServiceSummaries;
+  if (!rows.length) return live ? [] : staticServiceSummaries;
 
   const bySlug = new Map(staticServiceSummaries.map((s) => [s.slug, s]));
   return rows
@@ -160,9 +204,9 @@ function mapServiceSummaries(cms: PublicCmsPayload | null): ServiceSummary[] {
     });
 }
 
-function mapHomeServices(cms: PublicCmsPayload | null): ServiceSummary[] {
-  const all = mapServiceSummaries(cms);
-  if (all === staticServiceSummaries) return staticHomeServices;
+function mapHomeServices(cms: PublicCmsPayload | null, live: boolean): ServiceSummary[] {
+  const all = mapServiceSummaries(cms, live);
+  if (!live && all === staticServiceSummaries) return staticHomeServices;
   return all.slice(0, Math.max(4, Math.min(all.length, 8)));
 }
 
@@ -361,20 +405,103 @@ function mapPosts(cms: PublicCmsPayload | null) {
     }));
 }
 
+function mapServicesIntro(cms: PublicCmsPayload | null) {
+  const content = sectionContent(cms, 'home', 'services');
+  if (!content) return { ...staticServicesSection, cta: staticServicesSection.cta.label };
+  return {
+    eyebrow: typeof content.eyebrow === 'string' ? content.eyebrow : staticServicesSection.eyebrow,
+    heading: typeof content.heading === 'string' ? content.heading : staticServicesSection.heading,
+    body: typeof content.body === 'string' ? content.body : staticServicesSection.body,
+    cta: typeof content.cta === 'string' ? content.cta : staticServicesSection.cta.label,
+  };
+}
+
+function mapBenefits(cms: PublicCmsPayload | null): { heading: string; items: Benefit[] } {
+  const content = sectionContent(cms, 'home', 'benefits');
+  const heading =
+    typeof content?.heading === 'string' ? content.heading : staticBenefitsSection.heading;
+  const raw = Array.isArray(content?.items) ? content.items : [];
+  const items: Benefit[] = raw
+    .map((item) => {
+      if (!item || typeof item !== 'object') return null;
+      const row = item as Record<string, unknown>;
+      if (typeof row.title !== 'string' || typeof row.description !== 'string') return null;
+      const imageSrc = typeof row.image === 'string' ? row.image : staticBenefits[0]?.image.src;
+      return {
+        title: row.title,
+        description: row.description,
+        image: { src: imageSrc, width: 1180, height: 1180 },
+      } satisfies Benefit;
+    })
+    .filter((item): item is Benefit => Boolean(item));
+  return { heading, items: items.length ? items : staticBenefits };
+}
+
+function mapHowItWorks(cms: PublicCmsPayload | null) {
+  const content = sectionContent(cms, 'home', 'how_it_works');
+  const rawSteps = Array.isArray(content?.steps) ? content.steps : [];
+  const steps: Step[] = rawSteps
+    .map((item) => {
+      if (!item || typeof item !== 'object') return null;
+      const row = item as Record<string, unknown>;
+      if (typeof row.title !== 'string' || typeof row.description !== 'string') return null;
+      return { title: row.title, description: row.description } satisfies Step;
+    })
+    .filter((item): item is Step => Boolean(item));
+  return {
+    eyebrow: typeof content?.eyebrow === 'string' ? content.eyebrow : staticHowItWorks.eyebrow,
+    heading: typeof content?.heading === 'string' ? content.heading : staticHowItWorks.heading,
+    body: typeof content?.body === 'string' ? content.body : staticHowItWorks.body,
+    steps: steps.length ? steps : staticSteps,
+  };
+}
+
+function mapStats(cms: PublicCmsPayload | null): Stat[] {
+  const content = sectionContent(cms, 'home', 'stats');
+  const raw = Array.isArray(content?.items) ? content.items : [];
+  const items: Stat[] = raw
+    .map((item) => {
+      if (!item || typeof item !== 'object') return null;
+      const row = item as Record<string, unknown>;
+      if (typeof row.label !== 'string') return null;
+      return {
+        value: Number(row.value) || 0,
+        suffix: typeof row.suffix === 'string' ? row.suffix : '',
+        label: row.label,
+        requiresVerification: Boolean(row.requiresVerification),
+      } satisfies Stat;
+    })
+    .filter((item): item is Stat => Boolean(item));
+  return items.length ? items : staticStats;
+}
+
 /** Cached per-request CMS resolve with static fallbacks. */
 export const getResolvedContent = cache(async (): Promise<ResolvedContent> => {
   const cms = await fetchPublicCms();
-  const hasCms = Boolean(cms);
+  const live = cmsLive(cms);
+  const benefits = mapBenefits(cms);
+  const howItWorks = mapHowItWorks(cms);
 
   return {
-    source: hasCms ? 'cms' : 'static',
+    source: live ? 'cms' : 'static',
     hero: mapHero(cms),
     welcome: mapWelcome(cms),
-    faqs: mapFaqs(cms),
-    testimonials: mapTestimonials(cms),
-    insurance: mapInsurance(cms),
-    homeServices: mapHomeServices(cms),
-    serviceSummaries: mapServiceSummaries(cms),
+    faqs: mapFaqs(cms, live),
+    feesFaqs: mapFeesFaqs(cms, live),
+    testimonials: mapTestimonials(cms, live),
+    insurance: mapInsurance(cms, live),
+    homeServices: mapHomeServices(cms, live),
+    serviceSummaries: mapServiceSummaries(cms, live),
+    servicesIntro: mapServicesIntro(cms),
+    benefitsHeading: benefits.heading,
+    benefits: benefits.items,
+    howItWorks: {
+      eyebrow: howItWorks.eyebrow,
+      heading: howItWorks.heading,
+      body: howItWorks.body,
+    },
+    steps: howItWorks.steps,
+    stats: mapStats(cms),
     booking: mapBooking(cms),
     announcements: mapAnnouncements(cms),
     videos: mapVideos(cms),

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { ScrollText } from 'lucide-react';
 import { api } from '@/lib/api';
 import { useAuth } from '@/lib/auth';
+import { PageLoader } from '@/components/PageLoader';
 
 type LogRow = {
   id: string;
@@ -19,12 +20,24 @@ export default function LogsPage() {
   const { user } = useAuth();
   const [rows, setRows] = useState<LogRow[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (user?.role !== 'super_admin') return;
+    setLoading(true);
     void api<LogRow[]>('/api/admin/audit-logs').then((res) => {
-      if (!res.success) setError(res.message || 'Could not load audit log');
-      else setRows(res.data || []);
+      if (!res.success) {
+        setError(
+          res.message?.includes('schema cache') || res.message?.includes('admin_audit_logs')
+            ? 'The audit log table is missing. Run server/supabase/ops.sql in the Supabase SQL editor, then refresh.'
+            : res.message || 'Could not load audit log'
+        );
+        setRows([]);
+      } else {
+        setError(null);
+        setRows(res.data || []);
+      }
+      setLoading(false);
     });
   }, [user?.role]);
 
@@ -44,7 +57,14 @@ export default function LogsPage() {
       {error ? <div className="error-banner">{error}</div> : null}
 
       <div className="card">
-        {rows.length === 0 ? (
+        {loading ? (
+          <PageLoader />
+        ) : error ? (
+          <div className="empty">
+            <ScrollText size={22} />
+            <p>Audit history will show here after the table is created.</p>
+          </div>
+        ) : rows.length === 0 ? (
           <div className="empty">
             <ScrollText size={22} />
             <p>No activity yet. Edits, logins, and account changes will appear here.</p>

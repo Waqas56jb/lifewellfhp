@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import {
   ArrowUpRight,
@@ -79,6 +79,7 @@ export default function DashboardPage() {
   const [error, setError] = useState<string | null>(null);
   const [importing, setImporting] = useState(false);
   const [importMessage, setImportMessage] = useState<string | null>(null);
+  const autoImported = useRef(false);
 
   async function loadDash() {
     const res = await api<Dash>('/api/admin/dashboard');
@@ -89,6 +90,13 @@ export default function DashboardPage() {
   useEffect(() => {
     void loadDash();
   }, []);
+
+  useEffect(() => {
+    if (user?.role !== 'super_admin' || !data || autoImported.current) return;
+    if ((data.services || 0) > 0 || (data.faqs || 0) > 0) return;
+    autoImported.current = true;
+    void importLive();
+  }, [data, user?.role]);
 
   async function importLive() {
     setImporting(true);

@@ -32,7 +32,7 @@ export const providerCreate = z.object({
   bio: z.string().max(20000).optional().nullable(),
   education: z.array(z.string()).default([]),
   certifications: z.array(z.string()).default([]),
-  photo_url: z.string().url().optional().nullable().or(z.literal('')),
+  photo_url: z.string().max(1000).optional().nullable().or(z.literal('')),
   published: z.boolean().default(true),
   sort_order: z.number().int().default(0),
 });

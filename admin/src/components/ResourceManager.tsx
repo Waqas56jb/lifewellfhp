@@ -56,7 +56,13 @@ export function ResourceManager({ title, subtitle, endpoint, columns, fields, cr
 
   function openCreate() {
     setEditing({});
-    setForm({ ...createDefaults });
+    const next = { ...createDefaults };
+    for (const field of fields) {
+      if (field.type === 'json' && next[field.key] != null && typeof next[field.key] !== 'string') {
+        next[field.key] = JSON.stringify(next[field.key], null, 2);
+      }
+    }
+    setForm(next);
   }
 
   function openEdit(row: Record<string, unknown>) {
@@ -82,7 +88,11 @@ export function ResourceManager({ title, subtitle, endpoint, columns, fields, cr
       if (field.type === 'number') value = value === '' || value == null ? null : Number(value);
       if (field.type === 'json') {
         try {
-          value = typeof value === 'string' && value.trim() ? JSON.parse(value) : {};
+          if (typeof value === 'string') {
+            value = value.trim() ? JSON.parse(value) : {};
+          } else if (value == null) {
+            value = {};
+          }
         } catch {
           setSaving(false);
           setError(`Invalid JSON in ${field.label}`);
@@ -130,10 +140,12 @@ export function ResourceManager({ title, subtitle, endpoint, columns, fields, cr
       {error ? <div className="error-banner">{error}</div> : null}
 
       <div className="card">
-        <div className="table-wrap desktop-only">
-          {loading ? (
-            <PageLoader />
-          ) : empty ? (
+        {loading ? (
+          <PageLoader />
+        ) : (
+          <>
+            <div className="table-wrap desktop-only">
+          {empty ? (
             <div className="empty">No items yet. Add the first one.</div>
           ) : (
             <table className="data">
@@ -169,9 +181,7 @@ export function ResourceManager({ title, subtitle, endpoint, columns, fields, cr
         </div>
 
         <div className="mobile-cards">
-          {loading ? (
-            <PageLoader />
-          ) : empty ? (
+          {empty ? (
             <div className="empty">No items yet. Add the first one.</div>
           ) : (
             rows.map((row) => (
@@ -196,6 +206,8 @@ export function ResourceManager({ title, subtitle, endpoint, columns, fields, cr
             ))
           )}
         </div>
+          </>
+        )}
       </div>
 
       {editing ? (
