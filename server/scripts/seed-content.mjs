@@ -88,7 +88,8 @@ const upserts = [
     rows: [
       {
         label: 'Book appointment',
-        booking_url: 'https://lifewellfhp.com/book-telehealth-mental-health-appointment',
+        booking_url:
+          'https://ehr.charmtracker.com/publicCal.sas?method=getCal&digest=26a1a06adbd537c481b1d04dd4f7172a9e13b95e979de3c2ffd67310b926494cef59d40e1bb127af1871e728dd80f5a6c2fe0580a6189219',
         provider: 'charmhealth',
         active: true,
       },

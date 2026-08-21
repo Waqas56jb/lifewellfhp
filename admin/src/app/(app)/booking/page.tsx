@@ -6,7 +6,7 @@ export default function Page() {
   return (
     <ResourceManager
       title="Booking"
-      subtitle="The CharmHealth appointment URL used by Book a Session buttons across the site."
+      subtitle="CharmHealth public calendar URL. Book buttons on the site open the in-site booking page, which embeds this calendar."
       endpoint="/api/admin/booking"
       createDefaults={{ label: 'Book appointment', provider: 'charmhealth', active: true }}
       columns={[

@@ -30,7 +30,7 @@ export function FeesPageContent({
   faqs?: Faq[];
   bookingUrl?: string;
 } = {}) {
-  const bookHref = bookingUrl || site.booking.url;
+  const bookHref = bookingUrl || site.booking.page;
   return (
     <div className="bg-white">
       <FeesHero />

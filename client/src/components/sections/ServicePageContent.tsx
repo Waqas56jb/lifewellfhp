@@ -95,7 +95,7 @@ export async function ServicePageContent({ slug }: { slug: string }) {
                   </p>
                 ))}
                 <div className="mt-7">
-                  <SwapButton href={cms.booking.url || site.booking.url}>
+                  <SwapButton href={cms.booking.page || site.booking.page}>
                     {title.length > 42 ? 'Start Your Care Today' : `Schedule Your ${title} Today`}
                   </SwapButton>
                 </div>
@@ -123,7 +123,7 @@ export async function ServicePageContent({ slug }: { slug: string }) {
                 telehealth support tailored to your needs.
               </p>
               <div className="mt-6">
-                <SwapButton href={site.booking.url} size="sm">
+                <SwapButton href={site.booking.page} size="sm">
                   Start Your Care Today
                 </SwapButton>
               </div>

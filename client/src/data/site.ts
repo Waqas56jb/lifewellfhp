@@ -72,13 +72,12 @@ export const site = {
   /**
    * Booking.
    *
-   * The source site ran two competing systems simultaneously — CharmHealth EHR
-   * and SimplePractice. CharmHealth is used as the single canonical
-   * destination because it carries the majority of the site's booking CTAs.
-   * Flagged for client confirmation — see README.
+   * CharmHealth public calendar is embedded on the in-site booking page.
+   * CTAs stay on-site (`page`); the EHR calendar URL is the iframe source.
    */
   booking: {
     url: 'https://ehr.charmtracker.com/publicCal.sas?method=getCal&digest=26a1a06adbd537c481b1d04dd4f7172a9e13b95e979de3c2ffd67310b926494cef59d40e1bb127af1871e728dd80f5a6c2fe0580a6189219',
+    page: '/book-telehealth-mental-health-appointment',
     label: 'Book a Session',
     /** Retained for reference; not linked from the UI. */
     alternateSystem: 'https://lourdie-chachoute.clientsecure.me',

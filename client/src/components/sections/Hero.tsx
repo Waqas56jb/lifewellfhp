@@ -21,7 +21,7 @@ export function Hero({
   const data: ResolvedHero = heroProp ?? { ...hero };
   const primary = data.headingPrimary ?? 'Compassionate Telehealth';
   const accent = data.headingAccent ?? 'Mental Care You Can Trust';
-  const bookHref = bookingUrl ?? site.booking.url;
+  const bookHref = bookingUrl ?? site.booking.page;
   const bookLabel = bookingLabel ?? site.booking.label;
 
   return (

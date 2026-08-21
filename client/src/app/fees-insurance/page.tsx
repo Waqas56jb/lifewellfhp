@@ -37,7 +37,7 @@ export default async function FeesInsurancePage() {
       <FeesPageContent
         carriers={cms.insurance}
         faqs={cms.feesFaqs}
-        bookingUrl={cms.booking.url}
+        bookingUrl={cms.booking.page}
       />
     </>
   );

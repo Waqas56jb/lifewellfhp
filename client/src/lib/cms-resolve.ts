@@ -44,7 +44,7 @@ export type ResolvedContent = {
   howItWorks: { eyebrow: string; heading: string; body: string };
   steps: Step[];
   stats: Stat[];
-  booking: { url: string; label: string };
+  booking: { url: string; page: string; label: string };
   announcements: { title: string; body: string; tone: string }[];
   videos: { title: string; url: string; provider: string; description?: string | null; embedHtml?: string | null }[];
   settings: {
@@ -293,15 +293,19 @@ function mapWelcome(cms: PublicCmsPayload | null): typeof staticWelcome {
   };
 }
 
-function mapBooking(cms: PublicCmsPayload | null): { url: string; label: string } {
+function calendarEmbedUrl(value: string | undefined) {
+  const url = (value || '').trim();
+  if (/charmtracker\.com|clientsecure\.me/i.test(url)) return url;
+  return staticSite.booking.url;
+}
+
+function mapBooking(cms: PublicCmsPayload | null): { url: string; page: string; label: string } {
   const rows = (cms?.booking ?? []) as { booking_url?: string; label?: string; active?: boolean }[];
   const active = rows.find((r) => r.active !== false && r.booking_url);
-  if (!active?.booking_url) {
-    return { url: staticSite.booking.url, label: staticSite.booking.label };
-  }
   return {
-    url: String(active.booking_url),
-    label: String(active.label || staticSite.booking.label),
+    url: calendarEmbedUrl(active?.booking_url),
+    page: staticSite.booking.page,
+    label: String(active?.label || staticSite.booking.label),
   };
 }
 

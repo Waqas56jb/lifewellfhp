@@ -28,6 +28,7 @@ function AdminShellInner({ children }: { children: ReactNode }) {
   const { user, logout, can, loading } = useAuth();
   const { pendingHref, begin } = useNavUi();
   const [collapsed, setCollapsed] = useState(false);
+  const [phoneNav, setPhoneNav] = useState(false);
   const mainRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -35,6 +36,12 @@ function AdminShellInner({ children }: { children: ReactNode }) {
     if (saved === 'collapsed') setCollapsed(true);
     else if (saved === 'expanded') setCollapsed(false);
     else if (window.matchMedia('(max-width: 1080px)').matches) setCollapsed(true);
+
+    const phone = window.matchMedia('(max-width: 760px)');
+    const syncPhone = () => setPhoneNav(phone.matches);
+    syncPhone();
+    phone.addEventListener('change', syncPhone);
+    return () => phone.removeEventListener('change', syncPhone);
   }, []);
 
   useEffect(() => {
@@ -152,15 +159,16 @@ function AdminShellInner({ children }: { children: ReactNode }) {
       <div className="main">
         <header className="topbar">
           <div className="topbar-left">
-            <button
-              type="button"
-              className="icon-btn topbar-menu"
-              aria-label="Open menu"
-              hidden={!collapsed}
-              onClick={() => setCollapsed(false)}
-            >
-              <Menu size={20} />
-            </button>
+            {phoneNav && collapsed ? (
+              <button
+                type="button"
+                className="icon-btn topbar-menu"
+                aria-label="Open menu"
+                onClick={() => setCollapsed(false)}
+              >
+                <Menu size={20} />
+              </button>
+            ) : null}
             {pathname !== '/' ? (
               <button
                 type="button"

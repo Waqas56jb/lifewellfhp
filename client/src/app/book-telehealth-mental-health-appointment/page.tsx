@@ -3,10 +3,12 @@ import type { Metadata } from 'next';
 import { InnerPageHero } from '@/components/sections/InnerPageHero';
 import { JourneyCta } from '@/components/sections/JourneyCta';
 import { HowItWorks } from '@/components/sections/HowItWorks';
+import { BookingCalendar } from '@/components/sections/BookingCalendar';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { bookingSteps } from '@/data/marketing';
 import { pageMetadata } from '@/lib/seo';
 import { pageGraph } from '@/lib/schema';
+import { getResolvedContent } from '@/lib/cms-resolve';
 
 const DESCRIPTION =
   'Schedule a confidential and personalized telehealth mental health appointment with a board-certified PMHNP and take the first step toward emotional wellness.';
@@ -23,7 +25,8 @@ export const metadata: Metadata = pageMetadata({
   },
 });
 
-export default function BookPage() {
+export default async function BookPage() {
+  const cms = await getResolvedContent();
   return (
     <>
       <JsonLd
@@ -52,6 +55,8 @@ export default function BookPage() {
           leadSize="subhead"
         />
 
+        <BookingCalendar src={cms.booking.url} label={cms.booking.label} />
+
         <HowItWorks
           steps={bookingSteps}
           heading="How Our Simple Telehealth Process Works"
@@ -67,6 +72,8 @@ export default function BookPage() {
             height: 740,
           }}
           imageSide="right"
+          href="#charm-calendar"
+          cta="Choose a Time"
         />
       </div>
     </>

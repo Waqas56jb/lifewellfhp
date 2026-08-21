@@ -11,6 +11,7 @@ export function JourneyCta({
   after = 'Journey Today',
   body = 'Getting help shouldn’t be complicated. Book your secure online appointment in just a few clicks.',
   cta = 'Book Your Session',
+  href = site.booking.page,
 }: {
   image: { src: string; alt: string; width: number; height: number };
   imageSide?: 'left' | 'right';
@@ -19,6 +20,7 @@ export function JourneyCta({
   after?: string;
   body?: string;
   cta?: string;
+  href?: string;
 }) {
   const copy = (
     <div>
@@ -31,7 +33,7 @@ export function JourneyCta({
         {body}
       </p>
       <div className="mt-8">
-        <SwapButton href={site.booking.url}>{cta}</SwapButton>
+        <SwapButton href={href}>{cta}</SwapButton>
       </div>
     </div>
   );

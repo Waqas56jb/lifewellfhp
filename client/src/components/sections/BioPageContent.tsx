@@ -46,7 +46,7 @@ export function BioPageContent({
                 {providerPage.consultation.body}
               </p>
               <div className="mt-8 flex justify-center">
-                <SwapButton href={site.booking.url}>{providerPage.consultation.cta.label}</SwapButton>
+                <SwapButton href={site.booking.page}>{providerPage.consultation.cta.label}</SwapButton>
               </div>
             </aside>
 
@@ -80,9 +80,7 @@ export function BioPageContent({
                 {providerPage.shifts.map((shift) => (
                   <li key={shift.day}>
                     <a
-                      href={site.booking.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      href={site.booking.page}
                       className="flex flex-col items-center rounded-[15px] bg-[var(--lw-accent)] px-6 py-8 text-center no-underline transition-transform duration-300 hover:-translate-y-2.5"
                     >
                       <span className="text-[16px] font-semibold leading-snug text-white sm:text-[18px]">

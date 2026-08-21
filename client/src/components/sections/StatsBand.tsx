@@ -14,7 +14,7 @@ import { site } from '@/data/site';
  * left-aligned split heading + booking button, then a 5-column stats row.
  */
 export function StatsBand({ stats, bookingUrl }: { stats: Stat[]; bookingUrl?: string }) {
-  const bookHref = bookingUrl ?? site.booking.url;
+  const bookHref = bookingUrl ?? site.booking.page;
   return (
     <section aria-labelledby="stats-heading" className="bg-white py-14 md:py-24">
       <Container>

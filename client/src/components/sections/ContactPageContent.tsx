@@ -134,7 +134,7 @@ function ContactHero() {
           </ul>
 
           <div>
-            <SwapButton href={site.booking.url}>Book a Session</SwapButton>
+            <SwapButton href={site.booking.page}>Book a Session</SwapButton>
           </div>
 
           <a href={site.contact.phoneHref} className="no-underline">

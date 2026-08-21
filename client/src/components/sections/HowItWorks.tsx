@@ -28,7 +28,7 @@ export function HowItWorks({
 }) {
   const lead = heading.replace(/ Process Works$/, '');
   const accent = heading.endsWith('Process Works') ? 'Process Works' : undefined;
-  const bookHref = bookingUrl ?? site.booking.url;
+  const bookHref = bookingUrl ?? site.booking.page;
 
   return (
     <Section

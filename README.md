@@ -255,7 +255,7 @@ Recorded here because each one is a judgement call the client should confirm.
 | Item | Decision |
 | --- | --- |
 | **Office hours** | Source published two conflicting sets. The Contact page version is used (it covers all seven days). Bio listed Mon–Thu 18:00–22:00, Fri–Sat 07:00–22:00. **Needs confirmation.** |
-| **Booking system** | Source ran CharmHealth *and* SimplePractice simultaneously. CharmHealth is canonical here; the SimplePractice URL is retained in `data/site.ts` but unlinked. **Needs confirmation.** |
+| **Booking system** | CharmHealth public calendar is embedded on `/book-telehealth-mental-health-appointment`. SimplePractice is retained in `data/site.ts` but unlinked. |
 | **Statistics** | Values were read from the source's own `data-to-value` attributes (5,000 sessions · 1 provider · 15 years · 98% satisfaction · 24/7). The live counters never fired, so every figure rendered as 0. "Licensed Therapists" was relabelled "Licensed Provider" — the practice is solo. **The 5,000-session and 98%-satisfaction claims cannot be verified and should be confirmed or removed.** |
 | **Testimonials** | Four genuine testimonials are published. Seven Lorem-ipsum placeholders ("This is item #01…" by "Jon Doe"/"Jane Doe") were dropped. No `Review`/`AggregateRating` schema is emitted, because consent status is unconfirmed. |
 | **Blog** | **All nine articles are theme filler** — the "Occidental/European languages" lorem substitute, Goethe's *Werther*, a dental-practice paragraph inside a psychiatry article, and commercial-moving-company copy inside a teen therapy article. Routes are preserved and `noindex`ed; each renders a short placeholder instead of the filler. Removing `needsClientContent` in the generated data publishes a post automatically. |

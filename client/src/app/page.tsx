@@ -32,7 +32,7 @@ export default async function HomePage() {
 
   return (
     <>
-      <Hero hero={cms.hero} bookingUrl={cms.booking.url} bookingLabel={cms.booking.label} />
+      <Hero hero={cms.hero} bookingUrl={cms.booking.page} bookingLabel={cms.booking.label} />
       <WelcomeSection welcome={cms.welcome} />
 
       <Section tone="raised" aria-labelledby="services-heading">
@@ -60,17 +60,17 @@ export default async function HomePage() {
 
       <BenefitsGrid heading={cms.benefitsHeading} items={cms.benefits} />
       <HowItWorks
-        bookingUrl={cms.booking.url}
+        bookingUrl={cms.booking.page}
         heading={cms.howItWorks.heading}
         eyebrow={cms.howItWorks.eyebrow}
         body={cms.howItWorks.body}
         steps={cms.steps}
       />
-      <StatsBand stats={cms.stats} bookingUrl={cms.booking.url} />
+      <StatsBand stats={cms.stats} bookingUrl={cms.booking.page} />
       <InsuranceGrid showCta={false} showDisclaimer={false} carriers={cms.insurance} />
       <Testimonials testimonials={cms.testimonials} />
       <VideosSection videos={cms.videos} />
-      <ContactCTA bookingUrl={cms.booking.url} bookingLabel={cms.booking.label} />
+      <ContactCTA bookingUrl={cms.booking.page} bookingLabel={cms.booking.label} />
     </>
   );
 }

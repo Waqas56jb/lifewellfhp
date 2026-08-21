@@ -325,7 +325,7 @@ a {
   border-bottom: 1px solid var(--line);
 }
 
-.topbar-menu {
+.icon-btn.topbar-menu {
   display: none;
 }
 
@@ -2298,7 +2298,7 @@ table.data th {
     padding-top: env(safe-area-inset-top);
   }
 
-  .admin-shell.collapsed .topbar-menu {
+  .admin-shell.collapsed .icon-btn.topbar-menu {
     display: inline-flex;
   }
 

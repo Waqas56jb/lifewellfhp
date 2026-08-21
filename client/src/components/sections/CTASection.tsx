@@ -10,7 +10,7 @@ export function CTASection({
   heading = primaryCta.heading,
   body = primaryCta.body,
   primaryLabel = site.booking.label,
-  primaryHref = site.booking.url,
+  primaryHref = site.booking.page,
   secondaryLabel = 'Contact us',
   secondaryHref = '/contact-telehealth-mental-health-provider',
 }: {
