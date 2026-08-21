@@ -42,13 +42,7 @@ const nextConfig: NextConfig = {
       {
         source: '/:path*',
         has: [{ type: 'host', value: 'lifewellfhp-client.vercel.app' }],
-        destination: 'https://lifewellfhp.com/:path*',
-        permanent: true,
-      },
-      {
-        source: '/:path*',
-        has: [{ type: 'host', value: 'www.lifewellfhp.com' }],
-        destination: 'https://lifewellfhp.com/:path*',
+        destination: 'https://www.lifewellfhp.com/:path*',
         permanent: true,
       },
       { source: '/about', destination: '/bio', permanent: true },

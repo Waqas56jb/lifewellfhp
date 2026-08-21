@@ -298,7 +298,7 @@ overriding them only creates ways for the deploy to fail.
 | Variable | Required | Notes |
 | --- | --- | --- |
 | `NEXT_PUBLIC_API_URL` | **Yes** | The deployed API origin. Left at localhost, the forms fail (gracefully — they show the phone number — but nothing is delivered). |
-| `NEXT_PUBLIC_SITE_URL` | Recommended | Drives canonicals, sitemap and JSON-LD. Falls back to `https://lifewellfhp.com`; set it per environment so previews don't claim production URLs. |
+| `NEXT_PUBLIC_SITE_URL` | Recommended | Drives canonicals, sitemap and JSON-LD. Falls back to `https://www.lifewellfhp.com`; set it per environment so previews don't claim production URLs. |
 | `NEXT_PUBLIC_GA4_ID` | Optional | `G-31C1GHVRGF` carried over from WordPress. Blank disables analytics. |
 
 These are read at **build** time and baked in, so changing one needs a redeploy.

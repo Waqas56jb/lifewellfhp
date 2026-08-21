@@ -5,13 +5,7 @@
     {
       "source": "/(.*)",
       "has": [{ "type": "host", "value": "lifewellfhp-client.vercel.app" }],
-      "destination": "https://lifewellfhp.com/$1",
-      "permanent": true
-    },
-    {
-      "source": "/(.*)",
-      "has": [{ "type": "host", "value": "www.lifewellfhp.com" }],
-      "destination": "https://lifewellfhp.com/$1",
+      "destination": "https://www.lifewellfhp.com/$1",
       "permanent": true
     }
   ],

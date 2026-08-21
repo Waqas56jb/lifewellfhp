@@ -5,14 +5,12 @@ import { Container, Section } from '@/components/ui/Section';
 import { SwapButton } from '@/components/ui/SwapButton';
 import { site } from '@/data/site';
 
-/** Must match CharmHealth Web Embed → Hosting Website(s). */
-const CHARM_HOST = 'lifewellfhp.com';
-const CHARM_ORIGIN = 'https://lifewellfhp.com';
+const LIVE_ORIGIN = 'https://www.lifewellfhp.com';
 
 /**
- * CharmHealth only renders the calendar when the parent page host is listed
- * under Hosting Websites. Their EHR is set to https://lifewellfhp.com/ — not
- * www and not the Vercel preview host.
+ * CharmHealth Web Embed is allowlisted for the live LifeWell host.
+ * The Vercel preview hostname is rejected, so those visits are sent to www.
+ * Do not send users to the apex domain — its TLS certificate is not valid.
  */
 export function BookingCalendar({
   src = site.booking.url,
@@ -25,11 +23,10 @@ export function BookingCalendar({
 
   useEffect(() => {
     const host = window.location.hostname;
-    const local = host === 'localhost' || host === '127.0.0.1';
-    if (!local && host !== CHARM_HOST) {
+    if (host.endsWith('.vercel.app')) {
       const next = new URL(
         `${window.location.pathname}${window.location.search}${window.location.hash || '#charm-calendar'}`,
-        CHARM_ORIGIN
+        LIVE_ORIGIN
       );
       window.location.replace(next.toString());
       return;
@@ -80,7 +77,7 @@ export function BookingCalendar({
           </div>
         ) : (
           <p className="mx-auto mt-10 max-w-[40ch] text-center text-[15px] text-[#5b6675]">
-            Opening the booking calendar on lifewellfhp.com…
+            Opening the booking calendar on the live LifeWell site…
           </p>
         )}
       </Container>

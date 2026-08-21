@@ -188,7 +188,7 @@ function AdminShellInner({ children }: { children: ReactNode }) {
             <NotificationBell />
             <a
               className="btn btn-ghost"
-              href={process.env.NEXT_PUBLIC_SITE_URL || 'https://lifewellfhp.com'}
+              href={process.env.NEXT_PUBLIC_SITE_URL || 'https://www.lifewellfhp.com'}
               target="_blank"
               rel="noreferrer"
             >
