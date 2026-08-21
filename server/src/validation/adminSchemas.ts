@@ -55,8 +55,8 @@ export const testimonialCreate = z.object({
   author_name: z.string().min(1).max(120),
   author_role: z.string().max(120).optional().nullable(),
   rating: z.number().int().min(1).max(5).optional().nullable(),
-  published: z.boolean().default(false),
-  consent_confirmed: z.boolean().default(false),
+  published: z.boolean().default(true),
+  consent_confirmed: z.boolean().default(true),
   sort_order: z.number().int().default(0),
 });
 export const testimonialUpdate = testimonialCreate.partial();
@@ -92,7 +92,7 @@ export const blogCreate = z.object({
   body: z.string().max(100000).optional().nullable(),
   cover_image_url: z.string().optional().nullable(),
   author_name: z.string().max(120).optional().nullable(),
-  published: z.boolean().default(false),
+  published: z.boolean().default(true),
   published_at: z.string().datetime().optional().nullable(),
   seo_title: z.string().max(200).optional().nullable(),
   seo_description: z.string().max(500).optional().nullable(),
@@ -111,17 +111,24 @@ export const mediaCreate = z.object({
 });
 export const mediaUpdate = mediaCreate.partial();
 
-export const videoCreate = z.object({
+const videoFields = z.object({
   title: z.string().min(1).max(200),
   description: z.string().max(5000).optional().nullable(),
   provider: z.enum(['youtube', 'vimeo', 'file', 'embed']).default('youtube'),
-  url: z.string().min(1),
+  url: z.string().max(2000).optional().nullable().or(z.literal('')),
   embed_html: z.string().max(10000).optional().nullable(),
   thumbnail_url: z.string().optional().nullable(),
   published: z.boolean().default(true),
   sort_order: z.number().int().default(0),
 });
-export const videoUpdate = videoCreate.partial();
+export const videoCreate = videoFields.refine(
+  (row) => Boolean((row.url && String(row.url).trim()) || (row.embed_html && String(row.embed_html).trim())),
+  {
+    message: 'Add a video URL or embed HTML',
+    path: ['url'],
+  }
+);
+export const videoUpdate = videoFields.partial();
 
 export const sectionCreate = z.object({
   page_key: z.string().min(1).max(80),

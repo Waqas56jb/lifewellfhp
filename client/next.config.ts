@@ -5,9 +5,10 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
 
   experimental: {
+    // Admin CMS edits must show on the next request — do not keep RSC payloads.
     staleTimes: {
-      dynamic: 30,
-      static: 180,
+      dynamic: 0,
+      static: 0,
     },
   },
 

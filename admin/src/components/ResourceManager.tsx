@@ -44,6 +44,7 @@ export function ResourceManager({
   const [rows, setRows] = useState<Record<string, unknown>[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
   const [editing, setEditing] = useState<Record<string, unknown> | null>(null);
   const [form, setForm] = useState<Record<string, unknown>>(createDefaults);
   const [saving, setSaving] = useState(false);
@@ -107,6 +108,7 @@ export function ResourceManager({
     e.preventDefault();
     setSaving(true);
     setError(null);
+    setMessage(null);
 
     const body: Record<string, unknown> = {};
     for (const field of fields) {
@@ -143,6 +145,7 @@ export function ResourceManager({
       return;
     }
     setEditing(null);
+    setMessage('Saved to the live website. Refresh the public site to see this change.');
     await load();
   }
 
@@ -191,6 +194,7 @@ export function ResourceManager({
       </div>
 
       {error ? <div className="error-banner">{error}</div> : null}
+      {message ? <div className="ok-banner">{message}</div> : null}
 
       <div className="card">
         {loading ? (

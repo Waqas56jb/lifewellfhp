@@ -4,6 +4,7 @@ import { badRequest } from '../utils/errors.js';
 import { DEFAULT_SITE_SETTINGS, settingsUpdate } from '../validation/adminSchemas.js';
 import { writeAuditLog } from '../lib/audit.js';
 import { isMissingTable } from '../lib/notify.js';
+import { refreshPublicSite } from '../lib/refreshSite.js';
 import type { AuthedRequest } from '../middleware/adminAuth.js';
 
 export async function getSiteSettings(_req: Request, res: Response): Promise<void> {
@@ -53,6 +54,7 @@ export async function updateSiteSettings(req: Request, res: Response): Promise<v
         throw badRequest(retry.error.message);
       }
       res.json({ success: true, data: retry.data });
+      void refreshPublicSite();
       return;
     }
     throw badRequest(error.message);
@@ -67,5 +69,6 @@ export async function updateSiteSettings(req: Request, res: Response): Promise<v
     summary: 'Updated site appearance and header settings',
   });
 
+  void refreshPublicSite();
   res.json({ success: true, data });
 }

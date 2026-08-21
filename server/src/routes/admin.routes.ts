@@ -198,6 +198,8 @@ adminRouter.use(
     createSchema: testimonialCreate,
     updateSchema: testimonialUpdate,
     orderBy: { column: 'sort_order', ascending: true },
+    beforeCreate: (data) => ({ ...data, consent_confirmed: data.published ? true : data.consent_confirmed }),
+    beforeUpdate: (data) => ({ ...data, consent_confirmed: data.published ? true : data.consent_confirmed }),
   })
 );
 
@@ -231,6 +233,15 @@ adminRouter.use(
     createSchema: blogCreate,
     updateSchema: blogUpdate,
     orderBy: { column: 'updated_at', ascending: false },
+    beforeCreate: (data) => ({
+      ...data,
+      published_at: data.published ? data.published_at || new Date().toISOString() : data.published_at ?? null,
+    }),
+    beforeUpdate: (data) => ({
+      ...data,
+      published_at:
+        data.published === true && !data.published_at ? new Date().toISOString() : data.published_at,
+    }),
   })
 );
 

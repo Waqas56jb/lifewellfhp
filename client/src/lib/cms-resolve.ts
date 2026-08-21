@@ -15,7 +15,7 @@ import {
   servicesSection as staticServicesSection,
 } from '@/data/marketing';
 import { site as staticSite } from '@/data/site';
-import { feesFaqs as staticFeesFaqs } from '@/data/pricing';
+import { feesFaqs as staticFeesFaqs, feesIntro as staticFeesIntro, selfPay as staticSelfPay } from '@/data/pricing';
 import {
   homeServiceSummaries as staticHomeServices,
   serviceSummaries as staticServiceSummaries,
@@ -97,6 +97,12 @@ export type ResolvedContent = {
     publishedAt?: string | null;
     body?: string | null;
   }[];
+  fees: {
+    introHeading: string;
+    introBody: string;
+    selfPayHeading: string;
+    selfPayBody: string[];
+  };
   serviceDetails: {
     slug: string;
     title: string;
@@ -131,15 +137,24 @@ type CmsSection = {
 };
 
 function cmsLive(cms: PublicCmsPayload | null): boolean {
-  if (!cms) return false;
-  return Boolean(
-    cms.settings ||
-      cms.faqs?.length ||
-      cms.services?.length ||
-      cms.sections?.length ||
-      cms.testimonials?.length ||
-      cms.insurance?.length
-  );
+  return Boolean(cms);
+}
+
+function asRecord(value: unknown): Record<string, unknown> | null {
+  if (value && typeof value === 'object' && !Array.isArray(value)) {
+    return value as Record<string, unknown>;
+  }
+  if (typeof value === 'string' && value.trim()) {
+    try {
+      const parsed: unknown = JSON.parse(value);
+      if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+        return parsed as Record<string, unknown>;
+      }
+    } catch {
+      return null;
+    }
+  }
+  return null;
 }
 
 function latestSection(cms: PublicCmsPayload | null, page: string, key: string): CmsSection | undefined {
@@ -151,7 +166,7 @@ function latestSection(cms: PublicCmsPayload | null, page: string, key: string):
 
 function sectionContent(cms: PublicCmsPayload | null, page: string, key: string): Record<string, unknown> | null {
   const row = latestSection(cms, page, key);
-  return row?.content && typeof row.content === 'object' ? (row.content as Record<string, unknown>) : null;
+  return asRecord(row?.content);
 }
 
 function mapFaqs(cms: PublicCmsPayload | null, live: boolean): Faq[] {
@@ -168,7 +183,7 @@ function mapFeesFaqs(cms: PublicCmsPayload | null, live: boolean): Faq[] {
   const mapped = rows
     .filter((r) => r.question && r.answer && String(r.category || '') === 'Fees')
     .map((r) => ({ question: String(r.question), answer: String(r.answer) }));
-  if (live) return mapped.length ? mapped : staticFeesFaqs;
+  if (live) return mapped;
   return mapped.length ? mapped : staticFeesFaqs;
 }
 
@@ -264,15 +279,22 @@ function mapHomeServices(cms: PublicCmsPayload | null, live: boolean): ServiceSu
 }
 
 function mapHero(cms: PublicCmsPayload | null): ResolvedHero {
-  const content = (latestSection(cms, 'home', 'hero')?.content ?? {}) as Record<string, unknown>;
-  const headline = typeof content.headline === 'string' ? content.headline : null;
-  const subhead = typeof content.subhead === 'string' ? content.subhead : null;
-  const badge = typeof content.badge === 'string' ? content.badge : null;
+  const row = latestSection(cms, 'home', 'hero');
+  const content = asRecord(row?.content) ?? {};
+  const headline =
+    (typeof content.headline === 'string' && content.headline.trim()) ||
+    (typeof content.heading === 'string' && content.heading.trim()) ||
+    (typeof row?.title === 'string' && row.title.trim() && row.title !== 'Homepage hero' ? row.title : '') ||
+    '';
+  const subhead =
+    (typeof content.subhead === 'string' && content.subhead.trim()) ||
+    (typeof content.subheading === 'string' && content.subheading.trim()) ||
+    '';
+  const badge = typeof content.badge === 'string' ? content.badge : '';
 
   if (!headline && !subhead && !badge) return staticHero;
 
-  // Split headline into primary/accent roughly at midpoint for brand two-tone.
-  let headingPrimary = staticHero.heading;
+  let headingPrimary = headline || staticHero.heading;
   let headingAccent = '';
   if (headline) {
     const parts = headline.split(/\s+/);
@@ -398,8 +420,23 @@ function mapSettings(cms: PublicCmsPayload | null) {
 }
 
 function stringList(value: unknown): string[] {
+  if (typeof value === 'string' && value.trim()) {
+    try {
+      return stringList(JSON.parse(value));
+    } catch {
+      return value.split(/\n+/).map((item) => item.trim()).filter(Boolean);
+    }
+  }
   if (!Array.isArray(value)) return [];
-  return value.filter((item): item is string => typeof item === 'string' && item.trim().length > 0);
+  return value
+    .map((item) => {
+      if (typeof item === 'string' && item.trim()) return item.trim();
+      if (item && typeof item === 'object' && 'name' in item && typeof (item as { name: unknown }).name === 'string') {
+        return (item as { name: string }).name.trim();
+      }
+      return '';
+    })
+    .filter(Boolean);
 }
 
 function hoursLines(value: unknown): string[] {
@@ -584,7 +621,28 @@ function mapStats(cms: PublicCmsPayload | null): Stat[] {
   return items.length ? items : staticStats;
 }
 
-/** Cached per-request CMS resolve with static fallbacks. */
+function mapFees(cms: PublicCmsPayload | null) {
+  const intro = sectionContent(cms, 'fees', 'intro') ?? {};
+  const selfPay = sectionContent(cms, 'fees', 'self_pay') ?? {};
+  const introBody =
+    typeof intro.body === 'string' && intro.body.trim()
+      ? intro.body
+      : Array.isArray(intro.body)
+        ? intro.body.filter((p): p is string => typeof p === 'string').join('\n\n')
+        : staticFeesIntro.body;
+  const selfPayBody = Array.isArray(selfPay.body)
+    ? selfPay.body.filter((p): p is string => typeof p === 'string' && p.trim().length > 0)
+    : typeof selfPay.body === 'string' && selfPay.body.trim()
+      ? selfPay.body.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean)
+      : staticSelfPay.body;
+  return {
+    introHeading: typeof intro.heading === 'string' && intro.heading.trim() ? intro.heading : staticFeesIntro.heading,
+    introBody,
+    selfPayHeading:
+      typeof selfPay.heading === 'string' && selfPay.heading.trim() ? selfPay.heading : staticSelfPay.heading,
+    selfPayBody: selfPayBody.length ? selfPayBody : staticSelfPay.body,
+  };
+}
 export const getResolvedContent = cache(async (): Promise<ResolvedContent> => {
   const cms = await fetchPublicCms();
   const live = cmsLive(cms);
@@ -618,6 +676,7 @@ export const getResolvedContent = cache(async (): Promise<ResolvedContent> => {
     provider: mapProvider(cms),
     locations: mapLocations(cms),
     posts: mapPosts(cms),
+    fees: mapFees(cms),
     serviceDetails: mapServiceDetails(cms),
     seoByPath: mapSeo(cms),
   };

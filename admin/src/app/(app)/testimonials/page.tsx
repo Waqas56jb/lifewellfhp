@@ -6,9 +6,9 @@ export default function Page() {
   return (
     <ResourceManager
       title="Reviews"
-      subtitle="Testimonials on the homepage and reviews page. Publish only with confirmed consent."
+      subtitle="Published reviews appear on the homepage and /telehealth-mental-health-testimonials after Save."
       endpoint="/api/admin/testimonials"
-      createDefaults={{ published: false, consent_confirmed: false, sort_order: 0 }}
+      createDefaults={{ published: true, consent_confirmed: true, sort_order: 0 }}
       columns={[
         { key: 'author_name', label: 'Author' },
         { key: 'quote', label: 'Quote', render: (r) => String(r.quote || '').slice(0, 80) },

@@ -2,11 +2,14 @@
 
 import { ResourceManager } from '@/components/ResourceManager';
 import { InsurancePreview } from '@/components/SitePreviews';
+import { FeesCopy } from '@/components/FeesCopy';
 import { publicAssetUrl } from '@/lib/site';
 
 export default function Page() {
   return (
-    <ResourceManager
+    <div>
+      <FeesCopy />
+      <ResourceManager
       title="Insurance"
       subtitle="Plans and logos on /fees-insurance. Preview the logo card, then Save to update the public page."
       endpoint="/api/admin/insurance"
@@ -52,5 +55,6 @@ export default function Page() {
         { key: 'published', label: 'Published', type: 'checkbox' },
       ]}
     />
+    </div>
   );
 }

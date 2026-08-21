@@ -41,6 +41,10 @@ export default async function FeesInsurancePage() {
         carriers={cms.insurance}
         faqs={cms.feesFaqs}
         bookingUrl={cms.booking.page}
+        introHeading={cms.fees.introHeading}
+        introBody={cms.fees.introBody}
+        selfPayHeading={cms.fees.selfPayHeading}
+        selfPayBody={cms.fees.selfPayBody}
       />
     </>
   );

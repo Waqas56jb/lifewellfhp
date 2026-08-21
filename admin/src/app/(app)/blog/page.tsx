@@ -6,9 +6,9 @@ export default function Page() {
   return (
     <ResourceManager
       title="Blog"
-      subtitle="Articles on /blog. Drafts stay off the public site until published."
+      subtitle="Published articles appear on /blog after Save. Leave Published unchecked to keep a draft."
       endpoint="/api/admin/blog"
-      createDefaults={{ published: false }}
+      createDefaults={{ published: true }}
       columns={[
         { key: 'title', label: 'Title' },
         { key: 'slug', label: 'Slug' },

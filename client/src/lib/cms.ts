@@ -2,6 +2,8 @@
  * Public CMS client — fetches published content from the API.
  * Falls back to null when the CMS is empty/unconfigured so static data remains.
  */
+import { unstable_noStore as noStore } from 'next/cache';
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://lifewellfhp-server.vercel.app';
 
 export type PublicCmsPayload = {
@@ -21,10 +23,12 @@ export type PublicCmsPayload = {
 };
 
 export async function fetchPublicCms(): Promise<PublicCmsPayload | null> {
+  noStore();
   try {
-    const res = await fetch(`${API_URL}/api/public/content`, {
+    const res = await fetch(`${API_URL}/api/public/content?ts=${Date.now()}`, {
       cache: 'no-store',
       next: { revalidate: 0 },
+      headers: { 'Cache-Control': 'no-cache', Pragma: 'no-cache' },
     });
     if (!res.ok) return null;
     const json = (await res.json()) as { success: boolean; data: PublicCmsPayload | null };
@@ -35,10 +39,12 @@ export async function fetchPublicCms(): Promise<PublicCmsPayload | null> {
 }
 
 export async function fetchPublicBlogPost(slug: string): Promise<Record<string, unknown> | null> {
+  noStore();
   try {
-    const res = await fetch(`${API_URL}/api/public/blog/${encodeURIComponent(slug)}`, {
+    const res = await fetch(`${API_URL}/api/public/blog/${encodeURIComponent(slug)}?ts=${Date.now()}`, {
       cache: 'no-store',
       next: { revalidate: 0 },
+      headers: { 'Cache-Control': 'no-cache', Pragma: 'no-cache' },
     });
     if (!res.ok) return null;
     const json = (await res.json()) as { success: boolean; data: Record<string, unknown> | null };

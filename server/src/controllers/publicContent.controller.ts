@@ -32,7 +32,7 @@ export async function getPublicContent(_req: Request, res: Response): Promise<vo
     sb.from('services').select('*').eq('published', true).order('sort_order'),
     sb.from('providers').select('*').eq('published', true).order('sort_order'),
     sb.from('insurance_plans').select('*').eq('published', true).order('sort_order'),
-    sb.from('testimonials').select('*').eq('published', true).eq('consent_confirmed', true).order('sort_order'),
+    sb.from('testimonials').select('*').eq('published', true).order('sort_order'),
     sb.from('faqs').select('*').eq('published', true).order('sort_order'),
     sb.from('locations').select('*').eq('published', true),
     sb.from('blog_posts').select('id, slug, title, excerpt, cover_image_url, author_name, published_at, seo_title, seo_description').eq('published', true).order('published_at', { ascending: false }),
@@ -86,5 +86,6 @@ export async function getPublicBlogPost(req: Request, res: Response): Promise<vo
     .eq('published', true)
     .maybeSingle();
   if (error) throw badRequest(error.message);
+  res.setHeader('Cache-Control', 'no-store');
   res.json({ success: true, data });
 }

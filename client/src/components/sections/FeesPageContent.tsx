@@ -25,24 +25,34 @@ export function FeesPageContent({
   carriers,
   faqs = feesFaqs,
   bookingUrl,
+  introHeading = feesIntro.heading,
+  introBody = feesIntro.body,
+  selfPayHeading = selfPay.heading,
+  selfPayBody = selfPay.body,
 }: {
   carriers?: InsuranceCarrier[];
   faqs?: Faq[];
   bookingUrl?: string;
+  introHeading?: string;
+  introBody?: string;
+  selfPayHeading?: string;
+  selfPayBody?: string[];
 } = {}) {
   const bookHref = bookingUrl || site.booking.page;
   return (
     <div className="bg-white">
-      <FeesHero />
+      <FeesHero heading={introHeading} body={introBody} />
 
       <section className="px-5 pb-16 sm:px-[30px] sm:pb-24 lg:px-10 lg:pb-[150px] min-[1601px]:px-[80px]">
         <div className="mx-auto max-w-[1840px]">
           <h2 className="mx-auto max-w-[18ch] text-center font-heading text-[30px] font-normal leading-[1.15] tracking-[-3px] sm:text-[48px] min-[1181px]:text-[56px]">
-            <span className="text-[var(--lw-accent)]">Cash-Pay / Self-Pay </span>
-            <span className="italic tracking-normal text-[var(--lw-primary)]">Options</span>
+            <span className="text-[var(--lw-accent)]">{selfPayHeading.replace(/ Options$/, '')} </span>
+            <span className="italic tracking-normal text-[var(--lw-primary)]">
+              {selfPayHeading.endsWith('Options') ? 'Options' : ''}
+            </span>
           </h2>
           <div className="mx-auto mt-6 max-w-[70ch] space-y-4 text-center">
-            {selfPay.body.map((p) => (
+            {selfPayBody.map((p) => (
               <p key={p.slice(0, 32)} className="text-[14px] leading-[1.45] text-[#374151] sm:text-[16px] min-[1181px]:text-[18px]">
                 {p}
               </p>
@@ -217,7 +227,8 @@ export function FeesPageContent({
   );
 }
 
-function FeesHero() {
+function FeesHero({ heading, body }: { heading: string; body: string }) {
+  const isDefault = heading === feesIntro.heading;
   return (
     <section className="px-5 pb-16 pt-4 sm:px-[30px] sm:pb-24 lg:px-10 lg:pb-[150px] min-[1601px]:px-[80px]">
       <div className="mx-auto flex max-w-[1840px] flex-col overflow-hidden rounded-[20px] bg-[#EEF3F7] sm:rounded-[30px] lg:min-h-[570px] lg:flex-row">
@@ -233,16 +244,22 @@ function FeesHero() {
         </div>
         <div className="flex flex-col justify-center gap-8 px-5 py-10 sm:gap-10 sm:px-[60px] sm:py-[100px] lg:w-[45%] lg:px-20 lg:py-5">
           <h1 className="font-heading text-[35px] font-normal leading-[1.15] tracking-[-3px] sm:text-[48px] min-[1181px]:text-[56px]">
-            <span className="italic tracking-normal text-[var(--lw-primary)] sm:text-[50px] sm:leading-[1.05] min-[1181px]:text-[60px]">
-              Transparent{' '}
-            </span>
-            <span className="text-[var(--lw-accent)]">Mental Health Fees and Insurance </span>
-            <span className="italic tracking-normal text-[var(--lw-primary)] sm:text-[50px] sm:leading-[1.05] min-[1181px]:text-[60px]">
-              Plans
-            </span>
+            {isDefault ? (
+              <>
+                <span className="italic tracking-normal text-[var(--lw-primary)] sm:text-[50px] sm:leading-[1.05] min-[1181px]:text-[60px]">
+                  Transparent{' '}
+                </span>
+                <span className="text-[var(--lw-accent)]">Mental Health Fees and Insurance </span>
+                <span className="italic tracking-normal text-[var(--lw-primary)] sm:text-[50px] sm:leading-[1.05] min-[1181px]:text-[60px]">
+                  Plans
+                </span>
+              </>
+            ) : (
+              <span className="text-[var(--lw-accent)]">{heading}</span>
+            )}
           </h1>
           <p className="text-[14px] leading-[1.45] text-[#374151] sm:text-[16px] min-[1181px]:text-[18px]">
-            {feesIntro.body}
+            {body}
           </p>
         </div>
       </div>

@@ -19,8 +19,8 @@ export function Hero({
   bookingLabel?: string;
 } = {}) {
   const data: ResolvedHero = heroProp ?? { ...hero };
-  const primary = data.headingPrimary ?? 'Compassionate Telehealth';
-  const accent = data.headingAccent ?? 'Mental Care You Can Trust';
+  const primary = data.headingPrimary || data.heading;
+  const accent = data.headingAccent || '';
   const bookHref = bookingUrl ?? site.booking.page;
   const bookLabel = bookingLabel ?? site.booking.label;
 

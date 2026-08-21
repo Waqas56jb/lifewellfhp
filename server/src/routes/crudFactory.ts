@@ -11,6 +11,7 @@ import {
 } from '../middleware/adminAuth.js';
 import { badRequest, notFound } from '../utils/errors.js';
 import { recordLabel, writeAuditLog } from '../lib/audit.js';
+import { refreshPublicSite } from '../lib/refreshSite.js';
 
 function withoutOptionalMediaFields(payload: Record<string, unknown>) {
   const next = { ...payload };
@@ -101,6 +102,7 @@ export function createCrudRouter(options: CrudOptions): Router {
         resourceId: data?.id ? String(data.id) : null,
         summary: `Created ${module}: ${recordLabel(data as Record<string, unknown>)}`,
       });
+      void refreshPublicSite();
       res.status(201).json({ success: true, data });
     })
   );
@@ -146,6 +148,7 @@ export function createCrudRouter(options: CrudOptions): Router {
         resourceId: String(req.params.id),
         summary: `Updated ${module}: ${recordLabel(data as Record<string, unknown>)}`,
       });
+      void refreshPublicSite();
       res.json({ success: true, data });
     })
   );
@@ -164,6 +167,7 @@ export function createCrudRouter(options: CrudOptions): Router {
         resourceId: String(req.params.id),
         summary: `Deleted ${module} record`,
       });
+      void refreshPublicSite();
       res.json({ success: true });
     })
   );
