@@ -131,14 +131,25 @@ function LogoCarousel({ carriers }: { carriers: InsuranceCarrier[] }) {
             className="flex shrink-0 items-center justify-center px-3 sm:px-5"
             style={{ width: `${100 / visible}%` }}
           >
-            <Image
-              src={carrier.logo}
-              alt=""
-              width={carrier.width}
-              height={carrier.height}
-              loading="lazy"
-              className="h-8 w-auto max-h-8 max-w-full object-contain object-center sm:h-9 sm:max-h-9"
-            />
+            {carrier.logo.startsWith('http') ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={carrier.logo}
+                alt=""
+                width={carrier.width}
+                height={carrier.height}
+                className="h-8 w-auto max-h-8 max-w-full object-contain object-center sm:h-9 sm:max-h-9"
+              />
+            ) : (
+              <Image
+                src={carrier.logo}
+                alt=""
+                width={carrier.width}
+                height={carrier.height}
+                loading="lazy"
+                className="h-8 w-auto max-h-8 max-w-full object-contain object-center sm:h-9 sm:max-h-9"
+              />
+            )}
           </li>
         ))}
       </ul>

@@ -22,6 +22,7 @@ import {
   serviceHref,
 } from '@/data/service-catalog';
 import type { ServiceSummary } from '@/types/content';
+import { siteAssetSrc } from '@/lib/site-asset';
 
 export type ResolvedHero = typeof staticHero & {
   headingPrimary?: string;
@@ -215,7 +216,7 @@ function mapInsurance(cms: PublicCmsPayload | null, live: boolean): InsuranceCar
     .filter((r) => r.name)
     .map((r) => ({
       name: String(r.name),
-      logo: r.logo_url ? String(r.logo_url) : '/images/insurance/placeholder.svg',
+      logo: r.logo_url ? siteAssetSrc(String(r.logo_url)) : '/images/insurance/placeholder.svg',
       width: 160,
       height: 64,
     }));
@@ -237,11 +238,12 @@ function mapServiceSummaries(cms: PublicCmsPayload | null, live: boolean): Servi
         r.category === 'primary-care' || r.category === 'psychiatric'
           ? r.category
           : base?.category ?? 'psychiatric';
-      const imageSrc =
+      const imageSrc = siteAssetSrc(
         (typeof r.image_url === 'string' && r.image_url) ||
-        (typeof r.icon === 'string' && r.icon) ||
-        base?.image.src ||
-        '/images/services/Psychiatric-Evaluation-Telehealth.avif';
+          (typeof r.icon === 'string' && r.icon) ||
+          base?.image.src ||
+          '/images/services/Psychiatric-Evaluation-Telehealth.avif'
+      );
       return {
         slug,
         title: String(r.title),
@@ -413,7 +415,7 @@ function mapSettings(cms: PublicCmsPayload | null) {
     bodyFont: typeof row.body_font === 'string' ? row.body_font : DEFAULT_SETTINGS.bodyFont,
     headerCtaLabel: typeof row.header_cta_label === 'string' ? row.header_cta_label : DEFAULT_SETTINGS.headerCtaLabel,
     headerCtaUrl: typeof row.header_cta_url === 'string' ? row.header_cta_url : DEFAULT_SETTINGS.headerCtaUrl,
-    logoUrl: typeof row.logo_url === 'string' && row.logo_url ? row.logo_url : null,
+    logoUrl: typeof row.logo_url === 'string' && row.logo_url ? siteAssetSrc(row.logo_url) : null,
     practicePhone: typeof row.practice_phone === 'string' && row.practice_phone ? row.practice_phone : null,
     practiceEmail: typeof row.practice_email === 'string' && row.practice_email ? row.practice_email : null,
   };
@@ -467,7 +469,7 @@ function mapProvider(cms: PublicCmsPayload | null) {
     credentials: String(row.credentials || ''),
     title: row.title ?? null,
     bio: row.bio ?? null,
-    photoUrl: row.photo_url ?? null,
+    photoUrl: row.photo_url ? siteAssetSrc(String(row.photo_url)) : null,
     education: stringList(row.education),
     certifications: stringList(row.certifications),
   };
@@ -518,7 +520,7 @@ function mapSeo(cms: PublicCmsPayload | null) {
     seoByPath[path] = {
       title: row.title ? String(row.title) : null,
       description: row.description ? String(row.description) : null,
-      ogImageUrl: row.og_image_url ? String(row.og_image_url) : null,
+      ogImageUrl: row.og_image_url ? siteAssetSrc(String(row.og_image_url)) : null,
       noindex: Boolean(row.noindex),
     };
   }
@@ -541,7 +543,7 @@ function mapPosts(cms: PublicCmsPayload | null) {
       slug: String(r.slug),
       title: String(r.title),
       excerpt: r.excerpt ?? null,
-      coverImageUrl: r.cover_image_url ?? null,
+      coverImageUrl: r.cover_image_url ? siteAssetSrc(String(r.cover_image_url)) : null,
       authorName: r.author_name ?? null,
       publishedAt: r.published_at ?? null,
       body: r.body ?? null,
@@ -569,10 +571,11 @@ function mapBenefits(cms: PublicCmsPayload | null): { heading: string; items: Be
       if (!item || typeof item !== 'object') return null;
       const row = item as Record<string, unknown>;
       if (typeof row.title !== 'string' || typeof row.description !== 'string') return null;
-      const imageSrc =
+      const imageSrc = siteAssetSrc(
         typeof row.image === 'string'
           ? row.image
-          : staticBenefits[0]?.image.src || '/images/benefits/Personalized-One-on-One-Care.avif';
+          : staticBenefits[0]?.image.src || '/images/benefits/Personalized-One-on-One-Care.avif'
+      );
       return {
         title: row.title,
         description: row.description,
