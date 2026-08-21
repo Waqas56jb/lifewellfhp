@@ -156,6 +156,7 @@ function AdminShellInner({ children }: { children: ReactNode }) {
               type="button"
               className="icon-btn topbar-menu"
               aria-label="Open menu"
+              hidden={!collapsed}
               onClick={() => setCollapsed(false)}
             >
               <Menu size={20} />
@@ -179,7 +180,7 @@ function AdminShellInner({ children }: { children: ReactNode }) {
             <NotificationBell />
             <a
               className="btn btn-ghost"
-              href={process.env.NEXT_PUBLIC_SITE_URL || 'https://lifewellfhp-client.vercel.app'}
+              href={process.env.NEXT_PUBLIC_SITE_URL || 'https://www.lifewellfhp.com'}
               target="_blank"
               rel="noreferrer"
             >

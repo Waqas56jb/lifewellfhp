@@ -2298,7 +2298,7 @@ table.data th {
     padding-top: env(safe-area-inset-top);
   }
 
-  .topbar-menu {
+  .admin-shell.collapsed .topbar-menu {
     display: inline-flex;
   }
 

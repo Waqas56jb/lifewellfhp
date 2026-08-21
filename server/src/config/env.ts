@@ -15,7 +15,7 @@ const schema = z.object({
   CORS_ORIGINS: z
     .string()
     .default(
-      'http://localhost:3000,http://localhost:3001,https://lifewellfhp-client.vercel.app,https://lifewellfhp-admin.vercel.app'
+      'http://localhost:3000,http://localhost:3001,https://www.lifewellfhp.com,https://lifewellfhp.com,https://lifewellfhp-client.vercel.app,https://lifewellfhp-admin.vercel.app'
     ),
 
   /** Destination for contact-form notifications. */
