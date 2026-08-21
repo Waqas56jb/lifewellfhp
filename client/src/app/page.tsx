@@ -10,7 +10,6 @@ import { StatsBand } from '@/components/sections/StatsBand';
 import { InsuranceGrid } from '@/components/sections/InsuranceGrid';
 import { Testimonials } from '@/components/sections/Testimonials';
 import { ContactCTA } from '@/components/sections/CTASection';
-import { SiteNotice } from '@/components/sections/SiteNotice';
 import { VideosSection } from '@/components/sections/VideosSection';
 
 import { site } from '@/data/site';
@@ -33,7 +32,6 @@ export default async function HomePage() {
 
   return (
     <>
-      <SiteNotice announcements={cms.announcements} />
       <Hero hero={cms.hero} bookingUrl={cms.booking.url} bookingLabel={cms.booking.label} />
       <WelcomeSection welcome={cms.welcome} />
 
