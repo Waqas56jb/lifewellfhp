@@ -26,7 +26,7 @@ export async function Footer() {
             <FooterNewsletter />
           </div>
 
-          <div className="grid grid-cols-1 gap-10 py-10 sm:grid-cols-2 sm:gap-x-8 sm:gap-y-12 lg:grid-cols-4 lg:gap-x-10 lg:py-14">
+          <div className="grid min-w-0 grid-cols-1 gap-10 py-10 sm:grid-cols-2 sm:gap-x-8 sm:gap-y-12 xl:grid-cols-4 xl:gap-x-10 xl:py-14">
             <div>
               <Link
                 href="/"
@@ -86,17 +86,17 @@ export async function Footer() {
             </div>
 
             {footerColumns.map((col) => (
-              <nav key={col.heading} aria-label={col.heading}>
+              <nav key={col.heading} aria-label={col.heading} className="min-w-0">
                 <h3 className="font-heading text-[20px] font-normal leading-[1.3] text-white sm:text-[22px] min-[1181px]:text-[24px]">
                   {col.heading}
                 </h3>
                 <ul className="mt-5 flex flex-col gap-3 sm:gap-3.5">
                   {col.links.map((link) => (
-                    <li key={link.href}>
+                    <li key={link.href} className="min-w-0">
                       <Link
                         href={link.href}
                         prefetch
-                        className="font-body text-[15px] font-normal leading-snug text-white no-underline transition-opacity duration-300 hover:opacity-80 sm:text-[16px]"
+                        className="break-words font-body text-[15px] font-normal leading-snug text-white no-underline transition-opacity duration-300 hover:opacity-80 sm:text-[16px]"
                       >
                         {link.label}
                       </Link>

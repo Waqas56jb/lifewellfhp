@@ -43,7 +43,7 @@ export function Header({
   return (
     <header
       className={cn(
-        'z-50 w-full transition-[background-color,box-shadow] duration-300',
+        'z-50 w-full overflow-x-clip transition-[background-color,box-shadow] duration-300',
         isHome ? 'fixed top-0' : 'sticky top-0',
         overlay
           ? 'bg-transparent'
@@ -51,16 +51,16 @@ export function Header({
       )}
       style={{ paddingTop: 'env(safe-area-inset-top)' }}
     >
-      <div className="flex min-h-[72px] w-full min-w-0 items-center justify-between gap-3 px-4 py-[16px] sm:min-h-[90px] sm:gap-4 sm:px-[30px] sm:py-[30px] lg:min-h-[110px] lg:gap-[30px] lg:px-[70px]">
+      <div className="flex min-h-[64px] w-full min-w-0 items-center justify-between gap-3 px-4 py-3 sm:min-h-[80px] sm:px-6 sm:py-5 md:px-8 lg:min-h-[96px] min-[1440px]:min-h-[110px] min-[1440px]:gap-8 min-[1440px]:px-[48px] min-[1601px]:px-[70px] min-[1601px]:py-[30px]">
         <Link
           href="/"
           prefetch
-          className="shrink-0 no-underline"
+          className="relative z-10 min-w-0 shrink-0 no-underline"
           aria-label={`${site.name} — home`}
         >
           {remoteLogo ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={logo} alt={site.name} className="h-9 w-auto sm:h-11 lg:h-[50px]" />
+            <img src={logo} alt={site.name} className="h-8 w-auto max-w-[min(11.5rem,42vw)] sm:h-10 sm:max-w-[13rem] min-[1440px]:h-[50px] min-[1440px]:max-w-[15rem]" />
           ) : (
             <Image
               src={logo}
@@ -68,7 +68,7 @@ export function Header({
               width={354}
               height={63}
               priority
-              className="h-9 w-auto sm:h-11 lg:h-[50px]"
+              className="h-8 w-auto max-w-[min(11.5rem,42vw)] sm:h-10 sm:max-w-[13rem] min-[1440px]:h-[50px] min-[1440px]:max-w-[15rem]"
             />
           )}
         </Link>

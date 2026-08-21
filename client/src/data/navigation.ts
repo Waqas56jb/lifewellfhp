@@ -24,7 +24,7 @@ export const headerNav: NavItem[] = [
       },
     ],
   },
-  { label: 'Psychiatric Mental Health Nurse Practitioner', href: '/bio' },
+  { label: 'Meet Your Provider', href: '/bio' },
   { label: 'Fees & Insurance', href: '/fees-insurance' },
   { label: 'Contact Us', href: '/contact-telehealth-mental-health-provider' },
 ];

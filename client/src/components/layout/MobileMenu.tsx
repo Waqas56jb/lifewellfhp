@@ -92,7 +92,7 @@ export function MobileMenu({ id, open, onClose, items, cta, pathname }: MobileMe
   // header's `backdrop-filter` / sticky ancestors (the usual reason this
   // drawer appears clipped or inert on iOS and Android).
   const drawer = (
-    <div className="fixed inset-0 z-[80] h-[100dvh] min-[1180px]:hidden">
+    <div className="fixed inset-0 z-[80] h-[100dvh]">
       <div
         className="absolute inset-0 bg-text-primary/50"
         onClick={onClose}
@@ -143,7 +143,7 @@ export function MobileMenu({ id, open, onClose, items, cta, pathname }: MobileMe
                     prefetch
                     aria-current={pathname === item.href ? 'page' : undefined}
                     className={cn(
-                      'flex min-h-12 items-center rounded-sm px-4 text-md font-semibold no-underline transition-colors duration-quick',
+                      'flex min-h-12 items-center rounded-sm px-4 text-left text-md font-semibold leading-snug no-underline transition-colors duration-quick',
                       pathname === item.href
                         ? 'bg-brand-primary-soft text-brand-primary-solid'
                         : 'text-text-primary hover:bg-surface-muted'
