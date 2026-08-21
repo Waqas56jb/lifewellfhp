@@ -426,7 +426,10 @@ function mapBenefits(cms: PublicCmsPayload | null): { heading: string; items: Be
       if (!item || typeof item !== 'object') return null;
       const row = item as Record<string, unknown>;
       if (typeof row.title !== 'string' || typeof row.description !== 'string') return null;
-      const imageSrc = typeof row.image === 'string' ? row.image : staticBenefits[0]?.image.src;
+      const imageSrc =
+        typeof row.image === 'string'
+          ? row.image
+          : staticBenefits[0]?.image.src || '/images/benefits/Personalized-One-on-One-Care.avif';
       return {
         title: row.title,
         description: row.description,
