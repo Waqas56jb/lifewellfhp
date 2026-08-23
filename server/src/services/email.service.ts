@@ -16,6 +16,10 @@ function getTransporter(): Transporter | null {
     port: env.SMTP_PORT,
     secure: env.SMTP_SECURE,
     auth: { user: env.SMTP_USER as string, pass: env.SMTP_PASSWORD as string },
+    // Serverless hosts (Vercel) need explicit timeouts; cPanel SMTP can be slow.
+    connectionTimeout: 20_000,
+    greetingTimeout: 20_000,
+    socketTimeout: 30_000,
   });
 
   return transporter;

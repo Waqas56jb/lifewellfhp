@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 import { randomUUID } from 'node:crypto';
 import { contactSchema, fieldErrors } from '../validation/schemas.js';
-import { sendContactNotification } from '../services/email.service.js';
+import { sendContactNotification, resolveInboxEmail } from '../services/email.service.js';
 import { storeLead } from './leads.controller.js';
 import { logEmailMessage } from '../lib/mailLog.js';
 import { badRequest } from '../utils/errors.js';
@@ -29,6 +29,7 @@ export async function handleContact(req: Request, res: Response): Promise<void> 
   }
 
   const referenceId = randomUUID().slice(0, 8).toUpperCase();
+  let leadStored = false;
 
   if (supabaseConfigured()) {
     try {
@@ -41,6 +42,7 @@ export async function handleContact(req: Request, res: Response): Promise<void> 
         message: parsed.data.message,
         reference_id: referenceId,
       });
+      leadStored = true;
     } catch (err) {
       logger.error('lead persist failed', {
         reason: err instanceof Error ? err.message : 'unknown',
@@ -48,7 +50,22 @@ export async function handleContact(req: Request, res: Response): Promise<void> 
     }
   }
 
-  const result = await sendContactNotification(parsed.data, referenceId);
+  let result;
+  try {
+    result = await sendContactNotification(parsed.data, referenceId);
+  } catch (err) {
+    logger.error('contact email failed', {
+      referenceId,
+      leadStored,
+      reason: err instanceof Error ? err.message : 'unknown',
+    });
+    if (!leadStored) throw err;
+    result = {
+      delivered: false,
+      referenceId,
+      inbox: await resolveInboxEmail(),
+    };
+  }
 
   await logEmailMessage({
     direction: 'inbound',
