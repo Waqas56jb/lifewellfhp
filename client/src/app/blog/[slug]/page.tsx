@@ -6,6 +6,9 @@ import { CmsCta } from '@/components/CmsCta';
 import { pageMetadata } from '@/lib/seo';
 import { fetchPublicBlogPost } from '@/lib/cms';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

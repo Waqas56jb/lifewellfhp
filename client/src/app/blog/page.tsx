@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/Button';
 import { InnerPageHero } from '@/components/sections/InnerPageHero';
 import { JsonLd } from '@/components/seo/JsonLd';
 
-import { publishedPosts } from '@/data/blog';
 import { serviceSummaries } from '@/data/service-catalog';
 import { formatDate, isoDate } from '@/lib/utils';
 import { cmsMetadata } from '@/lib/cms-seo';
@@ -18,47 +17,31 @@ import { CmsCta } from '@/components/CmsCta';
 const DESCRIPTION =
   'Mental health and wellness articles from LifeWell Family Health & Psychiatry — practical guidance on anxiety, depression, ADHD, sleep and living well.';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function generateMetadata(): Promise<Metadata> {
   const cms = await getResolvedContent();
   return cmsMetadata(cms, {
     title: 'Blog — Mental Health & Wellness Insights',
     description: DESCRIPTION,
     path: '/blog',
-    noIndex: cms.posts.length === 0 && publishedPosts.length === 0,
+    noIndex: cms.posts.length === 0,
   });
 }
 
-/**
- * Blog index.
- *
- * The original WordPress site had no blog index at all — the nine posts were
- * reachable only through category archives, which left them effectively
- * orphaned. This route fixes that. It currently renders an empty state because
- * every source article is theme filler; posts appear here automatically once
- * real content replaces it.
- */
+/** Lists published CMS articles from the API — never static placeholder posts. */
 export default async function BlogIndexPage() {
   const cms = await getResolvedContent();
-  const posts =
-    cms.posts.length > 0
-      ? cms.posts.map((post) => ({
-          slug: post.slug,
-          title: post.title,
-          excerpt: post.excerpt || '',
-          category: null as string | null,
-          image: post.coverImageUrl,
-          publishedAt: post.publishedAt,
-          href: `/blog/${post.slug}`,
-        }))
-      : publishedPosts.map((post) => ({
-          slug: post.slug,
-          title: post.title,
-          excerpt: post.excerpt,
-          category: post.category,
-          image: post.image,
-          publishedAt: post.publishedAt,
-          href: `/${post.slug}`,
-        }));
+  const posts = cms.posts.map((post) => ({
+    slug: post.slug,
+    title: post.title,
+    excerpt: post.excerpt || '',
+    category: null as string | null,
+    image: post.coverImageUrl,
+    publishedAt: post.publishedAt,
+    href: `/blog/${post.slug}`,
+  }));
 
   return (
     <>

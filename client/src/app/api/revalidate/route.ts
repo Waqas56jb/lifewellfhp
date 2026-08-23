@@ -16,6 +16,8 @@ export async function POST(req: Request) {
     return NextResponse.json({ success: false }, { status: 401 });
   }
   revalidatePath('/', 'layout');
+  revalidatePath('/blog', 'page');
+  revalidatePath('/blog/[slug]', 'page');
   return NextResponse.json({ success: true });
 }
 

@@ -22,36 +22,58 @@ export type PublicCmsPayload = {
   settings: Record<string, unknown> | null;
 };
 
+async function fetchWithTimeout(url: string, init?: RequestInit, ms = 12_000) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), ms);
+  try {
+    return await fetch(url, { ...init, signal: controller.signal });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 export async function fetchPublicCms(): Promise<PublicCmsPayload | null> {
   noStore();
-  try {
-    const res = await fetch(`${API_URL}/api/public/content?ts=${Date.now()}`, {
-      cache: 'no-store',
-      next: { revalidate: 0 },
-      headers: { 'Cache-Control': 'no-cache', Pragma: 'no-cache' },
-    });
-    if (!res.ok) return null;
-    const json = (await res.json()) as { success: boolean; data: PublicCmsPayload | null };
-    return json.success ? json.data : null;
-  } catch {
-    return null;
+  const url = `${API_URL}/api/public/content?ts=${Date.now()}`;
+  const init: RequestInit = {
+    cache: 'no-store',
+    next: { revalidate: 0 },
+    headers: { 'Cache-Control': 'no-cache', Pragma: 'no-cache' },
+  };
+
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const res = await fetchWithTimeout(url, init);
+      if (!res.ok) continue;
+      const json = (await res.json()) as { success: boolean; data: PublicCmsPayload | null };
+      if (json.success && json.data) return json.data;
+    } catch {
+      // Retry once — serverless cold starts can time out on the first attempt.
+    }
   }
+  return null;
 }
 
 export async function fetchPublicBlogPost(slug: string): Promise<Record<string, unknown> | null> {
   noStore();
-  try {
-    const res = await fetch(`${API_URL}/api/public/blog/${encodeURIComponent(slug)}?ts=${Date.now()}`, {
-      cache: 'no-store',
-      next: { revalidate: 0 },
-      headers: { 'Cache-Control': 'no-cache', Pragma: 'no-cache' },
-    });
-    if (!res.ok) return null;
-    const json = (await res.json()) as { success: boolean; data: Record<string, unknown> | null };
-    return json.success ? json.data : null;
-  } catch {
-    return null;
+  const url = `${API_URL}/api/public/blog/${encodeURIComponent(slug)}?ts=${Date.now()}`;
+  const init: RequestInit = {
+    cache: 'no-store',
+    next: { revalidate: 0 },
+    headers: { 'Cache-Control': 'no-cache', Pragma: 'no-cache' },
+  };
+
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const res = await fetchWithTimeout(url, init);
+      if (!res.ok) continue;
+      const json = (await res.json()) as { success: boolean; data: Record<string, unknown> | null };
+      if (json.success && json.data) return json.data;
+    } catch {
+      // Retry once on transient network failure.
+    }
   }
+  return null;
 }
 
 export async function trackPageView(path: string): Promise<void> {

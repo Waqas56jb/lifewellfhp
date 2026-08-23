@@ -1,21 +1,24 @@
 import type { MetadataRoute } from 'next';
 import { site } from '@/data/site';
 import { serviceSlugs, services } from '@/data/services';
-import { publishedPosts } from '@/data/blog';
 import { generatedLegalPages } from '@/data/generated/legal';
+import { fetchPublicCms } from '@/lib/cms';
 
 const abs = (path: string) => `${site.url}${path === '/' ? '' : path}`;
 
 /**
  * Sitemap.
  *
- * Only indexable URLs are listed. Excluded on purpose:
- *  - the nine placeholder-bodied posts (noindexed until real content lands)
- *  - the retired WooCommerce /shop surface, which was an indexable soft-404
- *  - tag and author archives, which were thin duplicate pages
+ * Core routes are static. Blog articles are loaded from the CMS API so newly
+ * published admin posts appear without a frontend redeploy.
  */
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
+  const cms = await fetchPublicCms();
+  const cmsPosts = (cms?.posts ?? []).filter(
+    (row): row is { slug: string; published_at?: string | null } =>
+      Boolean(row && typeof row === 'object' && typeof (row as { slug?: string }).slug === 'string')
+  );
 
   const core: MetadataRoute.Sitemap = [
     { url: abs('/'), lastModified: now, changeFrequency: 'monthly', priority: 1 },
@@ -54,13 +57,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
   });
 
   const blogIndex: MetadataRoute.Sitemap =
-    publishedPosts.length > 0
+    cmsPosts.length > 0
       ? [{ url: abs('/blog'), lastModified: now, changeFrequency: 'weekly', priority: 0.7 }]
       : [];
 
-  const postEntries: MetadataRoute.Sitemap = publishedPosts.map((post) => ({
-    url: abs(`/${post.slug}`),
-    lastModified: post.modifiedAt ? new Date(post.modifiedAt) : now,
+  const postEntries: MetadataRoute.Sitemap = cmsPosts.map((post) => ({
+    url: abs(`/blog/${post.slug}`),
+    lastModified: post.published_at ? new Date(post.published_at) : now,
     changeFrequency: 'yearly' as const,
     priority: 0.5,
   }));
