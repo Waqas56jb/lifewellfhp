@@ -44,6 +44,7 @@ const nextConfig: NextConfig = {
       { source: '/contact', destination: '/contact-telehealth-mental-health-provider', permanent: true },
       { source: '/book', destination: '/book-telehealth-mental-health-appointment', permanent: true },
       { source: '/testimonials', destination: '/telehealth-mental-health-testimonials', permanent: true },
+      { source: '/reviews', destination: '/telehealth-mental-health-testimonials', permanent: true },
       { source: '/faq', destination: '/faqs', permanent: true },
       { source: '/services-overview', destination: '/our-services', permanent: true },
 

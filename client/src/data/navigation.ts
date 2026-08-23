@@ -25,6 +25,9 @@ export const headerNav: NavItem[] = [
   },
   { label: 'Psychiatric Mental Health Nurse Practitioner', href: '/bio' },
   { label: 'Fees & Insurance', href: '/fees-insurance' },
+  { label: 'Blog', href: '/blog' },
+  { label: 'Testimonials', href: '/telehealth-mental-health-testimonials' },
+  { label: 'Videos', href: '/videos' },
   { label: 'Contact Us', href: '/contact-telehealth-mental-health-provider' },
 ];
 
@@ -49,7 +52,9 @@ export const footerColumns: { heading: string; links: NavLink[] }[] = [
       { label: 'Home', href: '/' },
       { label: 'Bio', href: '/bio' },
       { label: 'Fees & Insurance', href: '/fees-insurance' },
+      { label: 'Blog', href: '/blog' },
       { label: 'Testimonials', href: '/telehealth-mental-health-testimonials' },
+      { label: 'Videos', href: '/videos' },
       { label: 'FAQs', href: '/faqs' },
       { label: 'Privacy Policy', href: '/privacy-policy' },
       { label: 'Terms & Conditions', href: '/terms-conditions' },

@@ -44,6 +44,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly',
       priority: 0.6,
     },
+    { url: abs('/videos'), lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
   ];
 
   const serviceEntries: MetadataRoute.Sitemap = serviceSlugs.map((slug) => {

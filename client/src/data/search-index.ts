@@ -94,6 +94,13 @@ function build(): SearchEntry[] {
       section: 'Pages',
       summary: 'Mental health and wellness writing.',
       keywords: 'blog articles news insights',
+    },
+    {
+      title: 'Videos',
+      href: '/videos',
+      section: 'Pages',
+      summary: 'Educational mental health videos from LifeWell.',
+      keywords: 'videos watch learn education mental health',
     }
   );
 

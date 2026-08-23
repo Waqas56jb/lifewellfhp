@@ -174,6 +174,8 @@ export const PREFETCH_ROUTES = [
   '/bio',
   '/our-services',
   '/fees-insurance',
+  '/blog',
+  '/videos',
   '/contact-telehealth-mental-health-provider',
   '/book-telehealth-mental-health-appointment',
   '/faqs',
