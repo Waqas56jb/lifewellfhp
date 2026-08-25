@@ -2,6 +2,7 @@ import type { Request, Response } from 'express';
 import { getSupabase } from '../lib/supabase.js';
 import { badRequest } from '../utils/errors.js';
 import { writeAuditLog } from '../lib/audit.js';
+import { refreshPublicSite } from '../lib/refreshSite.js';
 import { DEFAULT_SITE_SETTINGS } from '../validation/adminSchemas.js';
 import type { AuthedRequest } from '../middleware/adminAuth.js';
 
@@ -97,35 +98,46 @@ async function missingThenInsert(
   return toInsert.length;
 }
 
+/**
+ * Seeds default website content. STRICTLY NON-DESTRUCTIVE: every table only
+ * receives rows that do not exist yet. Rows the admin has edited, unpublished,
+ * or customized are never touched — re-running this can never lose admin work.
+ */
 export async function runLiveImport(): Promise<Record<string, number>> {
   const sb = getSupabase();
   const counts: Record<string, number> = {};
 
-  const servicePayload = SERVICES.map(([slug, title, summary], i) => ({
-    slug,
-    title,
-    summary,
-    image_url: SERVICE_META[slug]?.image || null,
-    icon: SERVICE_META[slug]?.image || null,
-    category: SERVICE_META[slug]?.category || 'psychiatric',
-    published: true,
-    sort_order: i,
-  }));
-  let { error: serviceUpsertErr } = await sb.from('services').upsert(servicePayload, { onConflict: 'slug' });
-  if (serviceUpsertErr && /does not exist|schema cache/i.test(serviceUpsertErr.message)) {
-    const fallback = SERVICES.map(([slug, title, summary], i) => ({
+  const { data: serviceRows, error: serviceReadErr } = await sb.from('services').select('slug');
+  if (serviceReadErr) throw badRequest(serviceReadErr.message);
+  const haveServiceSlugs = new Set((serviceRows || []).map((r) => String(r.slug)));
+  const missingServices = SERVICES.filter(([slug]) => !haveServiceSlugs.has(slug));
+  if (missingServices.length) {
+    const servicePayload = missingServices.map(([slug, title, summary], i) => ({
       slug,
       title,
       summary,
+      image_url: SERVICE_META[slug]?.image || null,
       icon: SERVICE_META[slug]?.image || null,
+      category: SERVICE_META[slug]?.category || 'psychiatric',
       published: true,
       sort_order: i,
     }));
-    const retry = await sb.from('services').upsert(fallback, { onConflict: 'slug' });
-    serviceUpsertErr = retry.error;
+    let { error: serviceInsertErr } = await sb.from('services').insert(servicePayload);
+    if (serviceInsertErr && /does not exist|schema cache/i.test(serviceInsertErr.message)) {
+      const fallback = missingServices.map(([slug, title, summary], i) => ({
+        slug,
+        title,
+        summary,
+        icon: SERVICE_META[slug]?.image || null,
+        published: true,
+        sort_order: i,
+      }));
+      const retry = await sb.from('services').insert(fallback);
+      serviceInsertErr = retry.error;
+    }
+    if (serviceInsertErr) throw badRequest(serviceInsertErr.message);
   }
-  if (serviceUpsertErr) throw badRequest(serviceUpsertErr.message);
-  counts.services = servicePayload.length;
+  counts.services = missingServices.length;
 
   const { data: faqRows, error: faqErr } = await sb.from('faqs').select('question');
   if (faqErr) throw badRequest(faqErr.message);
@@ -296,12 +308,27 @@ export async function runLiveImport(): Promise<Record<string, number>> {
     },
   ];
 
-  const { error: sectionErr } = await sb.from('site_sections').upsert(homeSections, { onConflict: 'page_key,section_key' });
-  if (sectionErr) throw badRequest(sectionErr.message);
-  counts.sections = homeSections.length;
+  const { data: sectionRows, error: sectionReadErr } = await sb
+    .from('site_sections')
+    .select('page_key,section_key');
+  if (sectionReadErr) throw badRequest(sectionReadErr.message);
+  const haveSections = new Set((sectionRows || []).map((r) => `${r.page_key}:${r.section_key}`));
+  const missingSections = homeSections.filter((s) => !haveSections.has(`${s.page_key}:${s.section_key}`));
+  if (missingSections.length) {
+    const { error: sectionErr } = await sb.from('site_sections').insert(missingSections);
+    if (sectionErr) throw badRequest(sectionErr.message);
+  }
+  counts.sections = missingSections.length;
 
-  const { error: providerErr } = await sb.from('providers').upsert(
-    {
+  const { data: existingProvider } = await sb
+    .from('providers')
+    .select('id')
+    .eq('slug', 'lourdie-chachoute')
+    .maybeSingle();
+  const providerErr = existingProvider
+    ? null
+    : (
+        await sb.from('providers').insert({
       slug: 'lourdie-chachoute',
       name: 'Lourdie Chachoute',
       credentials: 'FNP-C, PMHNP-BC, RRT, CCRN',
@@ -327,11 +354,10 @@ export async function runLiveImport(): Promise<Record<string, number>> {
       photo_url: '/images/team/Lourdie-Chachoute.jpeg',
       published: true,
       sort_order: 0,
-    },
-    { onConflict: 'slug' }
-  );
+        })
+      ).error;
   if (providerErr) throw badRequest(providerErr.message);
-  counts.providers = 1;
+  counts.providers = existingProvider ? 0 : 1;
 
   const { data: locations } = await sb.from('locations').select('name');
   const hasLocation = (locations || []).some((r) => r.name === 'LifeWell Family Health & Psychiatry');
@@ -369,41 +395,38 @@ export async function runLiveImport(): Promise<Record<string, number>> {
     counts.booking = 0;
   }
 
-  const { error: mediaErr } = await sb.from('media_assets').upsert(
-    {
+  const { data: existingLogo } = await sb
+    .from('media_assets')
+    .select('id')
+    .eq('url', '/images/brand/logo.avif')
+    .maybeSingle();
+  if (!existingLogo) {
+    const { error } = await sb.from('media_assets').insert({
       title: 'LifeWell logo',
       url: '/images/brand/logo.avif',
       alt_text: 'LifeWell Family Health & Psychiatry',
       mime_type: 'image/avif',
       folder: 'brand',
-    },
-    { onConflict: 'url' }
-  );
-  if (mediaErr && !/on conflict|unique/i.test(mediaErr.message)) {
-    const { data: existingLogo } = await sb.from('media_assets').select('id').eq('url', '/images/brand/logo.avif').maybeSingle();
-    if (!existingLogo) {
-      const { error } = await sb.from('media_assets').insert({
-        title: 'LifeWell logo',
-        url: '/images/brand/logo.avif',
-        alt_text: 'LifeWell Family Health & Psychiatry',
-        mime_type: 'image/avif',
-        folder: 'brand',
-      });
-      if (error) throw badRequest(error.message);
-    }
+    });
+    if (error) throw badRequest(error.message);
+    counts.media = 1;
+  } else {
+    counts.media = 0;
   }
-  counts.media = 1;
 
-  const { data: existingSettings } = await sb.from('site_settings').select('*').eq('id', 'default').maybeSingle();
-  await sb.from('site_settings').upsert({
-    ...DEFAULT_SITE_SETTINGS,
-    ...(existingSettings || {}),
-    logo_url: existingSettings?.logo_url || '/images/brand/logo.avif',
-    practice_phone: existingSettings?.practice_phone || '(407) 603-1717',
-    practice_email: existingSettings?.practice_email || 'contact@lifewellfhp.com',
-    updated_at: new Date().toISOString(),
-  });
-  counts.settings = 1;
+  const { data: existingSettings } = await sb.from('site_settings').select('id').eq('id', 'default').maybeSingle();
+  if (!existingSettings) {
+    await sb.from('site_settings').upsert({
+      ...DEFAULT_SITE_SETTINGS,
+      logo_url: '/images/brand/logo.avif',
+      practice_phone: '(407) 603-1717',
+      practice_email: 'contact@lifewellfhp.com',
+      updated_at: new Date().toISOString(),
+    });
+    counts.settings = 1;
+  } else {
+    counts.settings = 0;
+  }
 
   const seoRows = [
     {
@@ -436,26 +459,38 @@ export async function runLiveImport(): Promise<Record<string, number>> {
       description: 'Psychiatric evaluations, medication management, and family health services through secure telehealth.',
     },
   ];
-  const { error: seoErr } = await sb.from('seo_meta').upsert(seoRows, { onConflict: 'path' });
-  if (seoErr) throw badRequest(seoErr.message);
-  counts.seo = seoRows.length;
+  const { data: seoExisting, error: seoReadErr } = await sb.from('seo_meta').select('path');
+  if (seoReadErr) throw badRequest(seoReadErr.message);
+  const haveSeoPaths = new Set((seoExisting || []).map((r) => String(r.path)));
+  const missingSeo = seoRows.filter((row) => !haveSeoPaths.has(row.path));
+  if (missingSeo.length) {
+    const { error: seoErr } = await sb.from('seo_meta').insert(missingSeo);
+    if (seoErr) throw badRequest(seoErr.message);
+  }
+  counts.seo = missingSeo.length;
 
   return counts;
 }
 
 export async function importLiveWebsiteContent(req: Request, res: Response): Promise<void> {
   const counts = await runLiveImport();
+  const inserted = Object.values(counts).reduce((sum, n) => sum + n, 0);
   const actor = (req as AuthedRequest).admin;
   await writeAuditLog({
     actor,
     action: 'create',
     resource: 'settings',
-    summary: 'Imported current public website content into the admin panel',
+    summary: inserted
+      ? `Restored ${inserted} missing default content item(s) — existing content untouched`
+      : 'Checked default content — everything already present, nothing changed',
   });
+  if (inserted) void refreshPublicSite();
 
   res.json({
     success: true,
-    message: 'Live website content is now in the admin panel. You can edit or delete any item.',
+    message: inserted
+      ? `Added ${inserted} missing default item(s). Your existing edits were not changed.`
+      : 'All default content is already in the admin panel. Nothing was changed.',
     data: counts,
   });
 }

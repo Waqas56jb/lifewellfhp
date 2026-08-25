@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import {
   ArrowUpRight,
@@ -79,7 +79,6 @@ export default function DashboardPage() {
   const [error, setError] = useState<string | null>(null);
   const [importing, setImporting] = useState(false);
   const [importMessage, setImportMessage] = useState<string | null>(null);
-  const autoImported = useRef(false);
 
   async function loadDash() {
     const res = await api<Dash>('/api/admin/dashboard');
@@ -90,13 +89,6 @@ export default function DashboardPage() {
   useEffect(() => {
     void loadDash();
   }, []);
-
-  useEffect(() => {
-    if (user?.role !== 'super_admin' || !data || autoImported.current) return;
-    if ((data.services || 0) > 0 || (data.faqs || 0) > 0) return;
-    autoImported.current = true;
-    void importLive();
-  }, [data, user?.role]);
 
   async function importLive() {
     setImporting(true);
@@ -121,9 +113,16 @@ export default function DashboardPage() {
           <h1 className="page-title">{greeting(user?.name || 'there')}</h1>
           <p className="page-sub">Website operations for LifeWell — never clinical charts.</p>
           {user?.role === 'super_admin' ? (
-            <button type="button" className="btn btn-primary" style={{ marginTop: '0.85rem' }} onClick={() => void importLive()} disabled={importing}>
+            <button
+              type="button"
+              className="btn btn-primary"
+              style={{ marginTop: '0.85rem' }}
+              onClick={() => void importLive()}
+              disabled={importing}
+              title="Adds any missing default content. Never overwrites or deletes anything you have edited."
+            >
               <Download size={16} />
-              {importing ? 'Loading live pages…' : 'Load live website content'}
+              {importing ? 'Checking defaults…' : 'Restore missing defaults'}
             </button>
           ) : null}
         </div>
