@@ -13,7 +13,7 @@ export async function Footer() {
   const phone = cms.settings.practicePhone || primary?.phone || site.contact.phone;
   const email = cms.settings.practiceEmail || primary?.email || site.contact.email;
   const phoneHref = phone.replace(/[^\d+]/g, '').length ? `tel:+1${phone.replace(/\D/g, '').replace(/^1/, '')}` : site.contact.phoneHref;
-  const logo = cms.settings.logoUrl || '/images/brand/logo.avif';
+  const logo = cms.settings.logoUrl || '/images/brand/logo-v2.avif';
   const remoteLogo = logo.startsWith('http');
   return (
     <footer className="bg-[#F4F7FA] pb-[env(safe-area-inset-bottom)]">
@@ -40,8 +40,8 @@ export async function Footer() {
                   <Image
                     src={logo}
                     alt={site.name}
-                    width={354}
-                    height={63}
+                    width={945}
+                    height={191}
                     className="h-8 w-auto sm:h-10"
                   />
                 )}

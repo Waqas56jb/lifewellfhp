@@ -39,7 +39,7 @@ export function Header({
 
   const overlay = isHome && !scrolled;
   const button = cta ?? headerCta;
-  const logo = logoUrl || '/images/brand/logo.avif';
+  const logo = logoUrl || '/images/brand/logo-v2.avif';
   const remoteLogo = logo.startsWith('http');
 
   return (
@@ -67,8 +67,8 @@ export function Header({
             <Image
               src={logo}
               alt={site.name}
-              width={354}
-              height={63}
+              width={945}
+              height={191}
               priority
               className="h-9 w-auto max-w-[min(11rem,46vw)] sm:h-11 sm:max-w-none lg:h-[50px]"
             />

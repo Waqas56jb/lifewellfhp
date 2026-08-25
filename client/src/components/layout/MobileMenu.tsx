@@ -113,10 +113,10 @@ export function MobileMenu({ id, open, onClose, items, cta, pathname, phone }: M
       >
         <div className="flex items-center justify-between gap-3 border-b border-border-subtle px-4 py-3 sm:gap-4 sm:px-5 sm:py-4">
           <Image
-            src="/images/brand/logo.avif"
+            src="/images/brand/logo-v2.avif"
             alt={site.name}
-            width={354}
-            height={63}
+            width={945}
+            height={191}
             className="h-8 w-auto max-w-[min(12rem,55vw)]"
           />
           <button

@@ -35,7 +35,7 @@ export function AppearancePreview({
 }) {
   const heading = HEADING_FONT[headingFont] || HEADING_FONT.Lora;
   const body = BODY_FONT[bodyFont] || BODY_FONT['Source Sans 3'];
-  const logo = publicAssetUrl(logoUrl || '/images/brand/logo.avif');
+  const logo = publicAssetUrl(logoUrl || '/images/brand/logo-v2.avif');
 
   return (
     <div

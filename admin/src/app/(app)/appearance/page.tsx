@@ -180,7 +180,7 @@ export default function AppearancePage() {
                 id="logo_url"
                 value={form.logo_url || ''}
                 onChange={(e) => setForm({ ...form, logo_url: e.target.value })}
-                placeholder="/images/brand/logo.avif or uploaded media URL"
+                placeholder="/images/brand/logo-v2.avif or uploaded media URL"
               />
             </div>
             <div className="field">

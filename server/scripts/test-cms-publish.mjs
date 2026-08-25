@@ -96,7 +96,7 @@ const video = await api('/api/admin/videos', {
 ok('create video', video.status === 201, video.json?.data?.title || `status ${video.status}`);
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-const logoPath = path.resolve(here, '../../client/public/images/brand/logo.avif');
+const logoPath = path.resolve(here, '../../client/public/images/brand/logo-v2.avif');
 let mediaStatus = 'skipped';
 if (fs.existsSync(logoPath)) {
   const buffer = fs.readFileSync(logoPath);
@@ -115,7 +115,7 @@ if (fs.existsSync(logoPath)) {
   mediaStatus = media.status === 201 ? media.json?.data?.url || 'created' : `status ${media.status}`;
   ok('upload image', media.status === 201, mediaStatus);
 } else {
-  ok('upload image', false, 'logo.avif not found locally');
+  ok('upload image', false, 'logo-v2.avif not found locally');
 }
 
 // Allow revalidate ping + fresh fetch

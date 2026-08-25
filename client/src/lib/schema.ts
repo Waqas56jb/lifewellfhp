@@ -34,7 +34,7 @@ export function organizationNode() {
     email: site.contact.email,
     logo: {
       '@type': 'ImageObject',
-      url: abs('/images/brand/logo.avif'),
+      url: abs('/images/brand/logo-v2.avif'),
       width: 354,
       height: 63,
     },

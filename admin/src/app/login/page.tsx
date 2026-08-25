@@ -57,10 +57,10 @@ export default function LoginPage() {
       <main className="login-panel">
         <form className="login-form" onSubmit={onSubmit} noValidate>
           <Image
-            src="/images/brand/logo.avif"
+            src="/images/brand/logo-v2.avif"
             alt="LifeWell Family Health & Psychiatry"
-            width={354}
-            height={63}
+            width={945}
+            height={191}
             priority
             className="login-logo"
           />

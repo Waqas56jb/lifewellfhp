@@ -398,12 +398,12 @@ export async function runLiveImport(): Promise<Record<string, number>> {
   const { data: existingLogo } = await sb
     .from('media_assets')
     .select('id')
-    .eq('url', '/images/brand/logo.avif')
+    .eq('url', '/images/brand/logo-v2.avif')
     .maybeSingle();
   if (!existingLogo) {
     const { error } = await sb.from('media_assets').insert({
       title: 'LifeWell logo',
-      url: '/images/brand/logo.avif',
+      url: '/images/brand/logo-v2.avif',
       alt_text: 'LifeWell Family Health & Psychiatry',
       mime_type: 'image/avif',
       folder: 'brand',
@@ -418,7 +418,7 @@ export async function runLiveImport(): Promise<Record<string, number>> {
   if (!existingSettings) {
     await sb.from('site_settings').upsert({
       ...DEFAULT_SITE_SETTINGS,
-      logo_url: '/images/brand/logo.avif',
+      logo_url: '/images/brand/logo-v2.avif',
       practice_phone: '(407) 603-1717',
       practice_email: 'contact@lifewellfhp.com',
       updated_at: new Date().toISOString(),

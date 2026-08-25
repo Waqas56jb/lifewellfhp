@@ -97,7 +97,7 @@ function AdminShellInner({ children }: { children: ReactNode }) {
               begin('/');
               if (window.matchMedia('(max-width: 1080px)').matches) setCollapsed(true);
             }}>
-            <Image src="/images/brand/logo.avif" alt="LifeWell" width={354} height={63} className="sidebar-logo" />
+            <Image src="/images/brand/logo-v2.avif" alt="LifeWell" width={945} height={191} className="sidebar-logo" />
             <span>Control Center</span>
           </Link>
           <button
