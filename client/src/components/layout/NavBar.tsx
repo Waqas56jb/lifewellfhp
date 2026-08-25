@@ -10,8 +10,12 @@ import { SwapButton } from '@/components/ui/SwapButton';
 import { MobileMenu } from './MobileMenu';
 
 /** Extra room for the Get Started control plus flex gaps. */
-const CTA_RESERVE = 210;
+const CTA_RESERVE = 230;
 const ROW_GAP = 20;
+/** Buffer so late font/image loads can never push links over the logo. */
+const SAFETY = 24;
+/** Chevron icon + gap rendered next to items that open a mega menu. */
+const CHEVRON_EXTRA = 19;
 
 const NAV_LINK =
   'inline-flex min-h-[42px] shrink-0 items-center whitespace-nowrap rounded-[30px] px-3.5 py-[5px] text-[15px] font-semibold leading-none no-underline transition-colors duration-300 xl:px-[18px] min-[1601px]:px-[22px] min-[1601px]:text-[16px]';
@@ -50,16 +54,23 @@ export function NavBar({
       const logo = row.firstElementChild as HTMLElement | null;
       const logoW = logo?.getBoundingClientRect().width ?? 0;
       const available = row.clientWidth - logoW - ROW_GAP;
-      const fits = measure.scrollWidth + CTA_RESERVE <= available;
+      const fits = measure.scrollWidth + CTA_RESERVE + SAFETY <= available;
       setCompact(!fits);
       if (fits) setMobileOpen(false);
     };
 
     update();
     const row = host.parentElement;
+    const logo = row?.firstElementChild as HTMLElement | null;
     const ro = new ResizeObserver(update);
     if (row) ro.observe(row);
+    // Web fonts and the logo image load after first paint and change widths;
+    // observing these re-runs the fit check so links never overlap the logo.
+    ro.observe(measure);
+    if (logo) ro.observe(logo);
     window.addEventListener('resize', update);
+    const fonts = (document as Document & { fonts?: FontFaceSet }).fonts;
+    fonts?.ready.then(update).catch(() => {});
     return () => {
       ro.disconnect();
       window.removeEventListener('resize', update);
@@ -79,6 +90,9 @@ export function NavBar({
         {items.map((item) => (
           <li key={item.href} className="px-3.5 py-[5px] xl:px-[18px] min-[1601px]:px-[22px]">
             {item.label}
+            {item.groups ? (
+              <span aria-hidden className="inline-block" style={{ width: `${CHEVRON_EXTRA}px` }} />
+            ) : null}
           </li>
         ))}
       </ul>
@@ -86,7 +100,7 @@ export function NavBar({
       <nav
         aria-label="Main"
         className={cn(
-          'min-w-0 flex-1',
+          'min-w-0 flex-1 overflow-x-clip',
           compact === null ? 'hidden min-[1440px]:flex' : showDesktop ? 'flex' : 'hidden'
         )}
       >

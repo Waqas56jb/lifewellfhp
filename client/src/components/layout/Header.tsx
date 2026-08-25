@@ -62,7 +62,7 @@ export function Header({
         >
           {remoteLogo ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={logo} alt={site.name} className="h-9 w-auto max-w-[min(11rem,46vw)] sm:h-11 sm:max-w-none lg:h-[50px]" />
+            <img src={logo} alt={site.name} className="h-9 w-auto max-w-[min(11rem,46vw)] object-contain object-left sm:h-11 sm:max-w-none lg:h-[50px]" />
           ) : (
             <Image
               src={logo}
@@ -70,7 +70,7 @@ export function Header({
               width={945}
               height={191}
               priority
-              className="h-9 w-auto max-w-[min(11rem,46vw)] sm:h-11 sm:max-w-none lg:h-[50px]"
+              className="h-9 w-auto max-w-[min(11rem,46vw)] object-contain object-left sm:h-11 sm:max-w-none lg:h-[50px]"
             />
           )}
         </Link>

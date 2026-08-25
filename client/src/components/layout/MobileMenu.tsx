@@ -117,7 +117,7 @@ export function MobileMenu({ id, open, onClose, items, cta, pathname, phone }: M
             alt={site.name}
             width={945}
             height={191}
-            className="h-8 w-auto max-w-[min(12rem,55vw)]"
+            className="h-8 w-auto max-w-[min(12rem,55vw)] object-contain object-left"
           />
           <button
             type="button"
