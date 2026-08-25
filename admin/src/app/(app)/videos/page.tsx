@@ -7,13 +7,13 @@ export default function Page() {
   return (
     <ResourceManager
       title="Videos"
-      subtitle="Published videos appear in Watch and Learn on the homepage (/#videos). Preview the embed, then Save to show it to visitors."
+      subtitle="Published videos appear on /videos and the homepage Watch and Learn section. Preview the embed, then Save to show it to visitors."
       endpoint="/api/admin/videos"
       createDefaults={{ published: true, provider: 'youtube', sort_order: 0 }}
       itemLabel={(r) => String(r.title || 'Video')}
       preview={{
-        hint: 'This is the homepage video card. Unpublished items stay hidden until you publish and save.',
-        liveHref: () => '/#videos',
+        hint: 'This is the public video card. Unpublished items stay hidden until you publish and save.',
+        liveHref: () => '/videos',
         render: (form) => (
           <VideoPreview
             title={String(form.title || '')}
